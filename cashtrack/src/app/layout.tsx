@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// Import do Toaster do Sonner
+import { Toaster } from "sonner";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Apollo Client
+
+import { ApolloProviderClient } from "@/lib/apollo/ApolloProviderCliente";
+
+// caminho do seu apollo-client.ts
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,15 +17,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <ApolloProviderClient>
+          {children}
+          <Toaster position="bottom-right" richColors />
+        </ApolloProviderClient>
       </body>
     </html>
   );
