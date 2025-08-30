@@ -199,3 +199,91 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   Types.IResetPasswordMutation,
   Types.IResetPasswordMutationVariables
 >;
+export const TransactionsGroupDocument = gql`
+  query TransactionsGroup($search: String) {
+    transactionsGroup(search: $search) {
+      _id
+      owner {
+        name
+        _id
+      }
+      iconProperties {
+        background
+        color
+        icon
+      }
+      description
+    }
+  }
+`;
+
+/**
+ * __useTransactionsGroupQuery__
+ *
+ * To run a query within a React component, call `useTransactionsGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionsGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionsGroupQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useTransactionsGroupQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    Types.ITransactionsGroupQuery,
+    Types.ITransactionsGroupQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ITransactionsGroupQuery,
+    Types.ITransactionsGroupQueryVariables
+  >(TransactionsGroupDocument, options);
+}
+export function useTransactionsGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ITransactionsGroupQuery,
+    Types.ITransactionsGroupQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ITransactionsGroupQuery,
+    Types.ITransactionsGroupQueryVariables
+  >(TransactionsGroupDocument, options);
+}
+export function useTransactionsGroupSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ITransactionsGroupQuery,
+        Types.ITransactionsGroupQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ITransactionsGroupQuery,
+    Types.ITransactionsGroupQueryVariables
+  >(TransactionsGroupDocument, options);
+}
+export type TransactionsGroupQueryHookResult = ReturnType<
+  typeof useTransactionsGroupQuery
+>;
+export type TransactionsGroupLazyQueryHookResult = ReturnType<
+  typeof useTransactionsGroupLazyQuery
+>;
+export type TransactionsGroupSuspenseQueryHookResult = ReturnType<
+  typeof useTransactionsGroupSuspenseQuery
+>;
+export type TransactionsGroupQueryResult = Apollo.QueryResult<
+  Types.ITransactionsGroupQuery,
+  Types.ITransactionsGroupQueryVariables
+>;

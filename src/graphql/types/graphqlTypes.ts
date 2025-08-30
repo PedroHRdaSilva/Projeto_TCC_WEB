@@ -260,6 +260,7 @@ export type IQuery = {
   creditCardById: Maybe<ICreditCard>;
   now: Maybe<Scalars["BigInt"]["output"]>;
   transactionGroupById: Maybe<ITransactionGroup>;
+  transactionsGroup: Array<ITransactionGroup>;
   viewer: Maybe<IViewer>;
 };
 
@@ -283,6 +284,10 @@ export type IQueryTransactionGroupByIdArgs = {
   _id: InputMaybe<Scalars["ObjectID"]["input"]>;
 };
 
+export type IQueryTransactionsGroupArgs = {
+  search: InputMaybe<Scalars["String"]["input"]>;
+};
+
 export type ITransactionCategory = {
   __typename: "TransactionCategory";
   _id: Scalars["ObjectID"]["output"];
@@ -302,7 +307,7 @@ export type ITransactionGroup = {
   _id: Scalars["ObjectID"]["output"];
   description: Scalars["String"]["output"];
   iconProperties: IIconProperties;
-  owner: Scalars["ObjectID"]["output"];
+  owner: IUser;
 };
 
 export type IUpdateCustomInput = {
@@ -316,6 +321,13 @@ export type IUpdateCustomInput = {
 export type IUpdateTransactionGroupInput = {
   description: Scalars["String"]["input"];
   iconProperties: IIconPropertiesInput;
+};
+
+export type IUser = {
+  __typename: "User";
+  _id: Scalars["ObjectID"]["output"];
+  email: Scalars["String"]["output"];
+  name: Scalars["String"]["output"];
 };
 
 export type IViewer = {
@@ -362,4 +374,24 @@ export type IResetPasswordMutationVariables = Exact<{
 export type IResetPasswordMutation = {
   __typename: "Mutation";
   resetPassword: boolean;
+};
+
+export type ITransactionsGroupQueryVariables = Exact<{
+  search: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type ITransactionsGroupQuery = {
+  __typename: "Query";
+  transactionsGroup: Array<{
+    __typename: "TransactionGroup";
+    _id: any;
+    description: string;
+    owner: { __typename: "User"; name: string; _id: any };
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  }>;
 };
