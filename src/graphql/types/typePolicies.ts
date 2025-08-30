@@ -95,6 +95,7 @@ export type QueryKeySpecifier = (
   | "creditCardById"
   | "now"
   | "transactionGroupById"
+  | "transactionsGroup"
   | "viewer"
   | QueryKeySpecifier
 )[];
@@ -105,6 +106,7 @@ export type QueryFieldPolicy = {
   creditCardById?: FieldPolicy<any> | FieldReadFunction<any>;
   now?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionGroupById?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactionsGroup?: FieldPolicy<any> | FieldReadFunction<any>;
   viewer?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TransactionCategoryKeySpecifier = (
@@ -134,6 +136,12 @@ export type TransactionGroupFieldPolicy = {
   description?: FieldPolicy<any> | FieldReadFunction<any>;
   iconProperties?: FieldPolicy<any> | FieldReadFunction<any>;
   owner?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type UserKeySpecifier = ("_id" | "email" | "name" | UserKeySpecifier)[];
+export type UserFieldPolicy = {
+  _id?: FieldPolicy<any> | FieldReadFunction<any>;
+  email?: FieldPolicy<any> | FieldReadFunction<any>;
+  name?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ViewerKeySpecifier = (
   | "_id"
@@ -211,6 +219,10 @@ export type StrictTypedTypePolicies = {
       | TransactionGroupKeySpecifier
       | (() => undefined | TransactionGroupKeySpecifier);
     fields?: TransactionGroupFieldPolicy;
+  };
+  User?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier);
+    fields?: UserFieldPolicy;
   };
   Viewer?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
