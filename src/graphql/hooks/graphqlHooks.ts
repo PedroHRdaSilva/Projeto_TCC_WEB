@@ -460,6 +460,112 @@ export type TransactionGroupByIdQueryResult = Apollo.QueryResult<
   Types.ITransactionGroupByIdQuery,
   Types.ITransactionGroupByIdQueryVariables
 >;
+export const TransactionTotalsDocument = gql`
+  query TransactionTotals(
+    $groupId: ObjectID!
+    $filterByPeriod: Date!
+    $filterByCategoryId: ObjectID
+    $filterBySearch: String
+  ) {
+    transactionTotals(
+      groupId: $groupId
+      filterByPeriod: $filterByPeriod
+      filterByCategoryId: $filterByCategoryId
+      filterBySearch: $filterBySearch
+    ) {
+      revenue {
+        percentageVariation
+        total
+      }
+      expense {
+        percentageVariation
+        total
+      }
+      balance {
+        percentageVariation
+        total
+      }
+    }
+  }
+`;
+
+/**
+ * __useTransactionTotalsQuery__
+ *
+ * To run a query within a React component, call `useTransactionTotalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionTotalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionTotalsQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      filterByPeriod: // value for 'filterByPeriod'
+ *      filterByCategoryId: // value for 'filterByCategoryId'
+ *      filterBySearch: // value for 'filterBySearch'
+ *   },
+ * });
+ */
+export function useTransactionTotalsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ITransactionTotalsQuery,
+    Types.ITransactionTotalsQueryVariables
+  > &
+    (
+      | { variables: Types.ITransactionTotalsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ITransactionTotalsQuery,
+    Types.ITransactionTotalsQueryVariables
+  >(TransactionTotalsDocument, options);
+}
+export function useTransactionTotalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ITransactionTotalsQuery,
+    Types.ITransactionTotalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ITransactionTotalsQuery,
+    Types.ITransactionTotalsQueryVariables
+  >(TransactionTotalsDocument, options);
+}
+export function useTransactionTotalsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ITransactionTotalsQuery,
+        Types.ITransactionTotalsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ITransactionTotalsQuery,
+    Types.ITransactionTotalsQueryVariables
+  >(TransactionTotalsDocument, options);
+}
+export type TransactionTotalsQueryHookResult = ReturnType<
+  typeof useTransactionTotalsQuery
+>;
+export type TransactionTotalsLazyQueryHookResult = ReturnType<
+  typeof useTransactionTotalsLazyQuery
+>;
+export type TransactionTotalsSuspenseQueryHookResult = ReturnType<
+  typeof useTransactionTotalsSuspenseQuery
+>;
+export type TransactionTotalsQueryResult = Apollo.QueryResult<
+  Types.ITransactionTotalsQuery,
+  Types.ITransactionTotalsQueryVariables
+>;
 export const TransactionsGroupDocument = gql`
   query TransactionsGroup($search: String) {
     transactionsGroup(search: $search) {

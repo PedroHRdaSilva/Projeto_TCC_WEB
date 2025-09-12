@@ -11,13 +11,19 @@ import {
 import { TransactionGroupFormSchema } from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupForm";
 import TransactionsGroupQuery from "@/graphql/queries/transactions/TransactionsGroupQuery";
 import TransactionGroupByIdQuery from "@/graphql/queries/transactions/TransactionGroupByIdQuery";
+import { InternalRefetchQueriesInclude } from "@apollo/client";
 
 interface UseActionProps {
   isCreating: boolean;
   _id?: string;
+  refetchQueries?: InternalRefetchQueriesInclude;
 }
 
-export default function useGroupActions({ isCreating, _id }: UseActionProps) {
+export default function useGroupActions({
+  isCreating,
+  _id,
+  refetchQueries,
+}: UseActionProps) {
   const { refresh } = useRouter();
   //   const revalidateAndRefresh = useRevalidateAndRefresh();
   const [createTransactionGroup, { loading: creatingLoading }] =
@@ -36,6 +42,7 @@ export default function useGroupActions({ isCreating, _id }: UseActionProps) {
               iconProperties: values.iconProperties,
             },
           },
+          refetchQueries,
         }),
         {
           loading: "Criando grupo...",

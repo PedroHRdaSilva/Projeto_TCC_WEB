@@ -5,6 +5,7 @@ import type { ITransactionGroupByIdQuery } from "@/graphql/types/graphqlTypes";
 import { arrayOfPossibleIcons, cn, hexToRgba } from "@/lib/utils/utils";
 import TransactionGroupSelection from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupSelection";
 import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/components/group/TransactionsGroupConfig";
+import IncomeExpenses from "@/app/finance/transaction/[[...id]]/components/group/IncomeExpenses";
 
 interface TransactionsPageProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
@@ -22,10 +23,10 @@ export default function TransactionGroupInformation({
     ) || TrophyIcon;
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full bg-slate-900 p-5">
       <div
         className={cn(
-          "-mx-4 -mt-4 flex h-32 bg-slate-900/85 p-5 border ",
+          "-mx-4 -mt-4 flex h-32 bg-slate-700 p-5 border ",
           "xl:mx-0 xl:mt-0 xl:h-24 xl:w-full xl:max-w-[340px] xl:items-center xl:rounded-lg  xl:p-6"
         )}
       >
@@ -60,7 +61,9 @@ export default function TransactionGroupInformation({
           </TransactionsGroupConfig>
         </div>
       </div>
-      <div>oi</div>
+      <div className=" w-full  justify-end flex">
+        <IncomeExpenses group={group} />
+      </div>
     </div>
   );
 }
