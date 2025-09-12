@@ -168,7 +168,7 @@ export type IMutation = {
   deleteCreditCard: Maybe<Scalars["Boolean"]["output"]>;
   deleteTransactionGroup: Scalars["Boolean"]["output"];
   forgotPassword: Scalars["Boolean"]["output"];
-  loginWithCredentials: Scalars["Boolean"]["output"];
+  loginWithCredentials: IAuthenticatedUser;
   now: Maybe<Scalars["BigInt"]["output"]>;
   resetPassword: Scalars["Boolean"]["output"];
   updateCategory: ITransactionCategory;
@@ -338,6 +338,56 @@ export type IViewer = {
   name: Scalars["String"]["output"];
 };
 
+export type ICreateTransactionGroupMutationVariables = Exact<{
+  input: ICreateTransactionGroupInput;
+}>;
+
+export type ICreateTransactionGroupMutation = {
+  __typename: "Mutation";
+  createTransactionGroup: {
+    __typename: "TransactionGroup";
+    _id: any;
+    description: string;
+    owner: { __typename: "User"; name: string };
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  };
+};
+
+export type IDeleteTransactionGroupMutationVariables = Exact<{
+  _id: Scalars["ObjectID"]["input"];
+}>;
+
+export type IDeleteTransactionGroupMutation = {
+  __typename: "Mutation";
+  deleteTransactionGroup: boolean;
+};
+
+export type IUpdateTransactionGroupMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+  updateTransactionGroup: IUpdateTransactionGroupInput;
+}>;
+
+export type IUpdateTransactionGroupMutation = {
+  __typename: "Mutation";
+  updateTransactionGroup: {
+    __typename: "TransactionGroup";
+    _id: any;
+    description: string;
+    owner: { __typename: "User"; name: string };
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  };
+};
+
 export type ICreateUserMutationVariables = Exact<{
   createUserInput: ICreateUserInput;
 }>;
@@ -363,7 +413,11 @@ export type ILoginWithCredentialsMutationVariables = Exact<{
 
 export type ILoginWithCredentialsMutation = {
   __typename: "Mutation";
-  loginWithCredentials: boolean;
+  loginWithCredentials: {
+    __typename: "AuthenticatedUser";
+    accessToken: string;
+    email: string;
+  };
 };
 
 export type IResetPasswordMutationVariables = Exact<{
@@ -374,6 +428,26 @@ export type IResetPasswordMutationVariables = Exact<{
 export type IResetPasswordMutation = {
   __typename: "Mutation";
   resetPassword: boolean;
+};
+
+export type ITransactionGroupByIdQueryVariables = Exact<{
+  _id: InputMaybe<Scalars["ObjectID"]["input"]>;
+}>;
+
+export type ITransactionGroupByIdQuery = {
+  __typename: "Query";
+  transactionGroupById: {
+    __typename: "TransactionGroup";
+    _id: any;
+    description: string;
+    owner: { __typename: "User"; name: string; _id: any };
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  } | null;
 };
 
 export type ITransactionsGroupQueryVariables = Exact<{
@@ -394,4 +468,17 @@ export type ITransactionsGroupQuery = {
       icon: string;
     };
   }>;
+};
+
+export type IViewerQueryVariables = Exact<{ [key: string]: never }>;
+
+export type IViewerQuery = {
+  __typename: "Query";
+  viewer: {
+    __typename: "Viewer";
+    _id: any;
+    email: string;
+    name: string;
+    isAdmin: boolean;
+  } | null;
 };

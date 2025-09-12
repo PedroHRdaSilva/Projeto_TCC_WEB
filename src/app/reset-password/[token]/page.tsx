@@ -8,7 +8,7 @@ interface ResetPasswordProps {
 
 export default function ResetPasswordPage({ params }: ResetPasswordProps) {
   const { token } = params;
-  console.log(token);
+
   return (
     <div className="flex h-full w-screen lg:h-screen">
       <div className="w-full p-6 lg:w-2/5">

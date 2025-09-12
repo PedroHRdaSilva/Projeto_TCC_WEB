@@ -45,8 +45,6 @@ export default function SignupForm() {
           },
         });
 
-        console.log("Resultado da mutation:", data);
-
         if (!data?.createUser) {
           throw new Error("Erro ao criar usuário");
         }
