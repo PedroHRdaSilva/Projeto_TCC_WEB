@@ -19,18 +19,20 @@ import { Input } from "@/lib/ui/input";
 
 import { arrayOfPossibleIcons, hexToRgba } from "@/lib/utils/utils";
 import useGroupActions from "@/app/finance/transaction/[[...id]]/components/hooks/useGroupActions";
-import { useViewer } from "@/lib/auth/AuthContext";
 import { ITransactionGroupByIdQuery } from "@/graphql/types/graphqlTypes";
 import { PopoverChangeIcon } from "@/app/finance/transaction/[[...id]]/components/group/PopoverChangeIcon";
+import { InternalRefetchQueriesInclude } from "@apollo/client";
 
 interface TransactionGroupFormProps {
   initialValues?: ITransactionGroupByIdQuery["transactionGroupById"];
   setOpen: (open: boolean) => void;
+  refetchQueries?: InternalRefetchQueriesInclude;
 }
 
 export default function TransactionGroupForm({
   initialValues,
   setOpen,
+  refetchQueries,
 }: TransactionGroupFormProps) {
   const isCreating = !initialValues;
 
@@ -38,8 +40,9 @@ export default function TransactionGroupForm({
     () => ({
       isCreating,
       _id: initialValues?._id,
+      refetchQueries,
     }),
-    [isCreating, initialValues]
+    [isCreating, initialValues, refetchQueries]
   );
 
   const { loading, onSubmit } = useGroupActions(params);

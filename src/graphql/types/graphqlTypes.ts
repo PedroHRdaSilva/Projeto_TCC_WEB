@@ -260,6 +260,7 @@ export type IQuery = {
   creditCardById: Maybe<ICreditCard>;
   now: Maybe<Scalars["BigInt"]["output"]>;
   transactionGroupById: Maybe<ITransactionGroup>;
+  transactionTotals: Maybe<ITransactionsTotals>;
   transactionsGroup: Array<ITransactionGroup>;
   viewer: Maybe<IViewer>;
 };
@@ -282,6 +283,13 @@ export type IQueryCreditCardByIdArgs = {
 
 export type IQueryTransactionGroupByIdArgs = {
   _id: InputMaybe<Scalars["ObjectID"]["input"]>;
+};
+
+export type IQueryTransactionTotalsArgs = {
+  filterByCategoryId: InputMaybe<Scalars["ObjectID"]["input"]>;
+  filterByPeriod: Scalars["Date"]["input"];
+  filterBySearch: InputMaybe<Scalars["String"]["input"]>;
+  groupId: Scalars["ObjectID"]["input"];
 };
 
 export type IQueryTransactionsGroupArgs = {
@@ -308,6 +316,19 @@ export type ITransactionGroup = {
   description: Scalars["String"]["output"];
   iconProperties: IIconProperties;
   owner: IUser;
+};
+
+export type ITransactionsTotalize = {
+  __typename: "TransactionsTotalize";
+  percentageVariation: Scalars["Float"]["output"];
+  total: Scalars["Float"]["output"];
+};
+
+export type ITransactionsTotals = {
+  __typename: "TransactionsTotals";
+  balance: ITransactionsTotalize;
+  expense: ITransactionsTotalize;
+  revenue: ITransactionsTotalize;
 };
 
 export type IUpdateCustomInput = {
@@ -446,6 +467,35 @@ export type ITransactionGroupByIdQuery = {
       background: string;
       color: string;
       icon: string;
+    };
+  } | null;
+};
+
+export type ITransactionTotalsQueryVariables = Exact<{
+  groupId: Scalars["ObjectID"]["input"];
+  filterByPeriod: Scalars["Date"]["input"];
+  filterByCategoryId: InputMaybe<Scalars["ObjectID"]["input"]>;
+  filterBySearch: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type ITransactionTotalsQuery = {
+  __typename: "Query";
+  transactionTotals: {
+    __typename: "TransactionsTotals";
+    revenue: {
+      __typename: "TransactionsTotalize";
+      percentageVariation: number;
+      total: number;
+    };
+    expense: {
+      __typename: "TransactionsTotalize";
+      percentageVariation: number;
+      total: number;
+    };
+    balance: {
+      __typename: "TransactionsTotalize";
+      percentageVariation: number;
+      total: number;
     };
   } | null;
 };

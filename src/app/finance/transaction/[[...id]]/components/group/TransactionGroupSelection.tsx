@@ -34,6 +34,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import TransactionsGroupQuery from "@/graphql/queries/transactions/TransactionsGroupQuery";
 
 interface TransactionGroupSelectionProps {
   groupIdPage?: string;
@@ -102,7 +103,14 @@ export default function TransactionGroupSelection({
                 />
               </div>
               <div className="relative ml-auto">
-                <TransactionsGroupConfig>
+                <TransactionsGroupConfig
+                  refetchQueries={[
+                    {
+                      query: TransactionsGroupQuery,
+                      variables: { search: search },
+                    },
+                  ]}
+                >
                   <Button variant="outline" className="gap-3">
                     <PlusIcon size={16} className="text-gray-500" />
                     Novo Grupo
@@ -120,7 +128,7 @@ export default function TransactionGroupSelection({
                 return (
                   <Link
                     key={group._id}
-                    href={`/finance/transactions/${group._id}`}
+                    href={`/finance/transaction/${group._id}`}
                     className="flex w-full items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
