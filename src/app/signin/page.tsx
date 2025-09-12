@@ -26,12 +26,12 @@ export default async function SigninPage() {
         </CardContent>
 
         <CardFooter className="flex  w-full flex-col items-start ">
-          <a
-            href="#"
+          <Link
+            href={routes.forgotPassword}
             className=" inline-block  underline-offset-4 hover:underline"
           >
             Esqueceu a senha?
-          </a>
+          </Link>
           <span className="text-base">
             Ainda nao tem cadastro?
             <Link

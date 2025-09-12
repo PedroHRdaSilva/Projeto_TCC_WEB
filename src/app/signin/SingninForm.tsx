@@ -41,12 +41,19 @@ export default function SigninForm() {
             password: values.password,
           },
         });
-        console.log("@@", data);
+
         if (!data?.loginWithCredentials) {
           throw new Error("Credenciais inválidas");
         }
 
-        window.location.href = routes.signup;
+        await fetch("/api/signin", {
+          method: "POST",
+          body: JSON.stringify({ credentials: data.loginWithCredentials }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        // redireciona
+        window.location.href = routes.finance.transactions;
       })(),
       {
         loading: "Entrando...",
