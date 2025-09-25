@@ -3,7 +3,7 @@ const routes = {
 
   //public routes
 
-  signup: "/singup",
+  signup: "/signup",
   signin: "/signin",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
