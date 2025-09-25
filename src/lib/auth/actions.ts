@@ -1,3 +1,5 @@
+"use server";
+
 // lib/auth/actions.ts
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
@@ -11,7 +13,7 @@ export type TokenPayload = {
 };
 
 // Esta função agora é exclusiva para o servidor
-export async function getViewerSession(): Promise<TokenPayload | null> {
+export async function getViewerSession() {
   try {
     const cookieStore = cookies();
     const token = (await cookieStore).get("accessToken")?.value;
@@ -20,13 +22,16 @@ export async function getViewerSession(): Promise<TokenPayload | null> {
       return null;
     }
 
-    // Use jwt.verify para uma verificação segura no servidor
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET || "secret"
     ) as TokenPayload;
 
-    return decoded;
+    // devolve o decoded + token original
+    return {
+      token, // token bruto
+      payload: decoded, // payload decodificado
+    };
   } catch (error) {
     console.error("Erro ao verificar token no servidor:", error);
     return null;

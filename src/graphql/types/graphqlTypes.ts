@@ -158,14 +158,22 @@ export type IIconPropertiesInput = {
   icon: Scalars["String"]["input"];
 };
 
+export type IInstallments = {
+  __typename: "Installments";
+  current: Scalars["Int"]["output"];
+  total: Scalars["Int"]["output"];
+};
+
 export type IMutation = {
   __typename: "Mutation";
   createCategory: ITransactionCategory;
   createCreditCard: ICreditCard;
+  createTransaction: Array<ITransaction>;
   createTransactionGroup: ITransactionGroup;
   createUser: Scalars["Boolean"]["output"];
   deleteCategory: Maybe<Scalars["Boolean"]["output"]>;
   deleteCreditCard: Maybe<Scalars["Boolean"]["output"]>;
+  deleteTransaction: Scalars["Boolean"]["output"];
   deleteTransactionGroup: Scalars["Boolean"]["output"];
   forgotPassword: Scalars["Boolean"]["output"];
   loginWithCredentials: IAuthenticatedUser;
@@ -173,6 +181,7 @@ export type IMutation = {
   resetPassword: Scalars["Boolean"]["output"];
   updateCategory: ITransactionCategory;
   updateCreditCard: ICreditCard;
+  updateTransaction: Maybe<ITransaction>;
   updateTransactionGroup: ITransactionGroup;
 };
 
@@ -182,6 +191,10 @@ export type IMutationCreateCategoryArgs = {
 
 export type IMutationCreateCreditCardArgs = {
   input: ICreditCardInput;
+};
+
+export type IMutationCreateTransactionArgs = {
+  input: ITransactionInput;
 };
 
 export type IMutationCreateTransactionGroupArgs = {
@@ -198,6 +211,10 @@ export type IMutationDeleteCategoryArgs = {
 };
 
 export type IMutationDeleteCreditCardArgs = {
+  _id: Scalars["ObjectID"]["input"];
+};
+
+export type IMutationDeleteTransactionArgs = {
   _id: Scalars["ObjectID"]["input"];
 };
 
@@ -227,6 +244,11 @@ export type IMutationUpdateCategoryArgs = {
 export type IMutationUpdateCreditCardArgs = {
   _id: Scalars["ObjectID"]["input"];
   input: ICreditCardInput;
+};
+
+export type IMutationUpdateTransactionArgs = {
+  _id: Scalars["ObjectID"]["input"];
+  input: ITransactionInput;
 };
 
 export type IMutationUpdateTransactionGroupArgs = {
@@ -259,8 +281,10 @@ export type IQuery = {
   creditCardByGroupId: Array<ICreditCard>;
   creditCardById: Maybe<ICreditCard>;
   now: Maybe<Scalars["BigInt"]["output"]>;
+  transactionById: Maybe<ITransaction>;
   transactionGroupById: Maybe<ITransactionGroup>;
   transactionTotals: Maybe<ITransactionsTotals>;
+  transactions: ITransactionDetailsPagination;
   transactionsGroup: Array<ITransactionGroup>;
   viewer: Maybe<IViewer>;
 };
@@ -281,6 +305,10 @@ export type IQueryCreditCardByIdArgs = {
   _id: Scalars["ObjectID"]["input"];
 };
 
+export type IQueryTransactionByIdArgs = {
+  _id: Scalars["ObjectID"]["input"];
+};
+
 export type IQueryTransactionGroupByIdArgs = {
   _id: InputMaybe<Scalars["ObjectID"]["input"]>;
 };
@@ -292,8 +320,30 @@ export type IQueryTransactionTotalsArgs = {
   groupId: Scalars["ObjectID"]["input"];
 };
 
+export type IQueryTransactionsArgs = {
+  cursor: InputMaybe<Scalars["Cursor"]["input"]>;
+  filterByCategoryId: InputMaybe<Scalars["ObjectID"]["input"]>;
+  filterByPeriod: Scalars["Date"]["input"];
+  filterBySearch: InputMaybe<Scalars["String"]["input"]>;
+  groupId: Scalars["ObjectID"]["input"];
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 export type IQueryTransactionsGroupArgs = {
   search: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type ITransaction = {
+  __typename: "Transaction";
+  _id: Scalars["ObjectID"]["output"];
+  amount: Scalars["Float"]["output"];
+  category: ITransactionCategory;
+  creditCard: Maybe<ICreditCard>;
+  date: Scalars["Date"]["output"];
+  description: Scalars["String"]["output"];
+  installments: Maybe<IInstallments>;
+  isRecurringPayment: Scalars["Boolean"]["output"];
+  transactionGroupId: Scalars["ObjectID"]["output"];
 };
 
 export type ITransactionCategory = {
@@ -310,12 +360,51 @@ export enum ITransactionCategoryTypeEnum {
   EXPENSES = "EXPENSES",
 }
 
+export type ITransactionDetailsPagination = {
+  __typename: "TransactionDetailsPagination";
+  nodes: Array<ITransaction>;
+  pageInfo: IPageInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
 export type ITransactionGroup = {
   __typename: "TransactionGroup";
   _id: Scalars["ObjectID"]["output"];
   description: Scalars["String"]["output"];
   iconProperties: IIconProperties;
   owner: IUser;
+};
+
+export type ITransactionGrouped = {
+  __typename: "TransactionGrouped";
+  groupBy: Scalars["ObjectID"]["output"];
+  nodes: Array<ITransaction>;
+};
+
+export type ITransactionGroupedDetailsPagination = {
+  __typename: "TransactionGroupedDetailsPagination";
+  groups: Array<ITransactionGrouped>;
+  pageInfo: IPageInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type ITransactionInput = {
+  amount: Scalars["Float"]["input"];
+  categoryId: Scalars["ObjectID"]["input"];
+  creditCardId: InputMaybe<Scalars["ObjectID"]["input"]>;
+  date: Scalars["Date"]["input"];
+  description: Scalars["String"]["input"];
+  installmentCount: InputMaybe<Scalars["Int"]["input"]>;
+  isRecurringPayment: Scalars["Boolean"]["input"];
+  transactionGroupId: Scalars["ObjectID"]["input"];
+};
+
+export type ITransactionsGroupedByCategoryPagination = {
+  __typename: "TransactionsGroupedByCategoryPagination";
+  groupBy: Scalars["ObjectID"]["output"];
+  nodes: Array<ITransaction>;
+  pageInfo: IPageInfo;
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type ITransactionsTotalize = {
@@ -359,6 +448,20 @@ export type IViewer = {
   name: Scalars["String"]["output"];
 };
 
+export type ICreateCreditCardMutationVariables = Exact<{
+  input: ICreditCardInput;
+}>;
+
+export type ICreateCreditCardMutation = {
+  __typename: "Mutation";
+  createCreditCard: {
+    __typename: "CreditCard";
+    _id: any;
+    transactionGroupId: any;
+    description: string;
+  };
+};
+
 export type ICreateTransactionGroupMutationVariables = Exact<{
   input: ICreateTransactionGroupInput;
 }>;
@@ -379,6 +482,55 @@ export type ICreateTransactionGroupMutation = {
   };
 };
 
+export type ICreateTransactionMutationVariables = Exact<{
+  input: ITransactionInput;
+}>;
+
+export type ICreateTransactionMutation = {
+  __typename: "Mutation";
+  createTransaction: Array<{
+    __typename: "Transaction";
+    _id: any;
+    transactionGroupId: any;
+    date: any;
+    description: string;
+    amount: number;
+    category: {
+      __typename: "TransactionCategory";
+      _id: any;
+      description: string;
+      type: ITransactionCategoryTypeEnum;
+      isDefault: boolean;
+      iconProperties: {
+        __typename: "IconProperties";
+        background: string;
+        color: string;
+        icon: string;
+      };
+    };
+    installments: {
+      __typename: "Installments";
+      total: number;
+      current: number;
+    } | null;
+    creditCard: {
+      __typename: "CreditCard";
+      _id: any;
+      transactionGroupId: any;
+      description: string;
+    } | null;
+  }>;
+};
+
+export type IDeleteCreditCardMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+}>;
+
+export type IDeleteCreditCardMutation = {
+  __typename: "Mutation";
+  deleteCreditCard: boolean | null;
+};
+
 export type IDeleteTransactionGroupMutationVariables = Exact<{
   _id: Scalars["ObjectID"]["input"];
 }>;
@@ -386,6 +538,30 @@ export type IDeleteTransactionGroupMutationVariables = Exact<{
 export type IDeleteTransactionGroupMutation = {
   __typename: "Mutation";
   deleteTransactionGroup: boolean;
+};
+
+export type IDeleteTransactionMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+}>;
+
+export type IDeleteTransactionMutation = {
+  __typename: "Mutation";
+  deleteTransaction: boolean;
+};
+
+export type IUpdateCreditCardMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+  input: ICreditCardInput;
+}>;
+
+export type IUpdateCreditCardMutation = {
+  __typename: "Mutation";
+  updateCreditCard: {
+    __typename: "CreditCard";
+    _id: any;
+    transactionGroupId: any;
+    description: string;
+  };
 };
 
 export type IUpdateTransactionGroupMutationVariables = Exact<{
@@ -407,6 +583,47 @@ export type IUpdateTransactionGroupMutation = {
       icon: string;
     };
   };
+};
+
+export type IUpdateTransactionMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+  input: ITransactionInput;
+}>;
+
+export type IUpdateTransactionMutation = {
+  __typename: "Mutation";
+  updateTransaction: {
+    __typename: "Transaction";
+    _id: any;
+    transactionGroupId: any;
+    date: any;
+    description: string;
+    amount: number;
+    category: {
+      __typename: "TransactionCategory";
+      description: string;
+      _id: any;
+      type: ITransactionCategoryTypeEnum;
+      isDefault: boolean;
+      iconProperties: {
+        __typename: "IconProperties";
+        background: string;
+        color: string;
+        icon: string;
+      };
+    };
+    installments: {
+      __typename: "Installments";
+      total: number;
+      current: number;
+    } | null;
+    creditCard: {
+      __typename: "CreditCard";
+      _id: any;
+      transactionGroupId: any;
+      description: string;
+    } | null;
+  } | null;
 };
 
 export type ICreateUserMutationVariables = Exact<{
@@ -449,6 +666,41 @@ export type IResetPasswordMutationVariables = Exact<{
 export type IResetPasswordMutation = {
   __typename: "Mutation";
   resetPassword: boolean;
+};
+
+export type ICategoriesByGroupIdQueryVariables = Exact<{
+  transactionGroupId: Scalars["ObjectID"]["input"];
+}>;
+
+export type ICategoriesByGroupIdQuery = {
+  __typename: "Query";
+  categoriesByGroupId: Array<{
+    __typename: "TransactionCategory";
+    _id: any;
+    description: string;
+    type: ITransactionCategoryTypeEnum;
+    isDefault: boolean;
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  }>;
+};
+
+export type ICreditCardByGroupIdQueryVariables = Exact<{
+  transactionGroupId: Scalars["ObjectID"]["input"];
+}>;
+
+export type ICreditCardByGroupIdQuery = {
+  __typename: "Query";
+  creditCardByGroupId: Array<{
+    __typename: "CreditCard";
+    _id: any;
+    transactionGroupId: any;
+    description: string;
+  }>;
 };
 
 export type ITransactionGroupByIdQueryVariables = Exact<{
@@ -498,6 +750,62 @@ export type ITransactionTotalsQuery = {
       total: number;
     };
   } | null;
+};
+
+export type ITransactionsByGroupIdQueryVariables = Exact<{
+  groupId: Scalars["ObjectID"]["input"];
+  filterByPeriod: Scalars["Date"]["input"];
+  filterByCategoryId: InputMaybe<Scalars["ObjectID"]["input"]>;
+  filterBySearch: InputMaybe<Scalars["String"]["input"]>;
+  cursor: InputMaybe<Scalars["Cursor"]["input"]>;
+  limit: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type ITransactionsByGroupIdQuery = {
+  __typename: "Query";
+  transactions: {
+    __typename: "TransactionDetailsPagination";
+    totalCount: number;
+    nodes: Array<{
+      __typename: "Transaction";
+      _id: any;
+      transactionGroupId: any;
+      date: any;
+      description: string;
+      amount: number;
+      isRecurringPayment: boolean;
+      category: {
+        __typename: "TransactionCategory";
+        _id: any;
+        description: string;
+        type: ITransactionCategoryTypeEnum;
+        isDefault: boolean;
+        iconProperties: {
+          __typename: "IconProperties";
+          background: string;
+          color: string;
+          icon: string;
+        };
+      };
+      installments: {
+        __typename: "Installments";
+        total: number;
+        current: number;
+      } | null;
+      creditCard: {
+        __typename: "CreditCard";
+        _id: any;
+        transactionGroupId: any;
+        description: string;
+      } | null;
+    }>;
+    pageInfo: {
+      __typename: "PageInfo";
+      cursor: any | null;
+      hasNextPage: boolean;
+      totalCount: number;
+    };
+  };
 };
 
 export type ITransactionsGroupQueryVariables = Exact<{

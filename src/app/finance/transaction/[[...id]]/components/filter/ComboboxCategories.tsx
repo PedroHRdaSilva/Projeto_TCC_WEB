@@ -38,7 +38,7 @@ const frameworks = [
   },
 ];
 
-export function ComboboxCategogia() {
+export function ComboboxCategories() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 

@@ -5,6 +5,58 @@ import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 
+export const CreateCreditCardDocument = gql`
+  mutation CreateCreditCard($input: CreditCardInput!) {
+    createCreditCard(input: $input) {
+      _id
+      transactionGroupId
+      description
+    }
+  }
+`;
+export type ICreateCreditCardMutationFn = Apollo.MutationFunction<
+  Types.ICreateCreditCardMutation,
+  Types.ICreateCreditCardMutationVariables
+>;
+
+/**
+ * __useCreateCreditCardMutation__
+ *
+ * To run a mutation, you first call `useCreateCreditCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCreditCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCreditCardMutation, { data, loading, error }] = useCreateCreditCardMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCreditCardMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.ICreateCreditCardMutation,
+    Types.ICreateCreditCardMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.ICreateCreditCardMutation,
+    Types.ICreateCreditCardMutationVariables
+  >(CreateCreditCardDocument, options);
+}
+export type CreateCreditCardMutationHookResult = ReturnType<
+  typeof useCreateCreditCardMutation
+>;
+export type CreateCreditCardMutationResult =
+  Apollo.MutationResult<Types.ICreateCreditCardMutation>;
+export type CreateCreditCardMutationOptions = Apollo.BaseMutationOptions<
+  Types.ICreateCreditCardMutation,
+  Types.ICreateCreditCardMutationVariables
+>;
 export const CreateTransactionGroupDocument = gql`
   mutation CreateTransactionGroup($input: CreateTransactionGroupInput!) {
     createTransactionGroup(input: $input) {
@@ -64,6 +116,128 @@ export type CreateTransactionGroupMutationOptions = Apollo.BaseMutationOptions<
   Types.ICreateTransactionGroupMutation,
   Types.ICreateTransactionGroupMutationVariables
 >;
+export const CreateTransactionDocument = gql`
+  mutation CreateTransaction($input: TransactionInput!) {
+    createTransaction(input: $input) {
+      _id
+      transactionGroupId
+      category {
+        _id
+        description
+        iconProperties {
+          background
+          color
+          icon
+        }
+        type
+        isDefault
+      }
+      date
+      description
+      amount
+      installments {
+        total
+        current
+      }
+      creditCard {
+        _id
+        transactionGroupId
+        description
+      }
+    }
+  }
+`;
+export type ICreateTransactionMutationFn = Apollo.MutationFunction<
+  Types.ICreateTransactionMutation,
+  Types.ICreateTransactionMutationVariables
+>;
+
+/**
+ * __useCreateTransactionMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.ICreateTransactionMutation,
+    Types.ICreateTransactionMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.ICreateTransactionMutation,
+    Types.ICreateTransactionMutationVariables
+  >(CreateTransactionDocument, options);
+}
+export type CreateTransactionMutationHookResult = ReturnType<
+  typeof useCreateTransactionMutation
+>;
+export type CreateTransactionMutationResult =
+  Apollo.MutationResult<Types.ICreateTransactionMutation>;
+export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
+  Types.ICreateTransactionMutation,
+  Types.ICreateTransactionMutationVariables
+>;
+export const DeleteCreditCardDocument = gql`
+  mutation DeleteCreditCard($id: ObjectID!) {
+    deleteCreditCard(_id: $id)
+  }
+`;
+export type IDeleteCreditCardMutationFn = Apollo.MutationFunction<
+  Types.IDeleteCreditCardMutation,
+  Types.IDeleteCreditCardMutationVariables
+>;
+
+/**
+ * __useDeleteCreditCardMutation__
+ *
+ * To run a mutation, you first call `useDeleteCreditCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCreditCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCreditCardMutation, { data, loading, error }] = useDeleteCreditCardMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCreditCardMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IDeleteCreditCardMutation,
+    Types.IDeleteCreditCardMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IDeleteCreditCardMutation,
+    Types.IDeleteCreditCardMutationVariables
+  >(DeleteCreditCardDocument, options);
+}
+export type DeleteCreditCardMutationHookResult = ReturnType<
+  typeof useDeleteCreditCardMutation
+>;
+export type DeleteCreditCardMutationResult =
+  Apollo.MutationResult<Types.IDeleteCreditCardMutation>;
+export type DeleteCreditCardMutationOptions = Apollo.BaseMutationOptions<
+  Types.IDeleteCreditCardMutation,
+  Types.IDeleteCreditCardMutationVariables
+>;
 export const DeleteTransactionGroupDocument = gql`
   mutation DeleteTransactionGroup($_id: ObjectID!) {
     deleteTransactionGroup(_id: $_id)
@@ -111,6 +285,107 @@ export type DeleteTransactionGroupMutationResult =
 export type DeleteTransactionGroupMutationOptions = Apollo.BaseMutationOptions<
   Types.IDeleteTransactionGroupMutation,
   Types.IDeleteTransactionGroupMutationVariables
+>;
+export const DeleteTransactionDocument = gql`
+  mutation DeleteTransaction($id: ObjectID!) {
+    deleteTransaction(_id: $id)
+  }
+`;
+export type IDeleteTransactionMutationFn = Apollo.MutationFunction<
+  Types.IDeleteTransactionMutation,
+  Types.IDeleteTransactionMutationVariables
+>;
+
+/**
+ * __useDeleteTransactionMutation__
+ *
+ * To run a mutation, you first call `useDeleteTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTransactionMutation, { data, loading, error }] = useDeleteTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IDeleteTransactionMutation,
+    Types.IDeleteTransactionMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IDeleteTransactionMutation,
+    Types.IDeleteTransactionMutationVariables
+  >(DeleteTransactionDocument, options);
+}
+export type DeleteTransactionMutationHookResult = ReturnType<
+  typeof useDeleteTransactionMutation
+>;
+export type DeleteTransactionMutationResult =
+  Apollo.MutationResult<Types.IDeleteTransactionMutation>;
+export type DeleteTransactionMutationOptions = Apollo.BaseMutationOptions<
+  Types.IDeleteTransactionMutation,
+  Types.IDeleteTransactionMutationVariables
+>;
+export const UpdateCreditCardDocument = gql`
+  mutation UpdateCreditCard($id: ObjectID!, $input: CreditCardInput!) {
+    updateCreditCard(_id: $id, input: $input) {
+      _id
+      transactionGroupId
+      description
+    }
+  }
+`;
+export type IUpdateCreditCardMutationFn = Apollo.MutationFunction<
+  Types.IUpdateCreditCardMutation,
+  Types.IUpdateCreditCardMutationVariables
+>;
+
+/**
+ * __useUpdateCreditCardMutation__
+ *
+ * To run a mutation, you first call `useUpdateCreditCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCreditCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCreditCardMutation, { data, loading, error }] = useUpdateCreditCardMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCreditCardMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IUpdateCreditCardMutation,
+    Types.IUpdateCreditCardMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IUpdateCreditCardMutation,
+    Types.IUpdateCreditCardMutationVariables
+  >(UpdateCreditCardDocument, options);
+}
+export type UpdateCreditCardMutationHookResult = ReturnType<
+  typeof useUpdateCreditCardMutation
+>;
+export type UpdateCreditCardMutationResult =
+  Apollo.MutationResult<Types.IUpdateCreditCardMutation>;
+export type UpdateCreditCardMutationOptions = Apollo.BaseMutationOptions<
+  Types.IUpdateCreditCardMutation,
+  Types.IUpdateCreditCardMutationVariables
 >;
 export const UpdateTransactionGroupDocument = gql`
   mutation UpdateTransactionGroup(
@@ -174,6 +449,81 @@ export type UpdateTransactionGroupMutationResult =
 export type UpdateTransactionGroupMutationOptions = Apollo.BaseMutationOptions<
   Types.IUpdateTransactionGroupMutation,
   Types.IUpdateTransactionGroupMutationVariables
+>;
+export const UpdateTransactionDocument = gql`
+  mutation UpdateTransaction($id: ObjectID!, $input: TransactionInput!) {
+    updateTransaction(_id: $id, input: $input) {
+      _id
+      transactionGroupId
+      category {
+        description
+        _id
+        iconProperties {
+          background
+          color
+          icon
+        }
+        type
+        isDefault
+      }
+      date
+      description
+      amount
+      installments {
+        total
+        current
+      }
+      creditCard {
+        _id
+        transactionGroupId
+        description
+      }
+    }
+  }
+`;
+export type IUpdateTransactionMutationFn = Apollo.MutationFunction<
+  Types.IUpdateTransactionMutation,
+  Types.IUpdateTransactionMutationVariables
+>;
+
+/**
+ * __useUpdateTransactionMutation__
+ *
+ * To run a mutation, you first call `useUpdateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTransactionMutation, { data, loading, error }] = useUpdateTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IUpdateTransactionMutation,
+    Types.IUpdateTransactionMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IUpdateTransactionMutation,
+    Types.IUpdateTransactionMutationVariables
+  >(UpdateTransactionDocument, options);
+}
+export type UpdateTransactionMutationHookResult = ReturnType<
+  typeof useUpdateTransactionMutation
+>;
+export type UpdateTransactionMutationResult =
+  Apollo.MutationResult<Types.IUpdateTransactionMutation>;
+export type UpdateTransactionMutationOptions = Apollo.BaseMutationOptions<
+  Types.IUpdateTransactionMutation,
+  Types.IUpdateTransactionMutationVariables
 >;
 export const CreateUserDocument = gql`
   mutation CreateUser($createUserInput: CreateUserInput!) {
@@ -372,6 +722,180 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   Types.IResetPasswordMutation,
   Types.IResetPasswordMutationVariables
 >;
+export const CategoriesByGroupIdDocument = gql`
+  query CategoriesByGroupId($transactionGroupId: ObjectID!) {
+    categoriesByGroupId(transactionGroupId: $transactionGroupId) {
+      _id
+      description
+      iconProperties {
+        background
+        color
+        icon
+      }
+      type
+      isDefault
+    }
+  }
+`;
+
+/**
+ * __useCategoriesByGroupIdQuery__
+ *
+ * To run a query within a React component, call `useCategoriesByGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesByGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesByGroupIdQuery({
+ *   variables: {
+ *      transactionGroupId: // value for 'transactionGroupId'
+ *   },
+ * });
+ */
+export function useCategoriesByGroupIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ICategoriesByGroupIdQuery,
+    Types.ICategoriesByGroupIdQueryVariables
+  > &
+    (
+      | { variables: Types.ICategoriesByGroupIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ICategoriesByGroupIdQuery,
+    Types.ICategoriesByGroupIdQueryVariables
+  >(CategoriesByGroupIdDocument, options);
+}
+export function useCategoriesByGroupIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ICategoriesByGroupIdQuery,
+    Types.ICategoriesByGroupIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ICategoriesByGroupIdQuery,
+    Types.ICategoriesByGroupIdQueryVariables
+  >(CategoriesByGroupIdDocument, options);
+}
+export function useCategoriesByGroupIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ICategoriesByGroupIdQuery,
+        Types.ICategoriesByGroupIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ICategoriesByGroupIdQuery,
+    Types.ICategoriesByGroupIdQueryVariables
+  >(CategoriesByGroupIdDocument, options);
+}
+export type CategoriesByGroupIdQueryHookResult = ReturnType<
+  typeof useCategoriesByGroupIdQuery
+>;
+export type CategoriesByGroupIdLazyQueryHookResult = ReturnType<
+  typeof useCategoriesByGroupIdLazyQuery
+>;
+export type CategoriesByGroupIdSuspenseQueryHookResult = ReturnType<
+  typeof useCategoriesByGroupIdSuspenseQuery
+>;
+export type CategoriesByGroupIdQueryResult = Apollo.QueryResult<
+  Types.ICategoriesByGroupIdQuery,
+  Types.ICategoriesByGroupIdQueryVariables
+>;
+export const CreditCardByGroupIdDocument = gql`
+  query CreditCardByGroupId($transactionGroupId: ObjectID!) {
+    creditCardByGroupId(transactionGroupId: $transactionGroupId) {
+      _id
+      transactionGroupId
+      description
+    }
+  }
+`;
+
+/**
+ * __useCreditCardByGroupIdQuery__
+ *
+ * To run a query within a React component, call `useCreditCardByGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreditCardByGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreditCardByGroupIdQuery({
+ *   variables: {
+ *      transactionGroupId: // value for 'transactionGroupId'
+ *   },
+ * });
+ */
+export function useCreditCardByGroupIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ICreditCardByGroupIdQuery,
+    Types.ICreditCardByGroupIdQueryVariables
+  > &
+    (
+      | { variables: Types.ICreditCardByGroupIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ICreditCardByGroupIdQuery,
+    Types.ICreditCardByGroupIdQueryVariables
+  >(CreditCardByGroupIdDocument, options);
+}
+export function useCreditCardByGroupIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ICreditCardByGroupIdQuery,
+    Types.ICreditCardByGroupIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ICreditCardByGroupIdQuery,
+    Types.ICreditCardByGroupIdQueryVariables
+  >(CreditCardByGroupIdDocument, options);
+}
+export function useCreditCardByGroupIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ICreditCardByGroupIdQuery,
+        Types.ICreditCardByGroupIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ICreditCardByGroupIdQuery,
+    Types.ICreditCardByGroupIdQueryVariables
+  >(CreditCardByGroupIdDocument, options);
+}
+export type CreditCardByGroupIdQueryHookResult = ReturnType<
+  typeof useCreditCardByGroupIdQuery
+>;
+export type CreditCardByGroupIdLazyQueryHookResult = ReturnType<
+  typeof useCreditCardByGroupIdLazyQuery
+>;
+export type CreditCardByGroupIdSuspenseQueryHookResult = ReturnType<
+  typeof useCreditCardByGroupIdSuspenseQuery
+>;
+export type CreditCardByGroupIdQueryResult = Apollo.QueryResult<
+  Types.ICreditCardByGroupIdQuery,
+  Types.ICreditCardByGroupIdQueryVariables
+>;
 export const TransactionGroupByIdDocument = gql`
   query TransactionGroupById($_id: ObjectID) {
     transactionGroupById(_id: $_id) {
@@ -565,6 +1089,152 @@ export type TransactionTotalsSuspenseQueryHookResult = ReturnType<
 export type TransactionTotalsQueryResult = Apollo.QueryResult<
   Types.ITransactionTotalsQuery,
   Types.ITransactionTotalsQueryVariables
+>;
+export const TransactionsByGroupIdDocument = gql`
+  query TransactionsByGroupId(
+    $groupId: ObjectID!
+    $filterByPeriod: Date!
+    $filterByCategoryId: ObjectID
+    $filterBySearch: String
+    $cursor: Cursor
+    $limit: Int
+  ) {
+    transactions(
+      groupId: $groupId
+      filterByPeriod: $filterByPeriod
+      filterByCategoryId: $filterByCategoryId
+      filterBySearch: $filterBySearch
+      cursor: $cursor
+      limit: $limit
+    )
+      @connection(
+        key: "transactions"
+        filter: [
+          "groupId"
+          "filterByPeriod"
+          "filterByCategoryId"
+          "filterBySearch"
+        ]
+      ) {
+      nodes {
+        _id
+        transactionGroupId
+        category {
+          _id
+          description
+          iconProperties {
+            background
+            color
+            icon
+          }
+          type
+          isDefault
+        }
+        date
+        description
+        amount
+        installments {
+          total
+          current
+        }
+        isRecurringPayment
+        creditCard {
+          _id
+          transactionGroupId
+          description
+        }
+      }
+      pageInfo {
+        cursor
+        hasNextPage
+        totalCount
+      }
+      totalCount
+    }
+  }
+`;
+
+/**
+ * __useTransactionsByGroupIdQuery__
+ *
+ * To run a query within a React component, call `useTransactionsByGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionsByGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionsByGroupIdQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      filterByPeriod: // value for 'filterByPeriod'
+ *      filterByCategoryId: // value for 'filterByCategoryId'
+ *      filterBySearch: // value for 'filterBySearch'
+ *      cursor: // value for 'cursor'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useTransactionsByGroupIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ITransactionsByGroupIdQuery,
+    Types.ITransactionsByGroupIdQueryVariables
+  > &
+    (
+      | {
+          variables: Types.ITransactionsByGroupIdQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ITransactionsByGroupIdQuery,
+    Types.ITransactionsByGroupIdQueryVariables
+  >(TransactionsByGroupIdDocument, options);
+}
+export function useTransactionsByGroupIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ITransactionsByGroupIdQuery,
+    Types.ITransactionsByGroupIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ITransactionsByGroupIdQuery,
+    Types.ITransactionsByGroupIdQueryVariables
+  >(TransactionsByGroupIdDocument, options);
+}
+export function useTransactionsByGroupIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ITransactionsByGroupIdQuery,
+        Types.ITransactionsByGroupIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ITransactionsByGroupIdQuery,
+    Types.ITransactionsByGroupIdQueryVariables
+  >(TransactionsByGroupIdDocument, options);
+}
+export type TransactionsByGroupIdQueryHookResult = ReturnType<
+  typeof useTransactionsByGroupIdQuery
+>;
+export type TransactionsByGroupIdLazyQueryHookResult = ReturnType<
+  typeof useTransactionsByGroupIdLazyQuery
+>;
+export type TransactionsByGroupIdSuspenseQueryHookResult = ReturnType<
+  typeof useTransactionsByGroupIdSuspenseQuery
+>;
+export type TransactionsByGroupIdQueryResult = Apollo.QueryResult<
+  Types.ITransactionsByGroupIdQuery,
+  Types.ITransactionsByGroupIdQueryVariables
 >;
 export const TransactionsGroupDocument = gql`
   query TransactionsGroup($search: String) {

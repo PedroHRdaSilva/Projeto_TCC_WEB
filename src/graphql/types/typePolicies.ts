@@ -35,13 +35,24 @@ export type IconPropertiesFieldPolicy = {
   color?: FieldPolicy<any> | FieldReadFunction<any>;
   icon?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type InstallmentsKeySpecifier = (
+  | "current"
+  | "total"
+  | InstallmentsKeySpecifier
+)[];
+export type InstallmentsFieldPolicy = {
+  current?: FieldPolicy<any> | FieldReadFunction<any>;
+  total?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type MutationKeySpecifier = (
   | "createCategory"
   | "createCreditCard"
+  | "createTransaction"
   | "createTransactionGroup"
   | "createUser"
   | "deleteCategory"
   | "deleteCreditCard"
+  | "deleteTransaction"
   | "deleteTransactionGroup"
   | "forgotPassword"
   | "loginWithCredentials"
@@ -49,16 +60,19 @@ export type MutationKeySpecifier = (
   | "resetPassword"
   | "updateCategory"
   | "updateCreditCard"
+  | "updateTransaction"
   | "updateTransactionGroup"
   | MutationKeySpecifier
 )[];
 export type MutationFieldPolicy = {
   createCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   createCreditCard?: FieldPolicy<any> | FieldReadFunction<any>;
+  createTransaction?: FieldPolicy<any> | FieldReadFunction<any>;
   createTransactionGroup?: FieldPolicy<any> | FieldReadFunction<any>;
   createUser?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteCreditCard?: FieldPolicy<any> | FieldReadFunction<any>;
+  deleteTransaction?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTransactionGroup?: FieldPolicy<any> | FieldReadFunction<any>;
   forgotPassword?: FieldPolicy<any> | FieldReadFunction<any>;
   loginWithCredentials?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -66,6 +80,7 @@ export type MutationFieldPolicy = {
   resetPassword?: FieldPolicy<any> | FieldReadFunction<any>;
   updateCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   updateCreditCard?: FieldPolicy<any> | FieldReadFunction<any>;
+  updateTransaction?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTransactionGroup?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ObjectKeyValueKeySpecifier = (
@@ -94,8 +109,10 @@ export type QueryKeySpecifier = (
   | "creditCardByGroupId"
   | "creditCardById"
   | "now"
+  | "transactionById"
   | "transactionGroupById"
   | "transactionTotals"
+  | "transactions"
   | "transactionsGroup"
   | "viewer"
   | QueryKeySpecifier
@@ -106,10 +123,35 @@ export type QueryFieldPolicy = {
   creditCardByGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
   creditCardById?: FieldPolicy<any> | FieldReadFunction<any>;
   now?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactionById?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionGroupById?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionTotals?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactions?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionsGroup?: FieldPolicy<any> | FieldReadFunction<any>;
   viewer?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionKeySpecifier = (
+  | "_id"
+  | "amount"
+  | "category"
+  | "creditCard"
+  | "date"
+  | "description"
+  | "installments"
+  | "isRecurringPayment"
+  | "transactionGroupId"
+  | TransactionKeySpecifier
+)[];
+export type TransactionFieldPolicy = {
+  _id?: FieldPolicy<any> | FieldReadFunction<any>;
+  amount?: FieldPolicy<any> | FieldReadFunction<any>;
+  category?: FieldPolicy<any> | FieldReadFunction<any>;
+  creditCard?: FieldPolicy<any> | FieldReadFunction<any>;
+  date?: FieldPolicy<any> | FieldReadFunction<any>;
+  description?: FieldPolicy<any> | FieldReadFunction<any>;
+  installments?: FieldPolicy<any> | FieldReadFunction<any>;
+  isRecurringPayment?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactionGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TransactionCategoryKeySpecifier = (
   | "_id"
@@ -126,6 +168,17 @@ export type TransactionCategoryFieldPolicy = {
   isDefault?: FieldPolicy<any> | FieldReadFunction<any>;
   type?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type TransactionDetailsPaginationKeySpecifier = (
+  | "nodes"
+  | "pageInfo"
+  | "totalCount"
+  | TransactionDetailsPaginationKeySpecifier
+)[];
+export type TransactionDetailsPaginationFieldPolicy = {
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>;
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
+  totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type TransactionGroupKeySpecifier = (
   | "_id"
   | "description"
@@ -138,6 +191,39 @@ export type TransactionGroupFieldPolicy = {
   description?: FieldPolicy<any> | FieldReadFunction<any>;
   iconProperties?: FieldPolicy<any> | FieldReadFunction<any>;
   owner?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionGroupedKeySpecifier = (
+  | "groupBy"
+  | "nodes"
+  | TransactionGroupedKeySpecifier
+)[];
+export type TransactionGroupedFieldPolicy = {
+  groupBy?: FieldPolicy<any> | FieldReadFunction<any>;
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionGroupedDetailsPaginationKeySpecifier = (
+  | "groups"
+  | "pageInfo"
+  | "totalCount"
+  | TransactionGroupedDetailsPaginationKeySpecifier
+)[];
+export type TransactionGroupedDetailsPaginationFieldPolicy = {
+  groups?: FieldPolicy<any> | FieldReadFunction<any>;
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
+  totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionsGroupedByCategoryPaginationKeySpecifier = (
+  | "groupBy"
+  | "nodes"
+  | "pageInfo"
+  | "totalCount"
+  | TransactionsGroupedByCategoryPaginationKeySpecifier
+)[];
+export type TransactionsGroupedByCategoryPaginationFieldPolicy = {
+  groupBy?: FieldPolicy<any> | FieldReadFunction<any>;
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>;
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
+  totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TransactionsTotalizeKeySpecifier = (
   | "percentageVariation"
@@ -200,6 +286,13 @@ export type StrictTypedTypePolicies = {
       | (() => undefined | IconPropertiesKeySpecifier);
     fields?: IconPropertiesFieldPolicy;
   };
+  Installments?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | InstallmentsKeySpecifier
+      | (() => undefined | InstallmentsKeySpecifier);
+    fields?: InstallmentsFieldPolicy;
+  };
   Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
       | false
@@ -228,6 +321,13 @@ export type StrictTypedTypePolicies = {
       | (() => undefined | QueryKeySpecifier);
     fields?: QueryFieldPolicy;
   };
+  Transaction?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | TransactionKeySpecifier
+      | (() => undefined | TransactionKeySpecifier);
+    fields?: TransactionFieldPolicy;
+  };
   TransactionCategory?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
       | false
@@ -235,12 +335,46 @@ export type StrictTypedTypePolicies = {
       | (() => undefined | TransactionCategoryKeySpecifier);
     fields?: TransactionCategoryFieldPolicy;
   };
+  TransactionDetailsPagination?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | TransactionDetailsPaginationKeySpecifier
+      | (() => undefined | TransactionDetailsPaginationKeySpecifier);
+    fields?: TransactionDetailsPaginationFieldPolicy;
+  };
   TransactionGroup?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
       | false
       | TransactionGroupKeySpecifier
       | (() => undefined | TransactionGroupKeySpecifier);
     fields?: TransactionGroupFieldPolicy;
+  };
+  TransactionGrouped?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | TransactionGroupedKeySpecifier
+      | (() => undefined | TransactionGroupedKeySpecifier);
+    fields?: TransactionGroupedFieldPolicy;
+  };
+  TransactionGroupedDetailsPagination?: Omit<
+    TypePolicy,
+    "fields" | "keyFields"
+  > & {
+    keyFields?:
+      | false
+      | TransactionGroupedDetailsPaginationKeySpecifier
+      | (() => undefined | TransactionGroupedDetailsPaginationKeySpecifier);
+    fields?: TransactionGroupedDetailsPaginationFieldPolicy;
+  };
+  TransactionsGroupedByCategoryPagination?: Omit<
+    TypePolicy,
+    "fields" | "keyFields"
+  > & {
+    keyFields?:
+      | false
+      | TransactionsGroupedByCategoryPaginationKeySpecifier
+      | (() => undefined | TransactionsGroupedByCategoryPaginationKeySpecifier);
+    fields?: TransactionsGroupedByCategoryPaginationFieldPolicy;
   };
   TransactionsTotalize?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
