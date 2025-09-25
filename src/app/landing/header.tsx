@@ -1,0 +1,30 @@
+"use client";
+
+import { Button } from "@/lib/ui/button";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+export default function Header() {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    router.push("/signin");
+  };
+
+  const handleSignup = () => {
+    router.push("/signup");
+  };
+
+  return (
+    <header className="flex justify-between items-center p-4 bg-gray-100 dark:bg-gray-800">
+      <Image src="/LogoDark.svg" alt="Logo" width={200} height={40} />
+
+      <div className="space-x-2">
+        <Button variant="outline" onClick={handleLogin}>
+          Entrar
+        </Button>
+        <Button onClick={handleSignup}>Cadastre-se</Button>
+      </div>
+    </header>
+  );
+}

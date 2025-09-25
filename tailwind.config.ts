@@ -19,9 +19,7 @@ const config = {
   	},
   	extend: {
   		fontFamily: {
-  			'dm-sans': [
-  				'var(--font-dm-sans)'
-  			]
+  			'dm-sans': ['var(--font-dm-sans)']
   		},
   		colors: {
   			input: 'hsl(var(--input))',
@@ -66,30 +64,9 @@ const config = {
   			}
   		},
   		keyframes: {
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
-  			},
-  			'move-infinite': {
-  				from: {
-  					transform: 'translateX(0)'
-  				},
-  				to: {
-  					transform: 'translateX(-100%)'
-  				}
-  			}
+  			'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
+  			'accordion-up': { from: { height: 'var(--radix-accordion-content-height)' }, to: { height: '0' } },
+  			'move-infinite': { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-100%)' } }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
@@ -107,3 +84,4 @@ const config = {
 } satisfies Config;
 
 export default config;
+
