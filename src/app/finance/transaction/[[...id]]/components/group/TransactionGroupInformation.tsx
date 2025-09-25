@@ -1,5 +1,5 @@
 "use client";
-import { SettingsIcon, TrophyIcon } from "lucide-react";
+import { PlusIcon, SettingsIcon, TrophyIcon } from "lucide-react";
 
 import type { ITransactionGroupByIdQuery } from "@/graphql/types/graphqlTypes";
 import { arrayOfPossibleIcons, cn, hexToRgba } from "@/lib/utils/utils";
@@ -7,6 +7,12 @@ import TransactionGroupSelection from "@/app/finance/transaction/[[...id]]/compo
 import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/components/group/TransactionsGroupConfig";
 import IncomeExpenses from "@/app/finance/transaction/[[...id]]/components/group/IncomeExpenses";
 import TransactionsFilter from "@/app/finance/transaction/[[...id]]/components/filter/TransactionsFilter";
+import CreateTransaction from "@/app/finance/transaction/[[...id]]/components/group/CreateTransaction";
+import TransactionsByGroupIdQuery from "@/graphql/queries/transactions/TransactionsByGroupIdQuery";
+import { lightFormat, startOfMonth } from "date-fns";
+import TransactionTotalsQuery from "@/graphql/queries/transactions/TransactionTotalsQuery";
+import { parseAsString, useQueryState } from "nuqs";
+import { parseAsDate } from "@/app/finance/transaction/[[...id]]/components/filter/urlParsers";
 
 interface TransactionsPageProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
@@ -17,6 +23,16 @@ export default function TransactionGroupInformation({
   group,
 }: TransactionsPageProps) {
   const { iconProperties, description } = group;
+  const date = startOfMonth(new Date());
+  const [filterByPeriod] = useQueryState(
+    "period",
+    parseAsDate.withDefault(date)
+  );
+  const [filterByCategoryId] = useQueryState("categoryId", parseAsString);
+  const [filterBySearch] = useQueryState(
+    "search",
+    parseAsString.withDefault("")
+  );
 
   const IconComponent =
     arrayOfPossibleIcons.find(
@@ -67,8 +83,45 @@ export default function TransactionGroupInformation({
           <IncomeExpenses group={group} />
         </div>
       </div>
-      <div className="mt-10">
-        <TransactionsFilter />
+      <div className="mt-10 flex w-full justify-between">
+        <div>
+          <TransactionsFilter />
+        </div>
+        <div className="">
+          <CreateTransaction
+            refetchQueries={[
+              {
+                query: TransactionsByGroupIdQuery,
+                variables: {
+                  cursor: null,
+                  filterByCategoryId: filterByCategoryId,
+                  filterByPeriod: lightFormat(filterByPeriod, "yyyy-MM-dd"),
+                  filterBySearch: filterBySearch,
+                  groupId: group._id,
+                  limit: 30,
+                },
+              },
+              {
+                query: TransactionTotalsQuery,
+                variables: {
+                  groupId: group._id,
+                  filterByPeriod: lightFormat(filterByPeriod, "yyyy-MM-dd"),
+                  filterByCategoryId,
+                  filterBySearch,
+                },
+              },
+            ]}
+            transactionGroup={group}
+            // categories={dataCategories?.categoriesByGroupId || []}
+          >
+            <div className="flex items-center space-x-3 rounded-lg border border-border bg-secondary p-2">
+              <PlusIcon size={16} className="text-secondary-foreground" />
+              <span className="font-dm-sans text-sm text-secondary-foreground">
+                Nova Transação
+              </span>
+            </div>
+          </CreateTransaction>
+        </div>
       </div>
     </div>
   );

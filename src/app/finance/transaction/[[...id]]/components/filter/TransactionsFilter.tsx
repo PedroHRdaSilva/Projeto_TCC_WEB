@@ -1,5 +1,5 @@
 "use client";
-import { ComboboxCategogia } from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategogia";
+import { ComboboxCategories } from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
 import Calendar from "@/lib/ui/calendar";
 import { Input } from "@/lib/ui/input";
 import { cn } from "@/lib/utils/utils";
@@ -14,6 +14,7 @@ import debounce from "lodash/fp/debounce";
 
 import { parseAsDate } from "@/app/finance/transaction/[[...id]]/components/filter/urlParsers";
 import { parseAsString, useQueryState } from "nuqs";
+import CreateTransaction from "@/app/finance/transaction/[[...id]]/components/group/CreateTransaction";
 
 export default function TransactionsFilter({}) {
   const date = startOfMonth(new Date());
@@ -56,7 +57,7 @@ export default function TransactionsFilter({}) {
           </div>
         </Calendar>
       </div>
-      <ComboboxCategogia />
+      <ComboboxCategories />
       <div className="relative w-full xl:max-w-96">
         <Search
           className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-foreground/50"
