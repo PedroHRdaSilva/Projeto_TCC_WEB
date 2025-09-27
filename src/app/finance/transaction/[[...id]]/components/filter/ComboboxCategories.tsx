@@ -1,10 +1,7 @@
-"use client";
+import { CheckIcon, ChevronDown, PlusCircleIcon } from "lucide-react";
+import React, { useState } from "react";
 
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { Popover } from "@radix-ui/react-popover";
-import { PopoverContent, PopoverTrigger } from "@/lib/ui/popover";
-import { Button } from "@/lib/ui/button";
+import type { ICategoriesByGroupIdQuery } from "@/graphql/types/graphqlTypes";
 import {
   Command,
   CommandEmpty,
@@ -13,74 +10,90 @@ import {
   CommandItem,
   CommandList,
 } from "@/lib/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/lib/ui/popover";
 import { cn } from "@/lib/utils/utils";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+import type { ReactNode } from "react";
+import GroupCategoryForm from "@/app/finance/transaction/[[...id]]/components/group/GroupCategoryForm";
 
-export function ComboboxCategories() {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+interface ComboboxCategorieProps {
+  children: ReactNode;
+  groupId: string;
+  categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>;
+  className?: string;
+  initialValue?: string;
+  onSelect?: (date: string) => void;
+}
+
+export default function ComboboxCategories({
+  children,
+  groupId,
+  categories,
+  className,
+  initialValue,
+  onSelect,
+}: ComboboxCategorieProps) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(initialValue);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[250px] justify-between"
-        >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Selecione uma categoria..."}
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
+    <Popover open={open} onOpenChange={setOpen} modal={true}>
+      <PopoverTrigger
+        className={cn(
+          "w-full ring-offset-background",
+          "focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-600 focus-visible:ring-offset-1",
+          "dark:focus-visible:ring-neutral-400",
+          className
+        )}
+      >
+        {categories.find((node) => node._id === value)?.description || children}
+        <div className="pr-2">
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[250px] p-0">
-        <Command>
-          <CommandInput
-            placeholder="Selecione uma categoria..."
-            className="h-9 "
-          />
-          <CommandList>
-            <CommandEmpty>Categoria nao encontrada.</CommandEmpty>
-            <CommandGroup className="border-b"></CommandGroup>
-            <CommandGroup>
-              {frameworks.map((framework) => (
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+        <Command value={initialValue}>
+          <CommandInput placeholder="Procurar Categorias..." />
+          <CommandList className="max-h-none overflow-hidden">
+            <CommandEmpty>Categoria nao encontrada</CommandEmpty>
+            <CommandGroup className="border-b">
+              <CommandItem>
+                <GroupCategoryForm
+                  groupId={groupId}
+                  onCreated={(categoryId) => {
+                    setValue(categoryId);
+                    setOpen(false);
+                  }}
+                  className="flex w-full items-center gap-3"
+                >
+                  <div>
+                    <PlusCircleIcon />
+                  </div>
+                  <span>Criar Categoria</span>
+                </GroupCategoryForm>
+              </CommandItem>
+            </CommandGroup>
+            <CommandGroup className="max-h-64 overflow-y-auto">
+              {categories.map((category) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                  key={category._id}
+                  value={category.description}
+                  onSelect={() => {
+                    if (value === category._id) {
+                      setValue(undefined);
+                      onSelect?.(category._id);
+                    } else {
+                      setValue(category._id);
+                      onSelect?.(category._id);
+                    }
                     setOpen(false);
                   }}
                 >
-                  {framework.label}
-                  <Check
+                  {category.description}
+                  <CheckIcon
                     className={cn(
                       "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      value === category._id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

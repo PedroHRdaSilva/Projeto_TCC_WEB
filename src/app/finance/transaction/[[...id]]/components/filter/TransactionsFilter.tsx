@@ -1,5 +1,5 @@
 "use client";
-import { ComboboxCategories } from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
+
 import Calendar from "@/lib/ui/calendar";
 import { Input } from "@/lib/ui/input";
 import { cn } from "@/lib/utils/utils";
@@ -14,22 +14,26 @@ import debounce from "lodash/fp/debounce";
 
 import { parseAsDate } from "@/app/finance/transaction/[[...id]]/components/filter/urlParsers";
 import { parseAsString, useQueryState } from "nuqs";
-import CreateTransaction from "@/app/finance/transaction/[[...id]]/components/group/CreateTransaction";
+import ComboboxCategories from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
+import { ICategoriesByGroupIdQuery } from "@/graphql/types/graphqlTypes";
+import useFilterQueryState from "@/app/finance/transaction/[[...id]]/components/filter/useFilterQueryState";
 
-export default function TransactionsFilter({}) {
-  const date = startOfMonth(new Date());
-  const [filterByPeriod, setFilterByPeriod] = useQueryState(
-    "period",
-    parseAsDate.withDefault(date)
-  );
-  const [filterByCategoryId, setFilterByCategoryId] = useQueryState(
-    "categoryId",
-    parseAsString
-  );
-  const [filterBySearch, setFilterBySearch] = useQueryState(
-    "search",
-    parseAsString.withDefault("")
-  );
+interface TransactionsFilterProps {
+  groupId: string;
+  categories: ICategoriesByGroupIdQuery["categoriesByGroupId"];
+}
+export default function TransactionsFilter({
+  groupId,
+  categories,
+}: TransactionsFilterProps) {
+  const {
+    filterByCategoryId,
+    filterByPeriod,
+    setFilterByCategoryId,
+    setFilterByPeriod,
+    setFilterBySearch,
+  } = useFilterQueryState();
+
   const currentMonth = getMonth(filterByPeriod) + 1;
   const currentYear = getYear(filterByPeriod);
   return (
@@ -57,7 +61,18 @@ export default function TransactionsFilter({}) {
           </div>
         </Calendar>
       </div>
-      <ComboboxCategories />
+      <ComboboxCategories
+        groupId={groupId}
+        categories={categories}
+        onSelect={(value) => {
+          setFilterByCategoryId(filterByCategoryId === value ? null : value);
+        }}
+        className="flex h-10 w-60 items-center justify-between rounded-lg bg-secondary pl-4"
+      >
+        <span className="text-sm text-secondary-foreground/50">
+          Filtre por categoria
+        </span>
+      </ComboboxCategories>
       <div className="relative w-full xl:max-w-96">
         <Search
           className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-foreground/50"

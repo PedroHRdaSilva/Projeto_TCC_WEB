@@ -37,14 +37,15 @@ import {
 
 import { useCreditCardByGroupIdQuery } from "@/graphql/hooks/graphqlHooks";
 import ComboboxCredit from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCredit";
-import { ComboboxCategories } from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
+
 import { CalendarCn } from "@/lib/ui/calendarCn";
+import ComboboxCategories from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
 
 interface CreateTransactionFormProps {
   transactionGroup: NonNullable<
     ITransactionGroupByIdQuery["transactionGroupById"]
   >;
-  // categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>;
+  categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>;
   initialValues?: NonNullable<
     ITransactionsByGroupIdQuery["transactions"]
   >["nodes"][0];
@@ -54,7 +55,7 @@ interface CreateTransactionFormProps {
 
 export default function CreateTransactionForm({
   transactionGroup,
-  // categories,
+  categories,
   initialValues,
   refetchQueries,
   setOpen,
@@ -143,7 +144,17 @@ export default function CreateTransactionForm({
                   <FormLabel className="text-secondary-foreground">
                     Categoria
                   </FormLabel>
-                  <ComboboxCategories></ComboboxCategories>
+                  <ComboboxCategories
+                    initialValue={initialValues?.category._id}
+                    groupId={transactionGroup._id}
+                    categories={categories}
+                    onSelect={field.onChange}
+                    className="flex h-10 w-full items-center justify-between rounded-lg border border-border pl-4"
+                  >
+                    <span className="text-sm text-muted-foreground">
+                      Informe a classificação
+                    </span>
+                  </ComboboxCategories>
                   <div className="h-4">
                     <FormMessage />
                   </div>

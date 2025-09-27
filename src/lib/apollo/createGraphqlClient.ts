@@ -1,4 +1,3 @@
-import { TokenPayload } from "@/lib/auth/actions";
 import {
   ApolloClient,
   ApolloLink,
@@ -6,9 +5,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 
-export function createGraphqlClient(
-  session: { token: string; payload: TokenPayload } | null
-) {
+export function createGraphqlClient(session: { token: string } | null) {
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",

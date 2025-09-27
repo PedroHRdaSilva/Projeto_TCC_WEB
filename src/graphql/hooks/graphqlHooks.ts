@@ -5,6 +5,63 @@ import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 
+export const CreateCategoryDocument = gql`
+  mutation CreateCategory($input: CreateCategoryCustomInput!) {
+    createCategory(input: $input) {
+      _id
+      description
+      iconProperties {
+        background
+        color
+        icon
+      }
+      type
+    }
+  }
+`;
+export type ICreateCategoryMutationFn = Apollo.MutationFunction<
+  Types.ICreateCategoryMutation,
+  Types.ICreateCategoryMutationVariables
+>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.ICreateCategoryMutation,
+    Types.ICreateCategoryMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.ICreateCategoryMutation,
+    Types.ICreateCategoryMutationVariables
+  >(CreateCategoryDocument, options);
+}
+export type CreateCategoryMutationHookResult = ReturnType<
+  typeof useCreateCategoryMutation
+>;
+export type CreateCategoryMutationResult =
+  Apollo.MutationResult<Types.ICreateCategoryMutation>;
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
+  Types.ICreateCategoryMutation,
+  Types.ICreateCategoryMutationVariables
+>;
 export const CreateCreditCardDocument = gql`
   mutation CreateCreditCard($input: CreditCardInput!) {
     createCreditCard(input: $input) {
@@ -190,6 +247,55 @@ export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
   Types.ICreateTransactionMutation,
   Types.ICreateTransactionMutationVariables
 >;
+export const DeleteCategoryDocument = gql`
+  mutation DeleteCategory($id: ObjectID!, $groupId: ObjectID!) {
+    deleteCategory(_id: $id, groupId: $groupId)
+  }
+`;
+export type IDeleteCategoryMutationFn = Apollo.MutationFunction<
+  Types.IDeleteCategoryMutation,
+  Types.IDeleteCategoryMutationVariables
+>;
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IDeleteCategoryMutation,
+    Types.IDeleteCategoryMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IDeleteCategoryMutation,
+    Types.IDeleteCategoryMutationVariables
+  >(DeleteCategoryDocument, options);
+}
+export type DeleteCategoryMutationHookResult = ReturnType<
+  typeof useDeleteCategoryMutation
+>;
+export type DeleteCategoryMutationResult =
+  Apollo.MutationResult<Types.IDeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<
+  Types.IDeleteCategoryMutation,
+  Types.IDeleteCategoryMutationVariables
+>;
 export const DeleteCreditCardDocument = gql`
   mutation DeleteCreditCard($id: ObjectID!) {
     deleteCreditCard(_id: $id)
@@ -333,6 +439,64 @@ export type DeleteTransactionMutationResult =
 export type DeleteTransactionMutationOptions = Apollo.BaseMutationOptions<
   Types.IDeleteTransactionMutation,
   Types.IDeleteTransactionMutationVariables
+>;
+export const UpdateCategoryDocument = gql`
+  mutation UpdateCategory($id: ObjectID!, $input: UpdateCustomInput!) {
+    updateCategory(_id: $id, input: $input) {
+      _id
+      description
+      iconProperties {
+        background
+        color
+        icon
+      }
+      type
+    }
+  }
+`;
+export type IUpdateCategoryMutationFn = Apollo.MutationFunction<
+  Types.IUpdateCategoryMutation,
+  Types.IUpdateCategoryMutationVariables
+>;
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IUpdateCategoryMutation,
+    Types.IUpdateCategoryMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IUpdateCategoryMutation,
+    Types.IUpdateCategoryMutationVariables
+  >(UpdateCategoryDocument, options);
+}
+export type UpdateCategoryMutationHookResult = ReturnType<
+  typeof useUpdateCategoryMutation
+>;
+export type UpdateCategoryMutationResult =
+  Apollo.MutationResult<Types.IUpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<
+  Types.IUpdateCategoryMutation,
+  Types.IUpdateCategoryMutationVariables
 >;
 export const UpdateCreditCardDocument = gql`
   mutation UpdateCreditCard($id: ObjectID!, $input: CreditCardInput!) {
@@ -811,6 +975,96 @@ export type CategoriesByGroupIdSuspenseQueryHookResult = ReturnType<
 export type CategoriesByGroupIdQueryResult = Apollo.QueryResult<
   Types.ICategoriesByGroupIdQuery,
   Types.ICategoriesByGroupIdQueryVariables
+>;
+export const CategoriesByIdDocument = gql`
+  query CategoriesById($categoryId: ObjectID!) {
+    categoryById(categoryId: $categoryId) {
+      _id
+      description
+      iconProperties {
+        background
+        color
+        icon
+      }
+      type
+      isDefault
+    }
+  }
+`;
+
+/**
+ * __useCategoriesByIdQuery__
+ *
+ * To run a query within a React component, call `useCategoriesByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesByIdQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useCategoriesByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ICategoriesByIdQuery,
+    Types.ICategoriesByIdQueryVariables
+  > &
+    (
+      | { variables: Types.ICategoriesByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ICategoriesByIdQuery,
+    Types.ICategoriesByIdQueryVariables
+  >(CategoriesByIdDocument, options);
+}
+export function useCategoriesByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ICategoriesByIdQuery,
+    Types.ICategoriesByIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ICategoriesByIdQuery,
+    Types.ICategoriesByIdQueryVariables
+  >(CategoriesByIdDocument, options);
+}
+export function useCategoriesByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ICategoriesByIdQuery,
+        Types.ICategoriesByIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ICategoriesByIdQuery,
+    Types.ICategoriesByIdQueryVariables
+  >(CategoriesByIdDocument, options);
+}
+export type CategoriesByIdQueryHookResult = ReturnType<
+  typeof useCategoriesByIdQuery
+>;
+export type CategoriesByIdLazyQueryHookResult = ReturnType<
+  typeof useCategoriesByIdLazyQuery
+>;
+export type CategoriesByIdSuspenseQueryHookResult = ReturnType<
+  typeof useCategoriesByIdSuspenseQuery
+>;
+export type CategoriesByIdQueryResult = Apollo.QueryResult<
+  Types.ICategoriesByIdQuery,
+  Types.ICategoriesByIdQueryVariables
 >;
 export const CreditCardByGroupIdDocument = gql`
   query CreditCardByGroupId($transactionGroupId: ObjectID!) {

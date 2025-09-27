@@ -1,20 +1,19 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
-import { lightFormat, startOfMonth } from "date-fns";
+import { lightFormat } from "date-fns";
 import { moneyFormatter } from "@/lib/utils/formatters";
 import { Skeleton } from "@/lib/ui/skeleton";
 import { ITransactionGroupByIdQuery } from "@/graphql/types/graphqlTypes";
 import { useTransactionTotalsQuery } from "@/graphql/hooks/graphqlHooks";
+import useFilterQueryState from "@/app/finance/transaction/[[...id]]/components/filter/useFilterQueryState";
 
 interface TransactionSummaryProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
 }
 
 export default function IncomeExpenses({ group }: TransactionSummaryProps) {
-  const date = startOfMonth(new Date());
-  const filterByPeriod = date;
-  const filterBySearch = "";
-  const filterByCategoryId = undefined;
+  const { filterByPeriod, filterByCategoryId, filterBySearch } =
+    useFilterQueryState();
 
   const { data, previousData } = useTransactionTotalsQuery({
     variables: {

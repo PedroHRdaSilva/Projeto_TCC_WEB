@@ -69,6 +69,15 @@ export default function GroupCreditForm({
               transactionGroupId: groupId,
             },
           },
+          refetchQueries: [
+            {
+              query: CreditCardByGroupIdQuery,
+              variables: {
+                transactionGroupId: groupId,
+              },
+            },
+          ],
+          awaitRefetchQueries: true,
         }),
         {
           position: "top-center",
