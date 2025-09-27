@@ -448,6 +448,26 @@ export type IViewer = {
   name: Scalars["String"]["output"];
 };
 
+export type ICreateCategoryMutationVariables = Exact<{
+  input: ICreateCategoryCustomInput;
+}>;
+
+export type ICreateCategoryMutation = {
+  __typename: "Mutation";
+  createCategory: {
+    __typename: "TransactionCategory";
+    _id: any;
+    description: string;
+    type: ITransactionCategoryTypeEnum;
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  };
+};
+
 export type ICreateCreditCardMutationVariables = Exact<{
   input: ICreditCardInput;
 }>;
@@ -522,6 +542,16 @@ export type ICreateTransactionMutation = {
   }>;
 };
 
+export type IDeleteCategoryMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+  groupId: Scalars["ObjectID"]["input"];
+}>;
+
+export type IDeleteCategoryMutation = {
+  __typename: "Mutation";
+  deleteCategory: boolean | null;
+};
+
 export type IDeleteCreditCardMutationVariables = Exact<{
   id: Scalars["ObjectID"]["input"];
 }>;
@@ -547,6 +577,27 @@ export type IDeleteTransactionMutationVariables = Exact<{
 export type IDeleteTransactionMutation = {
   __typename: "Mutation";
   deleteTransaction: boolean;
+};
+
+export type IUpdateCategoryMutationVariables = Exact<{
+  id: Scalars["ObjectID"]["input"];
+  input: IUpdateCustomInput;
+}>;
+
+export type IUpdateCategoryMutation = {
+  __typename: "Mutation";
+  updateCategory: {
+    __typename: "TransactionCategory";
+    _id: any;
+    description: string;
+    type: ITransactionCategoryTypeEnum;
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  };
 };
 
 export type IUpdateCreditCardMutationVariables = Exact<{
@@ -687,6 +738,27 @@ export type ICategoriesByGroupIdQuery = {
       icon: string;
     };
   }>;
+};
+
+export type ICategoriesByIdQueryVariables = Exact<{
+  categoryId: Scalars["ObjectID"]["input"];
+}>;
+
+export type ICategoriesByIdQuery = {
+  __typename: "Query";
+  categoryById: {
+    __typename: "TransactionCategory";
+    _id: any;
+    description: string;
+    type: ITransactionCategoryTypeEnum;
+    isDefault: boolean;
+    iconProperties: {
+      __typename: "IconProperties";
+      background: string;
+      color: string;
+      icon: string;
+    };
+  } | null;
 };
 
 export type ICreditCardByGroupIdQueryVariables = Exact<{

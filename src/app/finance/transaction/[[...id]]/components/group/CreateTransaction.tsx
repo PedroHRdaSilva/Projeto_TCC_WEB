@@ -25,7 +25,7 @@ interface CreateTransactionProps {
   transactionGroup: NonNullable<
     ITransactionGroupByIdQuery["transactionGroupById"]
   >;
-  // categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>;
+  categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>;
   initialValues?: NonNullable<
     ITransactionsByGroupIdQuery["transactions"]
   >["nodes"][0];
@@ -35,7 +35,7 @@ interface CreateTransactionProps {
 export default function CreateTransaction({
   children,
   transactionGroup,
-  // categories,
+  categories,
   initialValues,
   refetchQueries,
 }: CreateTransactionProps) {
@@ -63,7 +63,7 @@ export default function CreateTransaction({
         <CreateTransactionForm
           refetchQueries={refetchQueries}
           transactionGroup={transactionGroup}
-          // categories={categories}
+          categories={categories}
           initialValues={initialValues}
           setOpen={(value) => setOpen(value)}
         />
