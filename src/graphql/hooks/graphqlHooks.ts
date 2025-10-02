@@ -1584,7 +1584,6 @@ export const ViewerDocument = gql`
       _id
       email
       name
-      isAdmin
     }
   }
 `;

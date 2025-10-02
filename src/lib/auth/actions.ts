@@ -9,7 +9,9 @@ export type TokenPayload = {
   iat: number;
   exp: number;
 };
-
+export type ViewerSession = {
+  token: string;
+} | null;
 // Esta função agora é exclusiva para o servidor
 export async function getViewerSession() {
   try {

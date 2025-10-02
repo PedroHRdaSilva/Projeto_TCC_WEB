@@ -105,7 +105,7 @@ export default function CreateTransactionForm({
       transactionGroupId: transactionGroup._id,
     },
   });
-  console.log("@@credito", transactionGroup._id);
+
   const hasInstallments = form.watch("installmentCheck");
 
   const { onSubmit } = useCreatTransactionSubmit({

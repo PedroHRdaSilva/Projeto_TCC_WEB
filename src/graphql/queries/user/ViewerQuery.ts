@@ -6,7 +6,6 @@ export default gql`
       _id
       email
       name
-      isAdmin
     }
   }
 `;
