@@ -254,14 +254,12 @@ export type UserFieldPolicy = {
 export type ViewerKeySpecifier = (
   | "_id"
   | "email"
-  | "isAdmin"
   | "name"
   | ViewerKeySpecifier
 )[];
 export type ViewerFieldPolicy = {
   _id?: FieldPolicy<any> | FieldReadFunction<any>;
   email?: FieldPolicy<any> | FieldReadFunction<any>;
-  isAdmin?: FieldPolicy<any> | FieldReadFunction<any>;
   name?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type StrictTypedTypePolicies = {

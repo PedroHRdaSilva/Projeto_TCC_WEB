@@ -444,7 +444,6 @@ export type IViewer = {
   __typename: "Viewer";
   _id: Scalars["ObjectID"]["output"];
   email: Scalars["String"]["output"];
-  isAdmin: Scalars["Boolean"]["output"];
   name: Scalars["String"]["output"];
 };
 
@@ -909,6 +908,5 @@ export type IViewerQuery = {
     _id: any;
     email: string;
     name: string;
-    isAdmin: boolean;
   } | null;
 };
