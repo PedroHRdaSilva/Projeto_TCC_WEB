@@ -42,7 +42,20 @@ export default function useGroupActions({
               iconProperties: values.iconProperties,
             },
           },
-          refetchQueries,
+          refetchQueries: [
+            {
+              query: TransactionsGroupQuery,
+              variables: {
+                search: null,
+              },
+            },
+            {
+              query: TransactionGroupByIdQuery,
+              variables: {
+                _id: undefined,
+              },
+            },
+          ],
         }),
         {
           loading: "Criando grupo...",

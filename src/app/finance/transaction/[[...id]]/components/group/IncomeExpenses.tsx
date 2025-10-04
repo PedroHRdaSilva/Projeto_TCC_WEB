@@ -59,12 +59,12 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
               <span className="font-dm-sans text-lg font-bold text-primary">
                 {moneyFormatter.format(revenue.total)}
               </span>
+              {revenue.percentageVariation !== 0 && (
+                <span className="ml-auto flex items-center font-dm-sans text-sm font-bold text-primary">
+                  {revenue.percentageVariation} % <ArrowUp />
+                </span>
+              )}
             </div>
-            {revenue.percentageVariation !== 0 && (
-              <span className="ml-auto flex items-center font-dm-sans text-sm font-bold text-primary">
-                {revenue.percentageVariation} % <ArrowUp />
-              </span>
-            )}
           </div>
 
           <div className="flex h-24 w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">

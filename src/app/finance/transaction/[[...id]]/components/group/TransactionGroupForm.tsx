@@ -60,7 +60,7 @@ export default function TransactionGroupForm({
     [isCreating, initialValues, refetchQueries]
   );
 
-  const { loading, onSubmit } = useGroupActions(params);
+  const { onSubmit } = useGroupActions(params);
 
   const form = useForm<TransactionGroupFormSchema>({
     mode: "onChange",
@@ -76,6 +76,7 @@ export default function TransactionGroupForm({
   });
 
   const handleSubmit = async (data: TransactionGroupFormSchema) => {
+    console.log(data);
     await onSubmit(data);
     if (isCreating) setOpen(false);
   };
@@ -112,7 +113,7 @@ export default function TransactionGroupForm({
                         style={{
                           backgroundColor: hexToRgba(
                             iconProperties.background,
-                            1
+                            0.2
                           ),
                         }}
                       >
@@ -151,18 +152,12 @@ export default function TransactionGroupForm({
               />
             </div>
           </div>
+          <div className="flex justify-end mt-2 pt-4">
+            <Button type="submit" className="w-32 gap-2" variant="outline">
+              Salvar
+            </Button>
+          </div>
         </form>
-      </div>
-
-      <div className="flex justify-end mt-2 pt-4">
-        <Button
-          type="submit"
-          className="w-32 gap-2"
-          variant="outline"
-          disabled={loading}
-        >
-          {loading ? "Aguarde..." : "Salvar"}
-        </Button>
       </div>
     </Form>
   );
