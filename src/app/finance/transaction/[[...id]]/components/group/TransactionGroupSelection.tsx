@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 
 import { useTransactionsGroupQuery } from "@/graphql/hooks/graphqlHooks";
-import TransactionsGroupQuery from "@/graphql/queries/transactions/TransactionsGroupQuery";
 
 import { Button } from "@/lib/ui/button";
 import { Input } from "@/lib/ui/input";
@@ -75,161 +74,163 @@ export default function TransactionGroupSelection({
         setIsOpen(open);
       }}
     >
-      <form>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="p-2.5 text-secondary-foreground bg-gray-300"
-          >
-            <ArrowRightLeftIcon size={18} />
-          </Button>
-        </DialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild={true}>
+            <DialogTrigger
+              data-testid="group-switcher-trigger"
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-muted-foreground",
+                "hover:bg-accent hover:text-foreground focus:outline-none"
+              )}
+            >
+              <ArrowRightLeftIcon size={24} />
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent className="mt-6">Ver Grupos</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
-        <DialogContent className="sm:max-w-[800px]">
-          <DialogHeader className="w-full mt-4 space-y-1">
-            {/* Cabeçalho textual */}
-            <div>
-              <DialogTitle className="text-2xl font-semibold text-foreground">
-                Grupo de transações
-              </DialogTitle>
-              <DialogDescription className="text-base text-muted-foreground">
-                Lista de grupo de transações
-              </DialogDescription>
-            </div>
+      <DialogContent className="sm:max-w-[800px]">
+        <DialogHeader className="w-full mt-4 space-y-1">
+          {/* Cabeçalho textual */}
+          <div>
+            <DialogTitle className="text-2xl font-semibold text-foreground">
+              Grupo de transações
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground">
+              Lista de grupo de transações
+            </DialogDescription>
+          </div>
 
-            {/* Barra de busca e botão */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-              <div className="flex items-center w-full sm:w-auto gap-3">
-                <div className="relative w-full sm:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
-                    type="text"
-                    placeholder="Busque aqui..."
-                    className="pl-10 pr-4"
-                    onChange={debounce(400, (e) => setSearch(e.target.value))}
-                  />
-                </div>
-
-                <TransactionsGroupConfig
-                  refetchQueries={[
-                    { query: TransactionsGroupQuery, variables: { search } },
-                  ]}
-                >
-                  <Button variant="outline" className="gap-2 whitespace-nowrap">
-                    <PlusIcon size={16} className="text-gray-500" />
-                    Novo Grupo
-                  </Button>
-                </TransactionsGroupConfig>
+          {/* Barra de busca e botão */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
+            <div className="flex items-center w-full sm:w-auto gap-3">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  type="text"
+                  placeholder="Busque aqui..."
+                  className="pl-10 pr-4"
+                  onChange={debounce(400, (e) => setSearch(e.target.value))}
+                />
               </div>
+
+              <TransactionsGroupConfig>
+                <Button variant="outline" className="gap-2 whitespace-nowrap">
+                  <PlusIcon size={16} className="text-gray-500" />
+                  Novo Grupo
+                </Button>
+              </TransactionsGroupConfig>
             </div>
-          </DialogHeader>
+          </div>
+        </DialogHeader>
 
-          {/* Lista de grupos */}
-          <section className="mt-5 flex flex-col h-60 w-full space-y-3 overflow-y-auto">
-            <TooltipProvider>
-              {transactionsGroup.map((group) => {
-                const IconComponent =
-                  arrayOfPossibleIcons.find(
-                    (node) => node.displayName === group.iconProperties.icon
-                  ) || TrophyIcon;
+        {/* Lista de grupos */}
+        <section className="mt-5 flex flex-col h-60 w-full space-y-3 overflow-y-auto">
+          <TooltipProvider>
+            {transactionsGroup.map((group) => {
+              const IconComponent =
+                arrayOfPossibleIcons.find(
+                  (node) => node.displayName === group.iconProperties.icon
+                ) || TrophyIcon;
 
-                return (
-                  <Link
-                    key={group._id}
-                    href={`/finance/transaction/${group._id}`}
-                    className="flex w-full items-center justify-between rounded-md hover:bg-muted/40 transition"
-                  >
-                    {/* Ícone + Descrição */}
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="flex h-10 w-10 items-center justify-center rounded-lg"
-                        style={{
-                          backgroundColor: hexToRgba(
-                            group.iconProperties.background,
-                            1
-                          ),
-                        }}
+              return (
+                <Link
+                  key={group._id}
+                  href={`/finance/transaction/${group._id}`}
+                  className="flex w-full items-center justify-between rounded-md hover:bg-muted/40 transition"
+                >
+                  {/* Ícone + Descrição */}
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-lg"
+                      style={{
+                        backgroundColor: hexToRgba(
+                          group.iconProperties.background,
+                          1
+                        ),
+                      }}
+                    >
+                      <IconComponent
+                        size={22}
+                        style={{ color: group.iconProperties.color }}
+                      />
+                    </div>
+                    <p className="text-sm font-medium text-foreground">
+                      {group.description}
+                    </p>
+                  </div>
+
+                  {/* Ações desktop */}
+                  <div className="hidden lg:flex items-center rounded-lg border">
+                    <Tooltip>
+                      <TooltipTrigger
+                        className="px-3.5 py-2"
+                        onClick={(e) => e.preventDefault()}
                       >
-                        <IconComponent
-                          size={22}
-                          style={{ color: group.iconProperties.color }}
+                        <CircleCheckBig
+                          size={18}
+                          className="text-muted-foreground"
                         />
-                      </div>
-                      <p className="text-sm font-medium text-foreground">
-                        {group.description}
-                      </p>
-                    </div>
+                      </TooltipTrigger>
+                      <TooltipContent>Marcar como principal</TooltipContent>
+                    </Tooltip>
 
-                    {/* Ações desktop */}
-                    <div className="hidden lg:flex items-center rounded-lg border">
-                      <Tooltip>
-                        <TooltipTrigger
-                          className="px-3.5 py-2"
-                          onClick={(e) => e.preventDefault()}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
                         >
-                          <CircleCheckBig
-                            size={18}
-                            className="text-muted-foreground"
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>Marcar como principal</TooltipContent>
-                      </Tooltip>
-
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
+                          <DeleteGroupAlert
+                            onDelete={(valor) => {
+                              setIsOpen(valor);
+                              handleReplace(valor);
                             }}
-                          >
-                            <DeleteGroupAlert
-                              onDelete={(valor) => {
-                                setIsOpen(valor);
-                                handleReplace(valor);
-                              }}
-                              groupIdPage={groupIdPage}
-                              groupId={group._id}
-                            />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Excluir grupo</TooltipContent>
-                      </Tooltip>
+                            groupIdPage={groupIdPage}
+                            groupId={group._id}
+                          />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>Excluir grupo</TooltipContent>
+                    </Tooltip>
 
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="px-3.5 py-2 hover:bg-transparent focus:outline-none"
-                      >
-                        <ChevronRightIcon size={20} />
-                      </Button>
-                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="px-3.5 py-2 hover:bg-transparent focus:outline-none"
+                    >
+                      <ChevronRightIcon size={20} />
+                    </Button>
+                  </div>
 
-                    {/* Ações mobile */}
-                    <Popover modal>
-                      <PopoverTrigger className="flex lg:hidden">
-                        <EllipsisVerticalIcon className="stroke-muted-foreground" />
-                      </PopoverTrigger>
-                      <PopoverContent
-                        align="end"
-                        sideOffset={10}
-                        className="w-fit"
-                      >
-                        <ul className="space-y-2 text-sm text-foreground">
-                          <li>Definir como principal</li>
-                          <li>Excluir</li>
-                        </ul>
-                      </PopoverContent>
-                    </Popover>
-                  </Link>
-                );
-              })}
-            </TooltipProvider>
-          </section>
+                  {/* Ações mobile */}
+                  <Popover modal>
+                    <PopoverTrigger className="flex lg:hidden">
+                      <EllipsisVerticalIcon className="stroke-muted-foreground" />
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="end"
+                      sideOffset={10}
+                      className="w-fit"
+                    >
+                      <ul className="space-y-2 text-sm text-foreground">
+                        <li>Definir como principal</li>
+                        <li>Excluir</li>
+                      </ul>
+                    </PopoverContent>
+                  </Popover>
+                </Link>
+              );
+            })}
+          </TooltipProvider>
+        </section>
 
-          <DialogFooter />
-        </DialogContent>
-      </form>
+        <DialogFooter />
+      </DialogContent>
     </Dialog>
   );
 }
