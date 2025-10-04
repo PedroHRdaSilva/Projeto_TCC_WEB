@@ -14,7 +14,6 @@ import Image from "next/image";
 
 export default async function SigninPage() {
   return (
-    // Alterado o fundo para 'bg-primary'
     <div className="flex flex-col min-h-screen items-center justify-center bg-blue-600 p-4">
       <Image src="/LogoDark.svg" alt="Logo" width={600} height={120} />
       <Card className="w-full max-w-sm shadow-xl transition-shadow hover:shadow-2xl">
