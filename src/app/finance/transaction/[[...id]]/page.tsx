@@ -1,5 +1,4 @@
 import TransactionGroupInformation from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupInformation";
-import SidebarNew from "@/components/sidebar/SidebarNew";
 import TransactionGroupByIdQuery from "@/graphql/queries/transactions/TransactionGroupByIdQuery";
 import {
   ITransactionGroupByIdQuery,
@@ -31,8 +30,7 @@ export default async function TransactionsPage(props: TransactionsPageProps) {
     return null;
   }
   return (
-    <div className="flex w-screen h-screen">
-      <SidebarNew />
+    <div className="flex w-screen h-screen ">
       <TransactionGroupInformation group={data.transactionGroupById} />
     </div>
   );

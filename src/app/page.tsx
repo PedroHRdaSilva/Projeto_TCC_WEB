@@ -1,4 +1,3 @@
-// pages/index.tsx
 import Header from "@/app/landing/header";
 import Image from "next/image";
 import { Button } from "@/lib/ui/button";

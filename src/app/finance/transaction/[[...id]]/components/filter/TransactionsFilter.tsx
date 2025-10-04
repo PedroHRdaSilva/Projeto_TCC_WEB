@@ -37,7 +37,7 @@ export default function TransactionsFilter({
   const currentMonth = getMonth(filterByPeriod) + 1;
   const currentYear = getYear(filterByPeriod);
   return (
-    <div className="flex w-full items-center  space-x-5">
+    <div className="flex w-full align-center space-x-5">
       <h1 className="text-3xl">Filtros</h1>
       <div className="flex space-x-5">
         <Calendar
@@ -46,8 +46,8 @@ export default function TransactionsFilter({
           }}
           defaultValues={{ month: currentMonth, year: currentYear }}
           className={cn(
-            "flex w-full items-center gap-3 whitespace-nowrap rounded-lg bg-background px-4 text-sm opacity-70",
-            "xl:bg-secondary xl:opacity-100 xl:h-10 xl:w-60"
+            "flex w-full items-center gap-3 rounded-lg whitespace-nowrap bg-white px-4 text-sm h-10",
+            "xl:bg-white xl:h-10 xl:w-60"
           )}
         >
           <div>
@@ -61,34 +61,35 @@ export default function TransactionsFilter({
           </div>
         </Calendar>
       </div>
-      <ComboboxCategories
-        groupId={groupId}
-        categories={categories}
-        onSelect={(value) => {
-          setFilterByCategoryId(filterByCategoryId === value ? null : value);
-        }}
-        className="flex h-10 w-60 items-center justify-between rounded-lg bg-secondary pl-4"
-      >
-        <span className="text-sm text-secondary-foreground/50">
-          Filtre por categoria
-        </span>
-      </ComboboxCategories>
-      <div className="relative w-full xl:max-w-96">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-foreground/50"
-          size={18}
-        />
-        <Input
-          type="text"
-          placeholder="Busque aqui ..."
-          className={cn(
-            "pl-10 h-9 bg-background opacity-70 placeholder:text-secondary-foreground/50",
-            "xl:bg-secondary xl:opacity-100 xl:h-10"
-          )}
-          onChange={debounce(400, (e) => {
-            setFilterBySearch(e.target.value);
-          })}
-        />
+      <div className="flex w-full gap-2">
+        <ComboboxCategories
+          groupId={groupId}
+          categories={categories}
+          onSelect={(value) => {
+            setFilterByCategoryId(filterByCategoryId === value ? null : value);
+          }}
+          className="flex h-10 w-60 items-center justify-between rounded-lg bg-white pl-4"
+        >
+          <span className="text-sm text-black">Filtre por categoria</span>
+        </ComboboxCategories>
+
+        <div className="relative flex-1">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-black"
+            size={18}
+          />
+          <Input
+            type="text"
+            placeholder="Busque aqui..."
+            className={cn(
+              "pl-10 h-9 w-auto bg-background opacity-70 placeholder:text-black",
+              "xl:bg-white xl:opacity-100 xl:h-10 "
+            )}
+            onChange={debounce(400, (e) => {
+              setFilterBySearch(e.target.value);
+            })}
+          />
+        </div>
       </div>
     </div>
   );

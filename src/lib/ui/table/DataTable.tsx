@@ -39,8 +39,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="h-full w-full overflow-hidden rounded-md pb-16 lg:border lg:pb-0">
-      <Table>
+    <div className="h-full w-full overflow-hidden rounded-xl pb-16 lg:border lg:pb-0">
+      <Table className="overflow-hidden rounded-xl">
         <TableHeader className="hidden lg:table-header-group">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
                     {row.getVisibleCells().map((cell, index) => (
                       <Fragment key={`tableCell/${index}/${cell.id}`}>
                         <TableCell
-                          className="hidden text-muted-foreground lg:table-cell"
+                          className="hidden text-black lg:table-cell"
                           style={{ width: `${cell.column.getSize()}px` }}
                         >
                           {flexRender(
@@ -154,7 +154,7 @@ export function DataTableSkeleton<TData, TValue>({
   onMobileRender,
 }: DataTableSkeletonProps<TData, TValue>) {
   return (
-    <div className="h-full w-full overflow-hidden rounded-md lg:border">
+    <div className="h-full w-full overflow-hidden rounded-sm lg:border">
       <Table>
         <TableHeader className="hidden lg:table-header-group">
           <TableRow>

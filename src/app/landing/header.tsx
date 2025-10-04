@@ -20,7 +20,11 @@ export default function Header() {
       <Image src="/LogoDark.svg" alt="Logo" width={200} height={40} />
 
       <div className="space-x-2">
-        <Button variant="outline" onClick={handleLogin}>
+        <Button
+          variant="outline"
+          onClick={handleLogin}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full"
+        >
           Entrar
         </Button>
         <Button onClick={handleSignup}>Cadastre-se</Button>
