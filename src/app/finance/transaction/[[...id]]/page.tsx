@@ -30,7 +30,7 @@ export default async function TransactionsPage(props: TransactionsPageProps) {
     return null;
   }
   return (
-    <div className="flex w-screen h-screen">
+    <div className="flex w-screen h-screen ">
       <TransactionGroupInformation group={data.transactionGroupById} />
     </div>
   );

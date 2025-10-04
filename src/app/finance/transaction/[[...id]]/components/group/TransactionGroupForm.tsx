@@ -29,6 +29,21 @@ interface TransactionGroupFormProps {
   refetchQueries?: InternalRefetchQueriesInclude;
 }
 
+export const transactionGroupFormSchema = z.object({
+  iconProperties: z.object({
+    background: z.string(),
+    color: z.string(),
+    icon: z.string(),
+  }),
+  group: z
+    .string()
+    .min(4, "O nome do grupo deve conter no mínimo 4 caracteres"),
+});
+
+export type TransactionGroupFormSchema = z.infer<
+  typeof transactionGroupFormSchema
+>;
+
 export default function TransactionGroupForm({
   initialValues,
   setOpen,
@@ -47,13 +62,6 @@ export default function TransactionGroupForm({
 
   const { loading, onSubmit } = useGroupActions(params);
 
-  const handleSubmit = async (data: TransactionGroupFormSchema) => {
-    await onSubmit(data);
-    if (isCreating) {
-      setOpen(false);
-    }
-  };
-
   const form = useForm<TransactionGroupFormSchema>({
     mode: "onChange",
     resolver: zodResolver(transactionGroupFormSchema),
@@ -67,6 +75,11 @@ export default function TransactionGroupForm({
     },
   });
 
+  const handleSubmit = async (data: TransactionGroupFormSchema) => {
+    await onSubmit(data);
+    if (isCreating) setOpen(false);
+  };
+
   const iconProperties = form.watch("iconProperties");
   const IconComponent =
     arrayOfPossibleIcons.find(
@@ -75,90 +88,82 @@ export default function TransactionGroupForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex w-full flex-col gap-4"
-      >
-        <div className="flex items-center gap-4">
-          <FormField
-            control={form.control}
-            name="iconProperties"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm text-muted-foreground">
-                  Ícone
-                </FormLabel>
-                <FormControl>
-                  <PopoverChangeIcon
-                    onChange={field.onChange}
-                    iconProperties={iconProperties}
-                  >
-                    <div
-                      className="flex h-10 w-10 items-center justify-center rounded-lg opacity-70"
-                      style={{
-                        backgroundColor: hexToRgba(
-                          iconProperties.background,
-                          0.2
-                        ),
-                      }}
-                    >
-                      <IconComponent
-                        size={24}
-                        style={{ color: iconProperties.color }}
-                      />
-                    </div>
-                  </PopoverChangeIcon>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-1 flex-col">
+      <div className="flex flex-col gap-6 pb-6">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex flex-col gap-6"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
             <FormField
               control={form.control}
-              name="group"
+              name="iconProperties"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col items-center gap-2">
                   <FormLabel className="text-sm text-muted-foreground">
-                    Grupo
+                    Ícone
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
-                      className="max-w-96"
-                      placeholder="Digite o nome do grupo"
-                      {...field}
-                    />
+                    <PopoverChangeIcon
+                      onChange={field.onChange}
+                      iconProperties={iconProperties}
+                    >
+                      <div
+                        className="flex h-12 w-12 items-center justify-center rounded-lg border border-border transition hover:bg-muted cursor-pointer"
+                        style={{
+                          backgroundColor: hexToRgba(
+                            iconProperties.background,
+                            1
+                          ),
+                        }}
+                      >
+                        <IconComponent
+                          size={26}
+                          style={{ color: iconProperties.color }}
+                        />
+                      </div>
+                    </PopoverChangeIcon>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-        </div>
 
-        <div className="flex w-full justify-end">
-          <Button type="submit" className="w-36 gap-3" variant="outline">
-            {loading ? "Aguarde..." : "Salvar"}
-          </Button>
-        </div>
-      </form>
+            <div className="flex flex-1 flex-col w-full">
+              <FormField
+                control={form.control}
+                name="group"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel className="text-sm text-muted-foreground">
+                      Nome do grupo
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Digite o nome do grupo"
+                        className="h-11"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div className="flex justify-end mt-2 pt-4">
+        <Button
+          type="submit"
+          className="w-32 gap-2"
+          variant="outline"
+          disabled={loading}
+        >
+          {loading ? "Aguarde..." : "Salvar"}
+        </Button>
+      </div>
     </Form>
   );
 }
-
-export const transactionGroupFormSchema = z.object({
-  iconProperties: z.object({
-    background: z.string(),
-    color: z.string(),
-    icon: z.string(),
-  }),
-  group: z
-    .string()
-    .min(4, "O nome do grupo deve conter no mínimo 4 caracteres"),
-});
-
-export type TransactionGroupFormSchema = z.infer<
-  typeof transactionGroupFormSchema
->;

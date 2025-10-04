@@ -235,7 +235,7 @@ export default function GroupCategoryForm({
                           style={{
                             backgroundColor: hexToRgba(
                               iconProperties.background,
-                              0.2
+                              1
                             ),
                           }}
                         >

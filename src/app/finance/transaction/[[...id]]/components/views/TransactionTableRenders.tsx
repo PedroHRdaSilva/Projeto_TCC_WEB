@@ -37,10 +37,7 @@ export function TransactionsMobileRender(
 
   const iconStyle = {
     color: row.category.iconProperties.color,
-    backgroundColor: hexToRgba(
-      row.category.iconProperties.background,
-      theme === "dark" ? 0.25 : 0.65
-    ),
+    backgroundColor: hexToRgba(row.category.iconProperties.background, 1),
   };
   const moneyFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -55,7 +52,10 @@ export function TransactionsMobileRender(
             locale: ptBR,
           })}
           <div>
-            <IconComponent className="rounded-full p-1" style={iconStyle} />
+            <IconComponent
+              className="rounded-full p-1 bg-white"
+              style={iconStyle}
+            />
           </div>
         </span>
         <div className="text-base">{DescriptionRender(row)}</div>
@@ -167,7 +167,9 @@ export function TagsRender(cell: TransactionsTypeRow) {
 export function StatusRender() {
   return (
     <div className="space-x-2">
-      <span className="rounded bg-muted p-1.5 px-2 lg:px-8">Pendente</span>
+      <span className="rounded bg-yellow-400 opacity-70 text-gray-700 p-1.5 px-2 lg:px-8">
+        Pendente
+      </span>
     </div>
   );
 }
@@ -186,7 +188,7 @@ export function DescriptionRender(cell: TransactionsTypeRow) {
           color: cell.category.iconProperties.color,
         }}
       >
-        <div className="rounded-full bg-zinc-800 p-2">
+        <div className="rounded-full bg-gray-300 p-2">
           <IconComponent size={16} />
         </div>
       </div>

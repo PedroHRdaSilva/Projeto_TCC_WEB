@@ -40,11 +40,11 @@ export default function TransactionGroupInformation({
     ) || TrophyIcon;
 
   return (
-    <div className="flex flex-col w-full bg-slate-700 p-5">
+    <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 ">
       <div className="flex w-full">
         <div
           className={cn(
-            "-mx-4 -mt-4 flex h-32 bg-slate-700 p-5 border ",
+            "-mx-4 -mt-4 flex h-32 bg-white p-5 border ",
             "xl:mx-0 xl:mt-0 xl:h-24 xl:w-full xl:max-w-[340px] xl:items-center xl:rounded-lg  xl:p-6"
           )}
         >
@@ -53,14 +53,14 @@ export default function TransactionGroupInformation({
               "flex h-10 w-10 items-center justify-center rounded-full xl:rounded-lg"
             )}
             style={{
-              backgroundColor: hexToRgba(iconProperties.background, 0.2),
+              backgroundColor: hexToRgba(iconProperties.background, 1),
             }}
           >
             <IconComponent size={24} style={{ color: iconProperties.color }} />
           </div>
 
           <div className="mx-3 flex flex-col gap-0.5">
-            <p className="text-sm font-medium text-foreground">{description}</p>
+            <p className="text-sm font-medium text-black">{description}</p>
           </div>
 
           <div className="ml-auto flex  items-center justify-center gap-2">
@@ -70,7 +70,7 @@ export default function TransactionGroupInformation({
               <button
                 type="button"
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-lg bg-secondary ",
+                  "flex h-10 w-10 items-center justify-center rounded-lg bg-gray-300 ",
                   "hover:bg-accent hover:text-foreground focus:outline-none"
                 )}
               >
@@ -117,7 +117,7 @@ export default function TransactionGroupInformation({
             transactionGroup={group}
             categories={dataCategories?.categoriesByGroupId || []}
           >
-            <div className="flex items-center space-x-3 rounded-lg border border-border bg-secondary p-2">
+            <div className="flex items-center space-x-3  rounded-lg border border-border bg-white p-2">
               <PlusIcon size={16} className="text-secondary-foreground" />
               <span className="font-dm-sans text-sm text-secondary-foreground">
                 Nova Transação
