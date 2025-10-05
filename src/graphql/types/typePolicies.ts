@@ -104,10 +104,13 @@ export type PageInfoFieldPolicy = {
   totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type QueryKeySpecifier = (
+  | "cardCategorySpending"
   | "categoriesByGroupId"
   | "categoryById"
   | "creditCardByGroupId"
   | "creditCardById"
+  | "monthlyRevenueVsExpenses"
+  | "monthlySpendingByCategory"
   | "now"
   | "transactionById"
   | "transactionGroupById"
@@ -118,10 +121,13 @@ export type QueryKeySpecifier = (
   | QueryKeySpecifier
 )[];
 export type QueryFieldPolicy = {
+  cardCategorySpending?: FieldPolicy<any> | FieldReadFunction<any>;
   categoriesByGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
   categoryById?: FieldPolicy<any> | FieldReadFunction<any>;
   creditCardByGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
   creditCardById?: FieldPolicy<any> | FieldReadFunction<any>;
+  monthlyRevenueVsExpenses?: FieldPolicy<any> | FieldReadFunction<any>;
+  monthlySpendingByCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   now?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionById?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionGroupById?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -211,6 +217,47 @@ export type TransactionGroupedDetailsPaginationFieldPolicy = {
   groups?: FieldPolicy<any> | FieldReadFunction<any>;
   pageInfo?: FieldPolicy<any> | FieldReadFunction<any>;
   totalCount?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionsByCategoryChartKeySpecifier = (
+  | "amount"
+  | "category"
+  | "reportDate"
+  | "transactions"
+  | TransactionsByCategoryChartKeySpecifier
+)[];
+export type TransactionsByCategoryChartFieldPolicy = {
+  amount?: FieldPolicy<any> | FieldReadFunction<any>;
+  category?: FieldPolicy<any> | FieldReadFunction<any>;
+  reportDate?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactions?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionsCardCategorySpendingKeySpecifier = (
+  | "amount"
+  | "category"
+  | "creditCard"
+  | "reportDate"
+  | "transactions"
+  | TransactionsCardCategorySpendingKeySpecifier
+)[];
+export type TransactionsCardCategorySpendingFieldPolicy = {
+  amount?: FieldPolicy<any> | FieldReadFunction<any>;
+  category?: FieldPolicy<any> | FieldReadFunction<any>;
+  creditCard?: FieldPolicy<any> | FieldReadFunction<any>;
+  reportDate?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactions?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type TransactionsChartKeySpecifier = (
+  | "expense"
+  | "reportDate"
+  | "revenue"
+  | "transactions"
+  | TransactionsChartKeySpecifier
+)[];
+export type TransactionsChartFieldPolicy = {
+  expense?: FieldPolicy<any> | FieldReadFunction<any>;
+  reportDate?: FieldPolicy<any> | FieldReadFunction<any>;
+  revenue?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactions?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TransactionsGroupedByCategoryPaginationKeySpecifier = (
   | "groupBy"
@@ -363,6 +410,30 @@ export type StrictTypedTypePolicies = {
       | TransactionGroupedDetailsPaginationKeySpecifier
       | (() => undefined | TransactionGroupedDetailsPaginationKeySpecifier);
     fields?: TransactionGroupedDetailsPaginationFieldPolicy;
+  };
+  TransactionsByCategoryChart?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | TransactionsByCategoryChartKeySpecifier
+      | (() => undefined | TransactionsByCategoryChartKeySpecifier);
+    fields?: TransactionsByCategoryChartFieldPolicy;
+  };
+  TransactionsCardCategorySpending?: Omit<
+    TypePolicy,
+    "fields" | "keyFields"
+  > & {
+    keyFields?:
+      | false
+      | TransactionsCardCategorySpendingKeySpecifier
+      | (() => undefined | TransactionsCardCategorySpendingKeySpecifier);
+    fields?: TransactionsCardCategorySpendingFieldPolicy;
+  };
+  TransactionsChart?: Omit<TypePolicy, "fields" | "keyFields"> & {
+    keyFields?:
+      | false
+      | TransactionsChartKeySpecifier
+      | (() => undefined | TransactionsChartKeySpecifier);
+    fields?: TransactionsChartFieldPolicy;
   };
   TransactionsGroupedByCategoryPagination?: Omit<
     TypePolicy,

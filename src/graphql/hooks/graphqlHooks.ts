@@ -886,6 +886,122 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   Types.IResetPasswordMutation,
   Types.IResetPasswordMutationVariables
 >;
+export const CardCategorySpendingDocument = gql`
+  query CardCategorySpending(
+    $groupId: ObjectID!
+    $filterByStartMonth: Date
+    $filterByEndMonth: Date
+  ) {
+    cardCategorySpending(
+      groupId: $groupId
+      filterByStartMonth: $filterByStartMonth
+      filterByEndMonth: $filterByEndMonth
+    ) {
+      reportDate
+      amount
+      category {
+        _id
+        description
+        type
+        isDefault
+      }
+      transactions {
+        _id
+        transactionGroupId
+        category {
+          _id
+          description
+          type
+          isDefault
+        }
+        date
+        description
+        amount
+      }
+      creditCard {
+        _id
+        description
+      }
+    }
+  }
+`;
+
+/**
+ * __useCardCategorySpendingQuery__
+ *
+ * To run a query within a React component, call `useCardCategorySpendingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCardCategorySpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCardCategorySpendingQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      filterByStartMonth: // value for 'filterByStartMonth'
+ *      filterByEndMonth: // value for 'filterByEndMonth'
+ *   },
+ * });
+ */
+export function useCardCategorySpendingQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.ICardCategorySpendingQuery,
+    Types.ICardCategorySpendingQueryVariables
+  > &
+    (
+      | { variables: Types.ICardCategorySpendingQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.ICardCategorySpendingQuery,
+    Types.ICardCategorySpendingQueryVariables
+  >(CardCategorySpendingDocument, options);
+}
+export function useCardCategorySpendingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.ICardCategorySpendingQuery,
+    Types.ICardCategorySpendingQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.ICardCategorySpendingQuery,
+    Types.ICardCategorySpendingQueryVariables
+  >(CardCategorySpendingDocument, options);
+}
+export function useCardCategorySpendingSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.ICardCategorySpendingQuery,
+        Types.ICardCategorySpendingQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.ICardCategorySpendingQuery,
+    Types.ICardCategorySpendingQueryVariables
+  >(CardCategorySpendingDocument, options);
+}
+export type CardCategorySpendingQueryHookResult = ReturnType<
+  typeof useCardCategorySpendingQuery
+>;
+export type CardCategorySpendingLazyQueryHookResult = ReturnType<
+  typeof useCardCategorySpendingLazyQuery
+>;
+export type CardCategorySpendingSuspenseQueryHookResult = ReturnType<
+  typeof useCardCategorySpendingSuspenseQuery
+>;
+export type CardCategorySpendingQueryResult = Apollo.QueryResult<
+  Types.ICardCategorySpendingQuery,
+  Types.ICardCategorySpendingQueryVariables
+>;
 export const CategoriesByGroupIdDocument = gql`
   query CategoriesByGroupId($transactionGroupId: ObjectID!) {
     categoriesByGroupId(transactionGroupId: $transactionGroupId) {
@@ -1149,6 +1265,219 @@ export type CreditCardByGroupIdSuspenseQueryHookResult = ReturnType<
 export type CreditCardByGroupIdQueryResult = Apollo.QueryResult<
   Types.ICreditCardByGroupIdQuery,
   Types.ICreditCardByGroupIdQueryVariables
+>;
+export const MonthlyRevenueVsExpensesDocument = gql`
+  query MonthlyRevenueVsExpenses(
+    $groupId: ObjectID!
+    $filterByStartMonth: Date
+    $filterByEndMonth: Date
+  ) {
+    monthlyRevenueVsExpenses(
+      groupId: $groupId
+      filterByStartMonth: $filterByStartMonth
+      filterByEndMonth: $filterByEndMonth
+    ) {
+      transactions {
+        description
+        category {
+          type
+          _id
+          description
+        }
+        amount
+        _id
+      }
+      revenue
+      expense
+      reportDate
+    }
+  }
+`;
+
+/**
+ * __useMonthlyRevenueVsExpensesQuery__
+ *
+ * To run a query within a React component, call `useMonthlyRevenueVsExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMonthlyRevenueVsExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMonthlyRevenueVsExpensesQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      filterByStartMonth: // value for 'filterByStartMonth'
+ *      filterByEndMonth: // value for 'filterByEndMonth'
+ *   },
+ * });
+ */
+export function useMonthlyRevenueVsExpensesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.IMonthlyRevenueVsExpensesQuery,
+    Types.IMonthlyRevenueVsExpensesQueryVariables
+  > &
+    (
+      | {
+          variables: Types.IMonthlyRevenueVsExpensesQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.IMonthlyRevenueVsExpensesQuery,
+    Types.IMonthlyRevenueVsExpensesQueryVariables
+  >(MonthlyRevenueVsExpensesDocument, options);
+}
+export function useMonthlyRevenueVsExpensesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.IMonthlyRevenueVsExpensesQuery,
+    Types.IMonthlyRevenueVsExpensesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.IMonthlyRevenueVsExpensesQuery,
+    Types.IMonthlyRevenueVsExpensesQueryVariables
+  >(MonthlyRevenueVsExpensesDocument, options);
+}
+export function useMonthlyRevenueVsExpensesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.IMonthlyRevenueVsExpensesQuery,
+        Types.IMonthlyRevenueVsExpensesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.IMonthlyRevenueVsExpensesQuery,
+    Types.IMonthlyRevenueVsExpensesQueryVariables
+  >(MonthlyRevenueVsExpensesDocument, options);
+}
+export type MonthlyRevenueVsExpensesQueryHookResult = ReturnType<
+  typeof useMonthlyRevenueVsExpensesQuery
+>;
+export type MonthlyRevenueVsExpensesLazyQueryHookResult = ReturnType<
+  typeof useMonthlyRevenueVsExpensesLazyQuery
+>;
+export type MonthlyRevenueVsExpensesSuspenseQueryHookResult = ReturnType<
+  typeof useMonthlyRevenueVsExpensesSuspenseQuery
+>;
+export type MonthlyRevenueVsExpensesQueryResult = Apollo.QueryResult<
+  Types.IMonthlyRevenueVsExpensesQuery,
+  Types.IMonthlyRevenueVsExpensesQueryVariables
+>;
+export const MonthlySpendingByCategoryDocument = gql`
+  query MonthlySpendingByCategory(
+    $groupId: ObjectID!
+    $filterByStartMonth: Date
+    $filterByEndMonth: Date
+  ) {
+    monthlySpendingByCategory(
+      groupId: $groupId
+      filterByStartMonth: $filterByStartMonth
+      filterByEndMonth: $filterByEndMonth
+    ) {
+      transactions {
+        transactionGroupId
+        description
+        amount
+        _id
+      }
+      amount
+      reportDate
+      category {
+        _id
+        description
+      }
+    }
+  }
+`;
+
+/**
+ * __useMonthlySpendingByCategoryQuery__
+ *
+ * To run a query within a React component, call `useMonthlySpendingByCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMonthlySpendingByCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMonthlySpendingByCategoryQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      filterByStartMonth: // value for 'filterByStartMonth'
+ *      filterByEndMonth: // value for 'filterByEndMonth'
+ *   },
+ * });
+ */
+export function useMonthlySpendingByCategoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    Types.IMonthlySpendingByCategoryQuery,
+    Types.IMonthlySpendingByCategoryQueryVariables
+  > &
+    (
+      | {
+          variables: Types.IMonthlySpendingByCategoryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    Types.IMonthlySpendingByCategoryQuery,
+    Types.IMonthlySpendingByCategoryQueryVariables
+  >(MonthlySpendingByCategoryDocument, options);
+}
+export function useMonthlySpendingByCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    Types.IMonthlySpendingByCategoryQuery,
+    Types.IMonthlySpendingByCategoryQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    Types.IMonthlySpendingByCategoryQuery,
+    Types.IMonthlySpendingByCategoryQueryVariables
+  >(MonthlySpendingByCategoryDocument, options);
+}
+export function useMonthlySpendingByCategorySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        Types.IMonthlySpendingByCategoryQuery,
+        Types.IMonthlySpendingByCategoryQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    Types.IMonthlySpendingByCategoryQuery,
+    Types.IMonthlySpendingByCategoryQueryVariables
+  >(MonthlySpendingByCategoryDocument, options);
+}
+export type MonthlySpendingByCategoryQueryHookResult = ReturnType<
+  typeof useMonthlySpendingByCategoryQuery
+>;
+export type MonthlySpendingByCategoryLazyQueryHookResult = ReturnType<
+  typeof useMonthlySpendingByCategoryLazyQuery
+>;
+export type MonthlySpendingByCategorySuspenseQueryHookResult = ReturnType<
+  typeof useMonthlySpendingByCategorySuspenseQuery
+>;
+export type MonthlySpendingByCategoryQueryResult = Apollo.QueryResult<
+  Types.IMonthlySpendingByCategoryQuery,
+  Types.IMonthlySpendingByCategoryQueryVariables
 >;
 export const TransactionGroupByIdDocument = gql`
   query TransactionGroupById($_id: ObjectID) {
