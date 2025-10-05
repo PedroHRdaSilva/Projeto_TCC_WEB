@@ -21,12 +21,14 @@ interface DeleteGroupAlertProps {
   groupIdPage?: string;
   groupId: string;
   onDelete: (deletado: boolean) => void;
+  mobile?: boolean;
 }
 
 export default function DeleteGroupAlert({
   groupIdPage,
   groupId,
   onDelete,
+  mobile,
 }: DeleteGroupAlertProps) {
   const [deleteTransactionGroup] = useDeleteTransactionGroupMutation();
   //   const revalidateAndRefresh = useRevalidateAndRefresh();
@@ -66,7 +68,11 @@ export default function DeleteGroupAlert({
   return (
     <AlertDialog>
       <AlertDialogTrigger className="flex items-center justify-center">
-        <Trash2Icon size={18} />
+        {mobile ? (
+          <span className="p-1">Excluir</span>
+        ) : (
+          <Trash2Icon size={18} />
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

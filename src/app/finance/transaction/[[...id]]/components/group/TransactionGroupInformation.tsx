@@ -40,7 +40,7 @@ export default function TransactionGroupInformation({
     ) || TrophyIcon;
 
   return (
-    <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 ">
+    <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 h-full  ">
       <div className="flex w-full">
         <div
           className={cn(

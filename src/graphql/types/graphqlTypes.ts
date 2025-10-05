@@ -276,10 +276,13 @@ export type IPageInfo = {
 
 export type IQuery = {
   __typename: "Query";
+  cardCategorySpending: Array<ITransactionsCardCategorySpending>;
   categoriesByGroupId: Array<ITransactionCategory>;
   categoryById: Maybe<ITransactionCategory>;
   creditCardByGroupId: Array<ICreditCard>;
   creditCardById: Maybe<ICreditCard>;
+  monthlyRevenueVsExpenses: Array<ITransactionsChart>;
+  monthlySpendingByCategory: Array<ITransactionsByCategoryChart>;
   now: Maybe<Scalars["BigInt"]["output"]>;
   transactionById: Maybe<ITransaction>;
   transactionGroupById: Maybe<ITransactionGroup>;
@@ -287,6 +290,12 @@ export type IQuery = {
   transactions: ITransactionDetailsPagination;
   transactionsGroup: Array<ITransactionGroup>;
   viewer: Maybe<IViewer>;
+};
+
+export type IQueryCardCategorySpendingArgs = {
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  groupId: Scalars["ObjectID"]["input"];
 };
 
 export type IQueryCategoriesByGroupIdArgs = {
@@ -303,6 +312,18 @@ export type IQueryCreditCardByGroupIdArgs = {
 
 export type IQueryCreditCardByIdArgs = {
   _id: Scalars["ObjectID"]["input"];
+};
+
+export type IQueryMonthlyRevenueVsExpensesArgs = {
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  groupId: Scalars["ObjectID"]["input"];
+};
+
+export type IQueryMonthlySpendingByCategoryArgs = {
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  groupId: Scalars["ObjectID"]["input"];
 };
 
 export type IQueryTransactionByIdArgs = {
@@ -397,6 +418,31 @@ export type ITransactionInput = {
   installmentCount: InputMaybe<Scalars["Int"]["input"]>;
   isRecurringPayment: Scalars["Boolean"]["input"];
   transactionGroupId: Scalars["ObjectID"]["input"];
+};
+
+export type ITransactionsByCategoryChart = {
+  __typename: "TransactionsByCategoryChart";
+  amount: Scalars["Float"]["output"];
+  category: ITransactionCategory;
+  reportDate: Scalars["Date"]["output"];
+  transactions: Maybe<Array<ITransaction>>;
+};
+
+export type ITransactionsCardCategorySpending = {
+  __typename: "TransactionsCardCategorySpending";
+  amount: Scalars["Float"]["output"];
+  category: ITransactionCategory;
+  creditCard: ICreditCard;
+  reportDate: Scalars["Date"]["output"];
+  transactions: Maybe<Array<ITransaction>>;
+};
+
+export type ITransactionsChart = {
+  __typename: "TransactionsChart";
+  expense: Scalars["Float"]["output"];
+  reportDate: Scalars["Date"]["output"];
+  revenue: Scalars["Float"]["output"];
+  transactions: Array<ITransaction>;
 };
 
 export type ITransactionsGroupedByCategoryPagination = {
@@ -718,6 +764,44 @@ export type IResetPasswordMutation = {
   resetPassword: boolean;
 };
 
+export type ICardCategorySpendingQueryVariables = Exact<{
+  groupId: Scalars["ObjectID"]["input"];
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+}>;
+
+export type ICardCategorySpendingQuery = {
+  __typename: "Query";
+  cardCategorySpending: Array<{
+    __typename: "TransactionsCardCategorySpending";
+    reportDate: any;
+    amount: number;
+    category: {
+      __typename: "TransactionCategory";
+      _id: any;
+      description: string;
+      type: ITransactionCategoryTypeEnum;
+      isDefault: boolean;
+    };
+    transactions: Array<{
+      __typename: "Transaction";
+      _id: any;
+      transactionGroupId: any;
+      date: any;
+      description: string;
+      amount: number;
+      category: {
+        __typename: "TransactionCategory";
+        _id: any;
+        description: string;
+        type: ITransactionCategoryTypeEnum;
+        isDefault: boolean;
+      };
+    }> | null;
+    creditCard: { __typename: "CreditCard"; _id: any; description: string };
+  }>;
+};
+
 export type ICategoriesByGroupIdQueryVariables = Exact<{
   transactionGroupId: Scalars["ObjectID"]["input"];
 }>;
@@ -771,6 +855,61 @@ export type ICreditCardByGroupIdQuery = {
     _id: any;
     transactionGroupId: any;
     description: string;
+  }>;
+};
+
+export type IMonthlyRevenueVsExpensesQueryVariables = Exact<{
+  groupId: Scalars["ObjectID"]["input"];
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+}>;
+
+export type IMonthlyRevenueVsExpensesQuery = {
+  __typename: "Query";
+  monthlyRevenueVsExpenses: Array<{
+    __typename: "TransactionsChart";
+    revenue: number;
+    expense: number;
+    reportDate: any;
+    transactions: Array<{
+      __typename: "Transaction";
+      description: string;
+      amount: number;
+      _id: any;
+      category: {
+        __typename: "TransactionCategory";
+        type: ITransactionCategoryTypeEnum;
+        _id: any;
+        description: string;
+      };
+    }>;
+  }>;
+};
+
+export type IMonthlySpendingByCategoryQueryVariables = Exact<{
+  groupId: Scalars["ObjectID"]["input"];
+  filterByStartMonth: InputMaybe<Scalars["Date"]["input"]>;
+  filterByEndMonth: InputMaybe<Scalars["Date"]["input"]>;
+}>;
+
+export type IMonthlySpendingByCategoryQuery = {
+  __typename: "Query";
+  monthlySpendingByCategory: Array<{
+    __typename: "TransactionsByCategoryChart";
+    amount: number;
+    reportDate: any;
+    transactions: Array<{
+      __typename: "Transaction";
+      transactionGroupId: any;
+      description: string;
+      amount: number;
+      _id: any;
+    }> | null;
+    category: {
+      __typename: "TransactionCategory";
+      _id: any;
+      description: string;
+    };
   }>;
 };
 

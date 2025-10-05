@@ -41,10 +41,12 @@ import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/compone
 
 interface TransactionGroupSelectionProps {
   groupIdPage?: string;
+  dashboard?: boolean;
 }
 
 export default function TransactionGroupSelection({
   groupIdPage,
+  dashboard,
 }: TransactionGroupSelectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
@@ -115,13 +117,14 @@ export default function TransactionGroupSelection({
                   onChange={debounce(400, (e) => setSearch(e.target.value))}
                 />
               </div>
-
-              <TransactionsGroupConfig>
-                <Button variant="outline" className="gap-2 whitespace-nowrap">
-                  <PlusIcon size={16} className="text-gray-500" />
-                  Novo Grupo
-                </Button>
-              </TransactionsGroupConfig>
+              {!dashboard && (
+                <TransactionsGroupConfig>
+                  <Button variant="outline" className="gap-2 whitespace-nowrap">
+                    <PlusIcon size={16} className="text-gray-500" />
+                    Novo Grupo
+                  </Button>
+                </TransactionsGroupConfig>
+              )}
             </div>
           </div>
         </DialogHeader>
@@ -138,7 +141,11 @@ export default function TransactionGroupSelection({
               return (
                 <Link
                   key={group._id}
-                  href={`/finance/transaction/${group._id}`}
+                  href={
+                    dashboard
+                      ? `/finance/dashboard/${group._id}`
+                      : `/finance/transaction/${group._id}`
+                  }
                   className="flex w-full items-center justify-between rounded-md hover:bg-muted/40 transition"
                 >
                   {/* Ícone + Descrição */}
@@ -218,8 +225,41 @@ export default function TransactionGroupSelection({
                       className="w-fit"
                     >
                       <ul className="space-y-2 text-sm text-foreground">
-                        <li>Definir como principal</li>
-                        <li>Excluir</li>
+                        <li>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            // onClick={() =>
+                            //   setDefaultTransactionGroup(group._id)
+                            // }
+                            className="p-1"
+                          >
+                            Definir como principal
+                          </Button>
+                        </li>
+                        <li>
+                          <DeleteGroupAlert
+                            onDelete={(valor) => {
+                              setIsOpen(valor);
+                              handleReplace(valor);
+                            }}
+                            groupIdPage={groupIdPage}
+                            groupId={group._id}
+                            mobile={true}
+                          />
+                        </li>
+                        <li>
+                          <Link
+                            href={
+                              dashboard
+                                ? `/finance/dashboard/${group._id}`
+                                : `/finance/transaction/${group._id}`
+                            }
+                            className="p-1"
+                          >
+                            Ir para o grupo
+                          </Link>
+                        </li>
                       </ul>
                     </PopoverContent>
                   </Popover>

@@ -358,6 +358,12 @@ export default function CreateTransactionForm({
                       )}
                       placeholder="Informe o valor"
                       {...field}
+                      onChange={(e) => {
+                        const numeric = Number(
+                          e.target.value.replace(/\D/g, "")
+                        );
+                        field.onChange(numeric);
+                      }}
                     />
                   </FormControl>
                   <div className="h-4">
