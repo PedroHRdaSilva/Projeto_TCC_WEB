@@ -22,15 +22,15 @@ export default function TeamSwitcher() {
             <div className="flex justify-between">
               {open && (
                 <div className="hidden items-center space-x-3 text-xl xl:flex">
-                  {/* <BrandIcon height={40} width={40} /> */}
                   <span className="truncate font-semibold">CASHTRACK</span>
                 </div>
               )}
               <div className="flex items-center space-x-3 text-xl xl:hidden">
-                {/* <BrandIcon height={40} width={40} /> */}
                 <span className="truncate font-semibold">CASHTRACK</span>
               </div>
-              <SidebarTrigger></SidebarTrigger>
+              <div className="hidden xl:block">
+                <SidebarTrigger />
+              </div>
               <div className="rounded-full border xl:hidden">
                 <SidebarTrigger onClick={() => setOpen(false)}>
                   <X className="h-4 w-4" />

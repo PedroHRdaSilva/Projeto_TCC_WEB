@@ -21,14 +21,16 @@ import type { InternalRefetchQueriesInclude } from "@apollo/client";
 import CreateTransaction from "@/app/finance/transaction/[[...id]]/components/group/CreateTransaction";
 import { Skeleton } from "@/lib/ui/skeleton";
 import TransactionDeleteAlert from "@/app/finance/transaction/[[...id]]/components/views/TransactionDeleteAlert";
+import { Row, Table } from "@tanstack/react-table";
+import IndeterminateCheckbox from "@/lib/ui/IndeterminateCheckbox";
+import StatusPopover from "@/app/finance/transaction/[[...id]]/components/group/StatusPopover";
 
 export function TransactionsMobileRender(
   row: TransactionsTypeRow,
   categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>,
   transactionGroup: TransactionGroupType,
   refetchQueries: InternalRefetchQueriesInclude,
-  refetchTransactionTotalsQuery: InternalRefetchQueriesInclude,
-  theme?: string
+  refetchTransactionTotalsQuery: InternalRefetchQueriesInclude
 ) {
   const IconComponent =
     arrayOfPossibleIcons.find(
@@ -63,7 +65,7 @@ export function TransactionsMobileRender(
           {moneyFormatter.format(row.amount)}
         </span>
         <div className="flex items-center space-x-2 text-base">
-          {StatusRender()}
+          {StatusRender(row, refetchQueries)}
           <div className="mr-auto flex">{TagsRender(row)}</div>
           <div className="flex w-full">
             {ActionsRender(
@@ -163,13 +165,45 @@ export function TagsRender(cell: TransactionsTypeRow) {
     </div>
   );
 }
-
-export function StatusRender() {
+export function RowCheckbox(row: Row<TransactionsTypeRow>) {
   return (
-    <div className="space-x-2">
-      <span className="rounded bg-yellow-400 opacity-70 text-gray-700 p-1.5 px-2 lg:px-8">
-        Pendente
+    <IndeterminateCheckbox
+      checked={row.getIsSelected()}
+      disabled={!row.getCanSelect()}
+      onChange={row.getToggleSelectedHandler()}
+    />
+  );
+}
+export function SelectAllCheckbox(table: Table<TransactionsTypeRow>) {
+  return (
+    <IndeterminateCheckbox
+      checked={table.getIsAllRowsSelected()}
+      indeterminate={table.getIsSomeRowsSelected()}
+      onChange={table.getToggleAllRowsSelectedHandler()}
+    />
+  );
+}
+export function StatusRender(
+  cell: TransactionsTypeRow,
+  refetchQueries: InternalRefetchQueriesInclude,
+  table?: Table<TransactionsTypeRow>
+) {
+  const selectedRows = table?.getSelectedRowModel().rows.length
+    ? table.getSelectedRowModel().rows.map((r) => r.original._id)
+    : [cell._id];
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <span className="w-20 rounded bg-muted p-1 px-2 lg:px-2">
+        {cell.status?.toUpperCase() === "PAID" ? "Pago" : "Pendente"}
       </span>
+      <div className="flex items-center justify-center">
+        <StatusPopover
+          transactionIds={selectedRows}
+          refetchQueries={refetchQueries}
+          onSuccess={() => table?.resetRowSelection()}
+        />
+      </div>
     </div>
   );
 }

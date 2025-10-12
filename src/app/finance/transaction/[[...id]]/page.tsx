@@ -1,6 +1,5 @@
 import TransactionGroupInformation from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupInformation";
 import AppLayoutPage from "@/app/layout/AppLayoutPage";
-import SidebarNew from "@/components/sidebar/SidebarNew";
 import TransactionGroupByIdQuery from "@/graphql/queries/transactions/TransactionGroupByIdQuery";
 import {
   ITransactionGroupByIdQuery,

@@ -15,6 +15,8 @@ import TransactionTotalsQuery from "@/graphql/queries/transactions/TransactionTo
 import { useCategoriesByGroupIdQuery } from "@/graphql/hooks/graphqlHooks";
 import TransactionTableView from "@/app/finance/transaction/[[...id]]/components/views/TransactionTableView";
 import useFilterQueryState from "@/app/finance/transaction/[[...id]]/components/filter/useFilterQueryState";
+import FooterMobile from "@/app/FooterMobile";
+import TransationsFilterMobile from "@/app/finance/transaction/[[...id]]/components/filter/TransationsFilterMobile";
 
 interface TransactionsPageProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
@@ -41,7 +43,7 @@ export default function TransactionGroupInformation({
 
   return (
     <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 h-full  ">
-      <div className="flex w-full">
+      <div className="flex w-full flex-col xl:flex-row ">
         <div
           className={cn(
             "-mx-4 -mt-4 flex h-32 bg-white p-5 border ",
@@ -79,11 +81,11 @@ export default function TransactionGroupInformation({
             </TransactionsGroupConfig>
           </div>
         </div>
-        <div className=" w-full  justify-end flex">
+        <div className=" w-full  justify-end flex mt-5 xl:mt-0">
           <IncomeExpenses group={group} />
         </div>
       </div>
-      <div className="mt-10 flex w-full justify-between">
+      <div className="mt-10 xl:flex w-full justify-between hidden">
         <div className="flex w-full">
           <TransactionsFilter
             groupId={group._id}
@@ -130,6 +132,12 @@ export default function TransactionGroupInformation({
         group={group}
         categories={dataCategories?.categoriesByGroupId || []}
       />
+      <FooterMobile>
+        <TransationsFilterMobile
+          group={group}
+          categories={dataCategories?.categoriesByGroupId || []}
+        />
+      </FooterMobile>
     </div>
   );
 }

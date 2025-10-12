@@ -58,6 +58,7 @@ export type MutationKeySpecifier = (
   | "loginWithCredentials"
   | "now"
   | "resetPassword"
+  | "transactionStatus"
   | "updateCategory"
   | "updateCreditCard"
   | "updateTransaction"
@@ -78,6 +79,7 @@ export type MutationFieldPolicy = {
   loginWithCredentials?: FieldPolicy<any> | FieldReadFunction<any>;
   now?: FieldPolicy<any> | FieldReadFunction<any>;
   resetPassword?: FieldPolicy<any> | FieldReadFunction<any>;
+  transactionStatus?: FieldPolicy<any> | FieldReadFunction<any>;
   updateCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   updateCreditCard?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTransaction?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -145,6 +147,7 @@ export type TransactionKeySpecifier = (
   | "description"
   | "installments"
   | "isRecurringPayment"
+  | "status"
   | "transactionGroupId"
   | TransactionKeySpecifier
 )[];
@@ -157,6 +160,7 @@ export type TransactionFieldPolicy = {
   description?: FieldPolicy<any> | FieldReadFunction<any>;
   installments?: FieldPolicy<any> | FieldReadFunction<any>;
   isRecurringPayment?: FieldPolicy<any> | FieldReadFunction<any>;
+  status?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TransactionCategoryKeySpecifier = (

@@ -179,6 +179,7 @@ export type IMutation = {
   loginWithCredentials: IAuthenticatedUser;
   now: Maybe<Scalars["BigInt"]["output"]>;
   resetPassword: Scalars["Boolean"]["output"];
+  transactionStatus: Scalars["Boolean"]["output"];
   updateCategory: ITransactionCategory;
   updateCreditCard: ICreditCard;
   updateTransaction: Maybe<ITransaction>;
@@ -234,6 +235,11 @@ export type IMutationLoginWithCredentialsArgs = {
 export type IMutationResetPasswordArgs = {
   password: Scalars["String"]["input"];
   token: Scalars["String"]["input"];
+};
+
+export type IMutationTransactionStatusArgs = {
+  _id: Array<Scalars["ObjectID"]["input"]>;
+  status: ITransactionStatus;
 };
 
 export type IMutationUpdateCategoryArgs = {
@@ -364,6 +370,7 @@ export type ITransaction = {
   description: Scalars["String"]["output"];
   installments: Maybe<IInstallments>;
   isRecurringPayment: Scalars["Boolean"]["output"];
+  status: Maybe<ITransactionStatus>;
   transactionGroupId: Scalars["ObjectID"]["output"];
 };
 
@@ -419,6 +426,11 @@ export type ITransactionInput = {
   isRecurringPayment: Scalars["Boolean"]["input"];
   transactionGroupId: Scalars["ObjectID"]["input"];
 };
+
+export enum ITransactionStatus {
+  PAID = "PAID",
+  PENDING = "PENDING",
+}
 
 export type ITransactionsByCategoryChart = {
   __typename: "TransactionsByCategoryChart";
@@ -622,6 +634,16 @@ export type IDeleteTransactionMutationVariables = Exact<{
 export type IDeleteTransactionMutation = {
   __typename: "Mutation";
   deleteTransaction: boolean;
+};
+
+export type ITransactionStatusMutationVariables = Exact<{
+  id: Array<Scalars["ObjectID"]["input"]> | Scalars["ObjectID"]["input"];
+  status: ITransactionStatus;
+}>;
+
+export type ITransactionStatusMutation = {
+  __typename: "Mutation";
+  transactionStatus: boolean;
 };
 
 export type IUpdateCategoryMutationVariables = Exact<{
@@ -980,6 +1002,7 @@ export type ITransactionsByGroupIdQuery = {
       __typename: "Transaction";
       _id: any;
       transactionGroupId: any;
+      status: ITransactionStatus | null;
       date: any;
       description: string;
       amount: number;
