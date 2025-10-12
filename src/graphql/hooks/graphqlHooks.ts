@@ -440,6 +440,55 @@ export type DeleteTransactionMutationOptions = Apollo.BaseMutationOptions<
   Types.IDeleteTransactionMutation,
   Types.IDeleteTransactionMutationVariables
 >;
+export const TransactionStatusDocument = gql`
+  mutation TransactionStatus($id: [ObjectID!]!, $status: TransactionStatus!) {
+    transactionStatus(_id: $id, status: $status)
+  }
+`;
+export type ITransactionStatusMutationFn = Apollo.MutationFunction<
+  Types.ITransactionStatusMutation,
+  Types.ITransactionStatusMutationVariables
+>;
+
+/**
+ * __useTransactionStatusMutation__
+ *
+ * To run a mutation, you first call `useTransactionStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTransactionStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [transactionStatusMutation, { data, loading, error }] = useTransactionStatusMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useTransactionStatusMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.ITransactionStatusMutation,
+    Types.ITransactionStatusMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.ITransactionStatusMutation,
+    Types.ITransactionStatusMutationVariables
+  >(TransactionStatusDocument, options);
+}
+export type TransactionStatusMutationHookResult = ReturnType<
+  typeof useTransactionStatusMutation
+>;
+export type TransactionStatusMutationResult =
+  Apollo.MutationResult<Types.ITransactionStatusMutation>;
+export type TransactionStatusMutationOptions = Apollo.BaseMutationOptions<
+  Types.ITransactionStatusMutation,
+  Types.ITransactionStatusMutationVariables
+>;
 export const UpdateCategoryDocument = gql`
   mutation UpdateCategory($id: ObjectID!, $input: UpdateCustomInput!) {
     updateCategory(_id: $id, input: $input) {
@@ -1713,6 +1762,7 @@ export const TransactionsByGroupIdDocument = gql`
           type
           isDefault
         }
+        status
         date
         description
         amount

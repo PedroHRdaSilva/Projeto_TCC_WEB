@@ -9,6 +9,8 @@ import {
   ActionsRender,
   DescriptionRender,
   MobileSkeleton,
+  RowCheckbox,
+  SelectAllCheckbox,
   StatusRender,
   TagsRender,
   TransactionsMobileRender,
@@ -102,6 +104,12 @@ export default function TransactionTableView({
 
   const columns: ColumnDef<TransactionsTypeRow>[] = [
     {
+      id: "select-col",
+      header: ({ table }) => SelectAllCheckbox(table),
+      cell: ({ row }) => RowCheckbox(row),
+      size: 50,
+    },
+    {
       accessorKey: "description",
       header: "Descrição",
       cell: (cell) => DescriptionRender(cell.row.original),
@@ -120,7 +128,8 @@ export default function TransactionTableView({
     {
       accessorKey: "status",
       header: "Status",
-      cell: () => StatusRender(),
+      cell: ({ row, table }) =>
+        StatusRender(row.original, refetchTransactionsByGroupIdQuery, table),
     },
     {
       accessorKey: "tags",

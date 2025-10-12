@@ -40,6 +40,7 @@ export default gql`
           type
           isDefault
         }
+        status
         date
         description
         amount
