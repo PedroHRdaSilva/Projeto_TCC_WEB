@@ -106,7 +106,7 @@ function GroupCategoryTableMobileRender(row: CategoryTable) {
         <div
           className="flex size-10 items-center justify-center rounded-lg"
           style={{
-            backgroundColor: hexToRgba(row.iconProperties.background, 0.2),
+            backgroundColor: hexToRgba(row.iconProperties.background, 1),
           }}
         >
           <IconComponent
@@ -155,7 +155,7 @@ function CategoryDescriptionRender(cell: CellContext<CategoryTable, unknown>) {
       <div
         className="flex size-6 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: hexToRgba(row.iconProperties.background, 0.2),
+          backgroundColor: hexToRgba(row.iconProperties.background, 1),
         }}
       >
         <IconComponent size={14} style={{ color: row.iconProperties.color }} />

@@ -275,7 +275,11 @@ export default function GroupCategoryForm({
             </div>
 
             <div className="flex w-full justify-end">
-              <Button type="submit" className="w-36 gap-3" variant="outline">
+              <Button
+                type="submit"
+                className="w-36 gap-3 bg-green-500 text-primary-foreground hover:bg-green-700"
+                variant="outline"
+              >
                 {isLoading ? "Aguarde..." : "Salvar"}
               </Button>
             </div>

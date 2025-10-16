@@ -11,8 +11,6 @@ import { useMonthlySpendingByCategoryQuery } from "@/graphql/hooks/graphqlHooks"
 import { Card, CardContent, CardHeader, CardTitle } from "@/lib/ui/card";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/lib/ui/Chart";
@@ -97,7 +95,6 @@ export function MonthlySpendingByCategoryChart({
             />
 
             <ChartTooltip content={CustomTooltip} />
-            <ChartLegend content={<ChartLegendContent />} />
 
             {uniqueCategories.map((cat, idx) => {
               const isLast = idx === uniqueCategories.length - 1;

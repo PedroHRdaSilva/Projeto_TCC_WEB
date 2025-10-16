@@ -94,7 +94,7 @@ function ChartContainer({
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "[&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
+          "relative overflow-visible flex aspect-video justify-center text-xs [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
           className
         )}
         {...props}
@@ -148,11 +148,8 @@ function ChartTooltipContent({
   payload,
   label,
   className,
-  indicator = "dot",
   hideLabel = false,
-  hideIndicator = false,
   labelFormatter,
-  formatter,
   labelClassName,
   color,
   nameKey,
@@ -204,16 +201,15 @@ function ChartTooltipContent({
     return null;
   }
 
-  const nestLabel = payload.length === 1 && indicator !== "dot";
-
   return (
     <div
       className={cn(
-        "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        "relative z-50 grid min-w-[8rem] items-start gap-2 rounded-lg border border-border/50 bg-background px-3 py-2 text-xs shadow-xl",
         className
       )}
     >
-      {!nestLabel ? tooltipLabel : null}
+      {!hideLabel && tooltipLabel}
+
       <div className="grid gap-1.5">
         {payload.map((item, index) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`;
@@ -222,59 +218,23 @@ function ChartTooltipContent({
 
           return (
             <div
-              key={item.dataKey}
-              className={cn(
-                "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
-                indicator === "dot" && "items-center"
-              )}
+              key={item.dataKey || index}
+              className="flex items-center justify-between gap-3"
             >
-              {formatter && item?.value !== undefined && item.name ? (
-                formatter(item.value, item.name, item, index, item.payload)
-              ) : (
-                <>
-                  {itemConfig?.icon ? (
-                    <itemConfig.icon />
-                  ) : (
-                    !hideIndicator && (
-                      <div
-                        className={cn(
-                          "border-(--color-border) bg-(--color-bg) shrink-0 rounded-[2px]",
-                          {
-                            "h-2.5 w-2.5": indicator === "dot",
-                            "w-1": indicator === "line",
-                            "w-0 border-[1.5px] border-dashed bg-transparent":
-                              indicator === "dashed",
-                            "my-0.5": nestLabel && indicator === "dashed",
-                          }
-                        )}
-                        style={
-                          {
-                            "--color-bg": indicatorColor,
-                            "--color-border": indicatorColor,
-                          } as React.CSSProperties
-                        }
-                      />
-                    )
-                  )}
-                  <div
-                    className={cn(
-                      "flex flex-1 justify-between leading-none",
-                      nestLabel ? "items-end" : "items-center"
-                    )}
-                  >
-                    <div className="grid gap-1.5">
-                      {nestLabel ? tooltipLabel : null}
-                      <span className="text-muted-foreground">
-                        {itemConfig?.label || item.name}
-                      </span>
-                    </div>
-                    {item.value && (
-                      <span className="font-mono font-medium tabular-nums text-foreground">
-                        {item.value.toLocaleString()}
-                      </span>
-                    )}
-                  </div>
-                </>
+              <div className="flex items-center gap-2">
+                <div
+                  className="h-2.5 w-2.5 rounded-sm"
+                  style={{ backgroundColor: indicatorColor }}
+                />
+                <span className="text-muted-foreground">
+                  {itemConfig?.label || item.name}
+                </span>
+              </div>
+
+              {item.value && (
+                <span className="font-mono font-medium tabular-nums text-foreground">
+                  {item.value.toLocaleString()}
+                </span>
               )}
             </div>
           );
@@ -302,7 +262,7 @@ function ChartLegendContent({
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-4",
+        "flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs",
         verticalAlign === "top" ? "pb-3" : "pt-3",
         className
       )}

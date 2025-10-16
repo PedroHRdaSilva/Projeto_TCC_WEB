@@ -87,16 +87,20 @@ export default function CreateTransactionForm({
       label: "Salvar",
       type: "submit" as const,
       onClick: () => setCloseAfterSave(false),
+      className: "bg-green-500 text-primary-foreground hover:bg-green-700",
     },
     {
       label: "Salvar e Fechar",
       type: "submit" as const,
       onClick: () => setCloseAfterSave(true),
+      className: "bg-green-700 text-primary-foreground hover:bg-green-900",
     },
     {
       label: "Fechar",
       type: "button" as const,
       onClick: () => setOpen?.(false),
+      className:
+        "bg-red-500 border-border text-primary-foreground hover:bg-red-700",
     },
   ];
 
@@ -381,9 +385,9 @@ export default function CreateTransactionForm({
                 className={cn(
                   "ring-offset-background focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-1",
                   "focus-visible:ring-neutral-400",
-                  "w-full text-secondary-foreground xl:w-44"
+                  "w-full xl:w-44",
+                  btn.className
                 )}
-                variant="outline"
                 onClick={btn.onClick}
               >
                 {btn.label}

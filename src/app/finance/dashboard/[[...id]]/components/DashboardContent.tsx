@@ -39,7 +39,7 @@ export default function DashboardContent({ group }: DashboardContentProps) {
             "flex h-10 w-10 items-center justify-center rounded-full xl:rounded-lg"
           )}
           style={{
-            backgroundColor: hexToRgba(iconProperties.background, 0.2),
+            backgroundColor: hexToRgba(iconProperties.background, 1),
           }}
         >
           <IconComponent size={24} style={{ color: iconProperties.color }} />
