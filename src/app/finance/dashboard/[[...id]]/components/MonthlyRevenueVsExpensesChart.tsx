@@ -93,7 +93,6 @@ export function MonthlyRevenueVsExpensesChart({
             />
 
             <ChartTooltip content={CustomTooltip} />
-            <ChartLegend content={<ChartLegendContent />} />
 
             <Bar
               dataKey="revenue"

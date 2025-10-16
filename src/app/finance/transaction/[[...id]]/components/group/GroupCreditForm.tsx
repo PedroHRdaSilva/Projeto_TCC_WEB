@@ -142,7 +142,7 @@ export default function GroupCreditForm({
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               {initialValues
-                ? "Altere os dados do cartao"
+                ? "Altere os dados do cartão"
                 : "Crie um cartão personalizado"}
             </DialogDescription>
           </div>
@@ -178,7 +178,11 @@ export default function GroupCreditForm({
             </div>
 
             <div className="flex w-full justify-end">
-              <Button type="submit" className="w-36 gap-3" variant="outline">
+              <Button
+                type="submit"
+                className="w-36 gap-3 bg-green-500 text-primary-foreground hover:bg-green-700"
+                variant="outline"
+              >
                 {isLoading ? "Aguarde..." : "Salvar"}
               </Button>
             </div>
@@ -191,8 +195,8 @@ export default function GroupCreditForm({
 
 export const groupCreditFormSchema = z.object({
   description: z
-    .string("Nome do cartao é obrigatório")
-    .min(4, "O nome do cartao deve conter no mínimo 4 caracteres"),
+    .string("Nome do cartão é obrigatório")
+    .min(4, "O nome do cartão deve conter no mínimo 4 caracteres"),
 });
 
 export type GroupCreditFormSchema = z.infer<typeof groupCreditFormSchema>;

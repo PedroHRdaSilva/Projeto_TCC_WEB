@@ -82,7 +82,7 @@ export function CardCategorySpending({
     <Card>
       <CardHeader>
         <CardTitle className="text-xl">
-          Gastos do Cartao por Categoria
+          Gastos do Cartão por Categoria
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -100,7 +100,6 @@ export function CardCategorySpending({
             />
 
             <ChartTooltip content={CustomTooltip} />
-            <ChartLegend content={<ChartLegendContent />} />
 
             {uniqueCategories.map((cat, idx) => {
               const isLast = idx === uniqueCategories.length - 1;

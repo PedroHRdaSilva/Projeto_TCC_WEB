@@ -113,7 +113,7 @@ export default function TransactionGroupForm({
                         style={{
                           backgroundColor: hexToRgba(
                             iconProperties.background,
-                            0.2
+                            1
                           ),
                         }}
                       >
@@ -153,7 +153,11 @@ export default function TransactionGroupForm({
             </div>
           </div>
           <div className="flex justify-end mt-2 pt-4">
-            <Button type="submit" className="w-32 gap-2" variant="outline">
+            <Button
+              type="submit"
+              className="w-32 gap-2 bg-green-500 text-primary-foreground hover:bg-green-700"
+              variant="outline"
+            >
               Salvar
             </Button>
           </div>
