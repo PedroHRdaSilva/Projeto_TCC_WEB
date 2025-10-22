@@ -16,7 +16,7 @@ Antes de começar, verifique se o ambiente possui:
 - [Node.js](https://nodejs.org/) (versão 18 ou superior)
 - [pnpm](https://pnpm.io/) — Gerenciador de pacotes
 - [Git](https://git-scm.com/)
-- Banco de dados (ex: **MongoDB**)
+
 
 ---
 
@@ -34,12 +34,14 @@ pnpm i
 
 Crie o arquivo .env com base no exemplo:
 
-MONGODB_URI=mongodb://localhost:27017
-MONGO_DBNAME=cashtrack
-SERVER_PORT=4000
-GMAIL_USER=teste@gmail.com
-GMAIL_APP_PASSWORD=senha_fake
+# URL da API que o frontend vai consumir
+NEXT_PUBLIC_API_URL=http://localhost:3001/graphql
+
+# Ambiente de execução (development | production)
 NODE_ENV=development
-JWT_SECRET=teste123
+
+# Chave secreta JWT (apenas como modelo, preencha no seu .env real)
+JWT_SECRET=sua_chave_jwt_aqui
+
 
 
