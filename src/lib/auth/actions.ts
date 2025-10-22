@@ -22,7 +22,6 @@ export async function getViewerSession() {
       return null;
     }
 
-    // devolve o decoded + token original
     return {
       token, // token bruto
     };

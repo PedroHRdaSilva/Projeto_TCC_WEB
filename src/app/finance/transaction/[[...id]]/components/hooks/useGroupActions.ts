@@ -11,21 +11,16 @@ import {
 import { TransactionGroupFormSchema } from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupForm";
 import TransactionsGroupQuery from "@/graphql/queries/transactions/TransactionsGroupQuery";
 import TransactionGroupByIdQuery from "@/graphql/queries/transactions/TransactionGroupByIdQuery";
-import { InternalRefetchQueriesInclude } from "@apollo/client";
+import useRevalidateAndRefresh from "@/app/finance/transaction/[[...id]]/components/hooks/useRevalidateAndRefresh";
 
 interface UseActionProps {
   isCreating: boolean;
   _id?: string;
-  refetchQueries?: InternalRefetchQueriesInclude;
 }
 
-export default function useGroupActions({
-  isCreating,
-  _id,
-  refetchQueries,
-}: UseActionProps) {
+export default function useGroupActions({ isCreating, _id }: UseActionProps) {
   const { refresh } = useRouter();
-  //   const revalidateAndRefresh = useRevalidateAndRefresh();
+  const revalidateAndRefresh = useRevalidateAndRefresh();
   const [createTransactionGroup, { loading: creatingLoading }] =
     useCreateTransactionGroupMutation({});
 
@@ -63,6 +58,7 @@ export default function useGroupActions({
           error: "Erro ao criar grupo.",
         }
       );
+      revalidateAndRefresh("transactionGroup", 50);
     } else {
       toast.promise(
         updateTransactionGroup({
