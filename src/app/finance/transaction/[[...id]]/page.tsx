@@ -35,49 +35,29 @@ export default async function TransactionsPage(props: TransactionsPageProps) {
   if (!data || !data.transactionGroupById) {
     return (
       <AppLayoutPage>
-        <div className="flex flex-col items-center">
-          <div className="flex w-full flex-col items-center justify-center">
-            <span className="font-dm-sans text-xl font-bold">
-              Você não tem nenhum grupo criado ainda!
-            </span>
-            <span className="w-[415px] text-center font-dm-sans text-zinc-400">
-              Crie um grupo para gerenciar suas despesas pessoais e familiares
-              ou outro para dividir contas com amigos.
-            </span>
+        <div className="flex min-h-screen flex-col items-center justify-center px-6">
+          <div className="flex flex-col items-center justify-between rounded-2xl border border-border bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9] p-8 shadow-sm transition-all hover:shadow-md max-w-md text-center">
+            <div>
+              <h3 className="mb-3 font-dm-sans text-xl font-semibold text-foreground">
+                Crie seu primeiro grupo de transações 💰
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Organize suas finanças com facilidade! Crie um grupo para
+                acompanhar entradas e saídas, dividir gastos com amigos e ter
+                controle total das suas despesas em um só lugar.
+              </p>
+            </div>
+
             <TransactionGroupConfig>
-              <Button variant="outline" className="mt-6 gap-3">
-                <PlusIcon size={16} className="text-gray-500" />
-                Criar um grupo agora!
+              <Button
+                variant="default"
+                size="lg"
+                className="mt-6 gap-2 rounded-xl px-6 py-5 shadow-sm"
+              >
+                <PlusIcon size={18} className="text-white" />
+                Criar grupo agora
               </Button>
             </TransactionGroupConfig>
-          </div>
-          <div className="mt-11 w-full max-w-5xl">
-            <Separator className="mb-3 h-2" />
-            <span className="font-medium text-foreground">
-              Domine todas as funcionalidades
-            </span>
-            <div className="mt-6 flex justify-between">
-              {infoCards.map((node) => (
-                <div
-                  key={node.id}
-                  className="flex max-w-xl gap-8 border border-border bg-background p-5"
-                >
-                  <div className="w-56">
-                    <h1 className="mb-1 font-dm-sans font-medium text-foreground">
-                      {node.title}
-                    </h1>
-                    <span className="font-dm-sans text-muted-foreground">
-                      {node.subTitle}
-                    </span>
-                    <div className="mt-3">
-                      <Link href="#" className="font-sans text-sm underline">
-                        Ver mais
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </AppLayoutPage>
@@ -91,17 +71,3 @@ export default async function TransactionsPage(props: TransactionsPageProps) {
     </AppLayoutPage>
   );
 }
-const infoCards = [
-  {
-    id: 1,
-    title: "Saiba mais sobre os grupos",
-    subTitle:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut urna eget tellus dignissim auctor quis a nulla. Nunc dignissim molestie elit at ...",
-  },
-  {
-    id: 2,
-    title: "Saiba mais sobre os grupos",
-    subTitle:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut urna eget tellus dignissim auctor quis a nulla. Nunc dignissim molestie elit at ...",
-  },
-];

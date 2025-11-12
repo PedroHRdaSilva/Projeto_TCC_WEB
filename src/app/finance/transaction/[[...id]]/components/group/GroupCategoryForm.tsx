@@ -222,7 +222,7 @@ export default function GroupCategoryForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm text-muted-foreground">
-                      Ícone
+                      Ícon
                     </FormLabel>
                     <FormControl>
                       <PopoverChangeIcon
@@ -239,6 +239,7 @@ export default function GroupCategoryForm({
                           }}
                         >
                           <IconComponent
+                            className="text-white"
                             size={24}
                             style={{ color: iconProperties.color }}
                           />

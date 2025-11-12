@@ -1,3 +1,4 @@
+"use client";
 import AppSidebar from "@/components/sidebar/components/AppSidebar";
 import MobileSidebarToggle from "@/components/sidebar/components/MobileSidebarToggle";
 import { SidebarInset, SidebarProvider } from "@/lib/ui/sidebar";

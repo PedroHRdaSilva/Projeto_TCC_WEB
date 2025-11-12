@@ -16,12 +16,14 @@ import {
 import { useDeleteTransactionGroupMutation } from "@/graphql/hooks/graphqlHooks";
 import TransactionsGroupQuery from "@/graphql/queries/transactions/TransactionsGroupQuery";
 import TransactionGroupByIdQuery from "@/graphql/queries/transactions/TransactionGroupByIdQuery";
+import useRevalidateAndRefresh from "@/app/finance/transaction/[[...id]]/components/hooks/useRevalidateAndRefresh";
 
 interface DeleteGroupAlertProps {
   groupIdPage?: string;
   groupId: string;
   onDelete: (deletado: boolean) => void;
   mobile?: boolean;
+  totalGroups?: number;
 }
 
 export default function DeleteGroupAlert({
@@ -29,9 +31,11 @@ export default function DeleteGroupAlert({
   groupId,
   onDelete,
   mobile,
+  totalGroups,
 }: DeleteGroupAlertProps) {
   const [deleteTransactionGroup] = useDeleteTransactionGroupMutation();
-  //   const revalidateAndRefresh = useRevalidateAndRefresh();
+  const revalidateAndRefresh = useRevalidateAndRefresh();
+
   const onSubmit = async () => {
     toast.promise(
       deleteTransactionGroup({
@@ -61,7 +65,7 @@ export default function DeleteGroupAlert({
     );
     if (groupId === groupIdPage) {
       onDelete(false);
-      //   revalidateAndRefresh("transactionGroup", 50);
+      revalidateAndRefresh("transactionGroup", 50, "/finance/transaction");
     }
   };
 

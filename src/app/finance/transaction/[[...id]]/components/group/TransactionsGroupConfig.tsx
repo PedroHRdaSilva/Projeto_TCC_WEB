@@ -15,12 +15,7 @@ import {
 } from "@/lib/ui/dialog";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/lib/ui/tooltip";
+
 import { cn } from "@/lib/utils/utils";
 import TransactionGroupForm from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupForm";
 import GroupCategoryForm from "@/app/finance/transaction/[[...id]]/components/group/GroupCategoryForm";
@@ -44,16 +39,9 @@ export default function TransactionGroupConfig({
   const isAdm = initialValues?.owner._id === viewer?._id;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild={true}>
-            <DialogTrigger asChild={true}>{children}</DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent className="mt-6">Configurações</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="flex flex-col sm:max-w-6xl">
+      <DialogContent className="flex flex-col sm:max-w-6xl ">
         <DialogHeader className="flex h-fit w-full flex-row items-center space-x-1.5 space-y-0 border-b border-border pb-3.5">
           <div className="flex h-10 w-10 items-center justify-center rounded-md border bg-secondary">
             <Settings2Icon
