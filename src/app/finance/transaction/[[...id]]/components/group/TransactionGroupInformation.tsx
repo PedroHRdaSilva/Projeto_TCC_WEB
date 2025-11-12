@@ -40,7 +40,7 @@ export default function TransactionGroupInformation({
     arrayOfPossibleIcons.find(
       (node) => node.displayName === iconProperties.icon
     ) || TrophyIcon;
-
+  console.log("1!!", group._id);
   return (
     <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 h-full  ">
       <div className="flex w-full flex-col xl:flex-row ">
@@ -66,7 +66,7 @@ export default function TransactionGroupInformation({
           </div>
 
           <div className="ml-auto flex  items-center justify-center gap-2">
-            <TransactionGroupSelection />
+            <TransactionGroupSelection groupIdPage={group._id} />
 
             <TransactionsGroupConfig initialValues={group}>
               <button

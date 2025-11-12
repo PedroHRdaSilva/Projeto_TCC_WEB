@@ -76,22 +76,15 @@ export default function TransactionGroupSelection({
         setIsOpen(open);
       }}
     >
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild={true}>
-            <DialogTrigger
-              data-testid="group-switcher-trigger"
-              className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-muted-foreground",
-                "hover:bg-accent hover:text-foreground focus:outline-none"
-              )}
-            >
-              <ArrowRightLeftIcon size={24} />
-            </DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent className="mt-6">Ver Grupos</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <DialogTrigger
+        data-testid="group-switcher-trigger"
+        className={cn(
+          "flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-muted-foreground",
+          "hover:bg-accent hover:text-foreground focus:outline-none"
+        )}
+      >
+        <ArrowRightLeftIcon size={24} />
+      </DialogTrigger>
 
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader className="w-full mt-4 space-y-1">
@@ -199,6 +192,7 @@ export default function TransactionGroupSelection({
                             }}
                             groupIdPage={groupIdPage}
                             groupId={group._id}
+                            totalGroups={transactionsGroup.length}
                           />
                         </div>
                       </TooltipTrigger>

@@ -77,7 +77,9 @@ export default function SignupForm() {
                 <FormControl>
                   <Input placeholder="Nome" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="h-4 ">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
@@ -90,7 +92,9 @@ export default function SignupForm() {
                 <FormControl>
                   <Input placeholder="voce@exemplo.com.br" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="h-4 ">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />

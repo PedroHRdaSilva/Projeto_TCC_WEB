@@ -113,7 +113,7 @@ export default function TransactionGroupForm({
                         style={{
                           backgroundColor: hexToRgba(
                             iconProperties.background,
-                            1
+                            0.4
                           ),
                         }}
                       >
@@ -124,7 +124,9 @@ export default function TransactionGroupForm({
                       </div>
                     </PopoverChangeIcon>
                   </FormControl>
-                  <FormMessage />
+                  <div className="h-4 ">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -146,7 +148,9 @@ export default function TransactionGroupForm({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <div className="h-4 ">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />

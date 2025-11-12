@@ -83,7 +83,9 @@ export default function SigninForm() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <div className="h-4 ">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
@@ -96,7 +98,9 @@ export default function SigninForm() {
                 <FormControl>
                   <Input placeholder="••••••••" type="password" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="h-4 ">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
