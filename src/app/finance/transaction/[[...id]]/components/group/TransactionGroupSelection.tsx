@@ -98,27 +98,32 @@ export default function TransactionGroupSelection({
             </DialogDescription>
           </div>
 
-          {/* Barra de busca e botão */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-            <div className="flex items-center w-full sm:w-auto gap-3">
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input
-                  type="text"
-                  placeholder="Busque aqui..."
-                  className="pl-10 pr-4"
-                  onChange={debounce(400, (e) => setSearch(e.target.value))}
-                />
-              </div>
-              {!dashboard && (
+          <div className="flex justify-between w-full sm:w-auto">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                type="text"
+                placeholder="Busque aqui..."
+                className="pl-10 pr-4"
+                onChange={debounce(400, (e) => setSearch(e.target.value))}
+              />
+            </div>
+            {!dashboard && (
+              <TransactionsGroupConfig>
                 <TransactionsGroupConfig>
-                  <Button variant="outline" className="gap-2 whitespace-nowrap">
-                    <PlusIcon size={16} className="text-gray-500" />
+                  <Button
+                    variant="ghost"
+                    className="group gap-2 whitespace-nowrap text-white hover:text-foreground hover:bg-green-900 bg-green-700 transition"
+                  >
+                    <PlusIcon
+                      size={16}
+                      className="text-white group-hover:text-foreground transition-colors"
+                    />
                     Novo Grupo
                   </Button>
                 </TransactionsGroupConfig>
-              )}
-            </div>
+              </TransactionsGroupConfig>
+            )}
           </div>
         </DialogHeader>
 

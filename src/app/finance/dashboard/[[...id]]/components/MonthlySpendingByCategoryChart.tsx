@@ -35,9 +35,9 @@ export function MonthlySpendingByCategoryChart({
   filterByStartMonth,
   filterByEndMonth,
 }: MonthlySpendingByCategoryChartProps) {
-  const { data } = useMonthlySpendingByCategoryQuery({
+  const { data, loading } = useMonthlySpendingByCategoryQuery({
     variables: {
-      groupId: groupId,
+      groupId,
       filterByStartMonth: filterByStartMonth
         ? lightFormat(filterByStartMonth, "yyyy-MM-dd")
         : undefined,
@@ -48,6 +48,36 @@ export function MonthlySpendingByCategoryChart({
   });
 
   const rows = data?.monthlySpendingByCategory ?? [];
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Gastos por Categoria</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-muted-foreground py-6">
+            Carregando dados...
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!rows.length) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Gastos por Categoria</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-muted-foreground py-6">
+            Nenhum dado disponível para o período selecionado.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const grouped = groupBy(rows, "reportDate");
 
@@ -114,6 +144,7 @@ export function MonthlySpendingByCategoryChart({
     </Card>
   );
 }
+
 function CustomTooltip(props: TooltipContentProps<ValueType, NameType>) {
   return (
     <ChartTooltipContent {...(props as CustomTooltipProps)} hideLabel={true} />

@@ -10,8 +10,6 @@ import { useMonthlyRevenueVsExpensesQuery } from "@/graphql/hooks/graphqlHooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/lib/ui/card";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/lib/ui/Chart";
@@ -25,17 +23,6 @@ import type {
 
 export const description = "A stacked bar chart with a legend";
 
-const chartConfig = {
-  revenue: {
-    label: "Receitas",
-    color: "var(--chart-2)",
-  },
-  expense: {
-    label: "Gasto",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
 interface MonthlyRevenueVsExpensesChartProps {
   groupId: string;
   filterByStartMonth?: Date | null;
@@ -47,9 +34,9 @@ export function MonthlyRevenueVsExpensesChart({
   filterByStartMonth,
   filterByEndMonth,
 }: MonthlyRevenueVsExpensesChartProps) {
-  const { data } = useMonthlyRevenueVsExpensesQuery({
+  const { data, loading } = useMonthlyRevenueVsExpensesQuery({
     variables: {
-      groupId: groupId,
+      groupId,
       filterByStartMonth: filterByStartMonth
         ? lightFormat(filterByStartMonth, "yyyy-MM-dd")
         : undefined,
@@ -59,14 +46,54 @@ export function MonthlyRevenueVsExpensesChart({
     },
   });
 
-  const chartData =
-    data?.monthlyRevenueVsExpenses.map((item) => {
-      return {
-        time: parseISO(item.reportDate).getTime(),
-        revenue: item.revenue,
-        expense: item.expense,
-      };
-    }) ?? [];
+  const rows = data?.monthlyRevenueVsExpenses ?? [];
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Receitas x Gastos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-muted-foreground py-6">
+            Carregando dados...
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!rows.length) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Receitas x Gastos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-muted-foreground py-6">
+            Nenhum dado disponível para o período selecionado.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const chartData = rows.map((item) => ({
+    time: parseISO(item.reportDate).getTime(),
+    revenue: item.revenue,
+    expense: item.expense,
+  }));
+
+  const chartConfig: ChartConfig = {
+    revenue: {
+      label: "Receitas",
+      color: "var(--chart-2)",
+    },
+    expense: {
+      label: "Gastos",
+      color: "var(--chart-1)",
+    },
+  };
 
   return (
     <Card>
@@ -75,12 +102,7 @@ export function MonthlyRevenueVsExpensesChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart
-            data={chartData}
-            barSize={40}
-            barGap={10}
-            stackOffset="sign"
-          >
+          <BarChart data={chartData} barSize={40} barGap={10}>
             <CartesianGrid vertical={false} horizontal={false} />
             <XAxis
               dataKey="time"
@@ -96,17 +118,13 @@ export function MonthlyRevenueVsExpensesChart({
 
             <Bar
               dataKey="revenue"
-              fill="var(--chart-green-light)"
-              radius={[4, 4, 0, 0]}
-              stroke="var(--chart-green-dark)"
-              strokeWidth={2}
+              fill={chartConfig.revenue.color}
+              radius={[8, 8, 0, 0]}
             />
             <Bar
               dataKey="expense"
-              fill="var(--chart-9)"
-              radius={[4, 4, 0, 0]}
-              stroke="var(--chart-8)"
-              strokeWidth={2}
+              fill={chartConfig.expense.color}
+              radius={[8, 8, 0, 0]}
             />
           </BarChart>
         </ChartContainer>
@@ -114,6 +132,7 @@ export function MonthlyRevenueVsExpensesChart({
     </Card>
   );
 }
+
 function CustomTooltip(props: TooltipContentProps<ValueType, NameType>) {
   return (
     <ChartTooltipContent {...(props as CustomTooltipProps)} hideLabel={true} />
