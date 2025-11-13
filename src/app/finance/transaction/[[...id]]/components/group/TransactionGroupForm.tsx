@@ -113,7 +113,7 @@ export default function TransactionGroupForm({
                         style={{
                           backgroundColor: hexToRgba(
                             iconProperties.background,
-                            0.4
+                            1
                           ),
                         }}
                       >

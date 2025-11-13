@@ -54,14 +54,14 @@ export default function ChartFilter() {
           <div>
             <Button
               variant="secondary"
-              className="bg-background p-3 hover:bg-background"
+              className="bg-yellow-500 p-3 hover:hover:bg-yellow-700 text-primary-foreground"
               type="button"
               onClick={() => {
                 setFilterByEndMonth(null);
                 setFilterByStarMonth(null);
               }}
             >
-              Resetar Data
+              Limpar filtro
             </Button>
           </div>
         </div>
