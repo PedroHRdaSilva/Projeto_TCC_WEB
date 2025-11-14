@@ -14,7 +14,7 @@ import Image from "next/image";
 
 export default async function SingupPage() {
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center bg-blue-600 p-4">
+    <div className="flex flex-col min-h-screen items-center justify-center bg-blue-400 p-4">
       <Image src="/LogoDark.svg" alt="Logo" width={600} height={120} />
       <Card className="w-full max-w-sm shadow-xl transition-shadow hover:shadow-2xl">
         <CardHeader className="space-y-1 p-6">
