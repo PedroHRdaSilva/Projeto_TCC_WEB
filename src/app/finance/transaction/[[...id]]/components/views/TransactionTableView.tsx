@@ -138,13 +138,14 @@ export default function TransactionTableView({
     },
     {
       header: "Ações",
-      cell: (cell) =>
+      cell: ({ row, table }) =>
         ActionsRender(
-          cell.row.original,
+          row.original,
           categories,
           group,
           refetchTransactionsByGroupIdQuery,
-          refetchTransactionTotalsQuery
+          refetchTransactionTotalsQuery,
+          table
         ),
       size: 100,
       maxSize: 100,

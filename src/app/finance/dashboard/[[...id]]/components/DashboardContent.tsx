@@ -13,6 +13,9 @@ import { arrayOfPossibleIcons, cn, hexToRgba } from "@/lib/utils/utils";
 import { SettingsIcon, TrophyIcon } from "lucide-react";
 import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/components/group/TransactionsGroupConfig";
 import TransactionGroupSelection from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupSelection";
+import TreemapCategorysChart from "@/app/finance/dashboard/[[...id]]/components/TreemapCategorysChart";
+import { Carousel } from "@/lib/ui/carousel";
+import CarouselCreditCard from "@/app/finance/dashboard/[[...id]]/components/CarouselCreditCard";
 
 interface DashboardContentProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
@@ -30,7 +33,7 @@ export default function DashboardContent({ group }: DashboardContentProps) {
     <div>
       <div
         className={cn(
-          "-mx-4 -mt-4 flex h-32 bg-white p-5 border ",
+          "-mx-4 -mt-4 flex h-32 bg-white p-5 border  ",
           "xl:mx-0 xl:mt-0 xl:h-24 xl:w-full xl:max-w-[340px] xl:items-center xl:rounded-lg  xl:p-6"
         )}
       >
@@ -39,7 +42,7 @@ export default function DashboardContent({ group }: DashboardContentProps) {
             "flex h-10 w-10 items-center justify-center rounded-full xl:rounded-lg"
           )}
           style={{
-            backgroundColor: hexToRgba(iconProperties.background, 1),
+            backgroundColor: hexToRgba(iconProperties.background, 0.5),
           }}
         >
           <IconComponent size={24} style={{ color: iconProperties.color }} />
@@ -66,30 +69,40 @@ export default function DashboardContent({ group }: DashboardContentProps) {
           )}
         </div>
       </div>
-      <div className="mt-5">
+
+      <div className="mt-5  ">
         <ChartFilter />
       </div>
-      <div className="flex h-full w-full flex-col space-y-5 lg:mt-10 lg:flex-row lg:space-x-10 lg:space-y-0">
-        <div className="w-96">
-          <MonthlyRevenueVsExpensesChart
-            groupId={group._id}
-            filterByStartMonth={filterByStartMonth}
-            filterByEndMonth={filterByEndMonth}
-          />
+      <div className="flex  w-full flex-col space-y-5 lg:mt-10 ">
+        <div className="w-full min-h-[350px] flex flex-col lg:flex-row gap-4">
+          <div className="flex-[3]">
+            <MonthlyRevenueVsExpensesChart
+              groupId={group._id}
+              filterByStartMonth={filterByStartMonth}
+              filterByEndMonth={filterByEndMonth}
+            />
+          </div>
+
+          <div className="flex-[1]">
+            <CarouselCreditCard groupId={group._id} />
+          </div>
         </div>
-        <div className="w-96">
-          <MonthlySpendingByCategoryChart
-            groupId={group._id}
-            filterByStartMonth={filterByStartMonth}
-            filterByEndMonth={filterByEndMonth}
-          />
-        </div>
-        <div className="w-96">
-          <CardCategorySpending
-            groupId={group._id}
-            filterByStartMonth={filterByStartMonth}
-            filterByEndMonth={filterByEndMonth}
-          />
+
+        <div className="w-full min-h-[300px] flex flex-col lg:flex-row gap-4">
+          <div className="flex-1">
+            <MonthlySpendingByCategoryChart
+              groupId={group._id}
+              filterByStartMonth={filterByStartMonth}
+              filterByEndMonth={filterByEndMonth}
+            />
+          </div>
+          <div className="flex-1">
+            <TreemapCategorysChart
+              groupId={group._id}
+              filterByStartMonth={filterByStartMonth}
+              filterByEndMonth={filterByEndMonth}
+            />
+          </div>
         </div>
       </div>
     </div>

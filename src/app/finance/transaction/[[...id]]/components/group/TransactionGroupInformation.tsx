@@ -55,7 +55,7 @@ export default function TransactionGroupInformation({
               "flex h-10 w-10 items-center justify-center rounded-full xl:rounded-lg"
             )}
             style={{
-              backgroundColor: hexToRgba(iconProperties.background, 1),
+              backgroundColor: hexToRgba(iconProperties.background, 0.5),
             }}
           >
             <IconComponent size={24} style={{ color: iconProperties.color }} />

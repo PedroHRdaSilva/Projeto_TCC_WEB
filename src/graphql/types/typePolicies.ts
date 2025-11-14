@@ -16,13 +16,17 @@ export type AuthenticatedUserFieldPolicy = {
 export type CreditCardKeySpecifier = (
   | "_id"
   | "description"
+  | "limit"
   | "transactionGroupId"
+  | "validity"
   | CreditCardKeySpecifier
 )[];
 export type CreditCardFieldPolicy = {
   _id?: FieldPolicy<any> | FieldReadFunction<any>;
   description?: FieldPolicy<any> | FieldReadFunction<any>;
+  limit?: FieldPolicy<any> | FieldReadFunction<any>;
   transactionGroupId?: FieldPolicy<any> | FieldReadFunction<any>;
+  validity?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type IconPropertiesKeySpecifier = (
   | "background"

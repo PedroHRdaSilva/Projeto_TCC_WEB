@@ -6,6 +6,8 @@ export default gql`
       _id
       transactionGroupId
       description
+      limit
+      validity
     }
   }
 `;

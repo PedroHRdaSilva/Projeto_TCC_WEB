@@ -39,7 +39,7 @@ export function TransactionsMobileRender(
 
   const iconStyle = {
     color: row.category.iconProperties.color,
-    backgroundColor: hexToRgba(row.category.iconProperties.background, 1),
+    backgroundColor: hexToRgba(row.category.iconProperties.background, 0.5),
   };
   const moneyFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -87,15 +87,21 @@ export function ActionsRender(
   categories: NonNullable<ICategoriesByGroupIdQuery["categoriesByGroupId"]>,
   transactionGroup: TransactionGroupType,
   refetchQueries: InternalRefetchQueriesInclude,
-  refetchTransactionTotalsQuery: InternalRefetchQueriesInclude
+  refetchTransactionTotalsQuery: InternalRefetchQueriesInclude,
+  table?: Table<TransactionsTypeRow>
 ) {
   const initialValues = cell;
+  const selectedRows = table?.getSelectedRowModel().rows.length
+    ? table.getSelectedRowModel().rows.map((r) => r.original._id)
+    : [initialValues._id];
+
   return (
     <>
       <div className="hidden items-center space-x-2 lg:flex">
         <TransactionDeleteAlert
           refetchQueries={[...refetchQueries, ...refetchTransactionTotalsQuery]}
-          transactionId={initialValues._id}
+          transactionId={selectedRows}
+          onSuccess={() => table?.resetRowSelection()}
         />
 
         <CreateTransaction
@@ -121,7 +127,7 @@ export function ActionsRender(
                     ...refetchQueries,
                     ...refetchTransactionTotalsQuery,
                   ]}
-                  transactionId={initialValues._id}
+                  transactionId={selectedRows}
                 />
               </li>
               <li>

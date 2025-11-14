@@ -153,7 +153,7 @@ export default function TransactionGroupSelection({
                       style={{
                         backgroundColor: hexToRgba(
                           group.iconProperties.background,
-                          1
+                          0.5
                         ),
                       }}
                     >

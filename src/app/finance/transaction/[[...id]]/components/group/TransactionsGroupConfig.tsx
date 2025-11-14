@@ -144,7 +144,7 @@ export default function TransactionGroupConfig({
                 </div>
                 <Separator />
 
-                <div className="h-[calc(100dvh-208px)] overflow-hidden lg:h-96">
+                <div className="h-[350px] overflow-y-auto lg:h-96">
                   <CategoryTable groupId={initialValues._id} />
                 </div>
               </TabsContent>

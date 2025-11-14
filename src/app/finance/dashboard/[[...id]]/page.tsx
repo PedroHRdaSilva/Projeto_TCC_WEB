@@ -82,7 +82,7 @@ export default async function DashboardPage(props: DashboardPageProps) {
   }
 
   return (
-    <AppLayoutPage>
+    <AppLayoutPage className="overflow-y-auto">
       <DashboardContent group={data.transactionGroupById} />
     </AppLayoutPage>
   );

@@ -68,6 +68,8 @@ export const CreateCreditCardDocument = gql`
       _id
       transactionGroupId
       description
+      limit
+      validity
     }
   }
 `;
@@ -393,8 +395,8 @@ export type DeleteTransactionGroupMutationOptions = Apollo.BaseMutationOptions<
   Types.IDeleteTransactionGroupMutationVariables
 >;
 export const DeleteTransactionDocument = gql`
-  mutation DeleteTransaction($id: ObjectID!) {
-    deleteTransaction(_id: $id)
+  mutation DeleteTransaction($_id: [ObjectID!]!) {
+    deleteTransaction(_id: $_id)
   }
 `;
 export type IDeleteTransactionMutationFn = Apollo.MutationFunction<
@@ -415,7 +417,7 @@ export type IDeleteTransactionMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteTransactionMutation, { data, loading, error }] = useDeleteTransactionMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      _id: // value for '_id'
  *   },
  * });
  */
@@ -553,6 +555,8 @@ export const UpdateCreditCardDocument = gql`
       _id
       transactionGroupId
       description
+      limit
+      validity
     }
   }
 `;
@@ -1237,6 +1241,8 @@ export const CreditCardByGroupIdDocument = gql`
       _id
       transactionGroupId
       description
+      limit
+      validity
     }
   }
 `;

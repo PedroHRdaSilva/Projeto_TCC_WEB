@@ -2,7 +2,7 @@
 
 import { EllipsisVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
-
+import { toast as toastSonner } from "sonner";
 import { useCreditCardByGroupIdQuery } from "@/graphql/hooks/graphqlHooks";
 import type { ICreditCardByGroupIdQuery } from "@/graphql/types/graphqlTypes";
 import {
@@ -24,6 +24,7 @@ import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/lib/ui/skeleton";
 import GroupCreditForm from "@/app/finance/transaction/[[...id]]/components/group/GroupCreditForm";
 import useCreditActions from "@/app/finance/transaction/[[...id]]/components/hooks/useCreditActions";
+import { toast } from "sonner";
 
 type CreditTable = ICreditCardByGroupIdQuery["creditCardByGroupId"][0];
 
@@ -67,15 +68,19 @@ export default function CreditTable({ groupId }: GroupCreditTableTableProps) {
     <DataTable
       columns={columns}
       data={data ? [...data.creditCardByGroupId] : []}
-      onMobileRender={GroupCategoryTableMobileRender}
+      onMobileRender={(row) => GroupCategoryTableMobileRender(row, groupId)}
     />
   );
 }
 
-function GroupCategoryTableMobileRender(row: CreditTable) {
+function GroupCategoryTableMobileRender(row: CreditTable, groupId: string) {
+  const { refresh } = useRouter();
+  const { deleteCredit } = useCreditActions();
+
   return (
     <div className="flex w-full items-center justify-between">
       <span>{row.description}</span>
+
       <Popover modal={true}>
         <PopoverTrigger className="flex lg:hidden">
           <EllipsisVerticalIcon className="stroke-muted-foreground" />
@@ -83,8 +88,63 @@ function GroupCategoryTableMobileRender(row: CreditTable) {
 
         <PopoverContent align="end" sideOffset={10} className="w-fit">
           <ul className="space-y-2 text-sm text-foreground">
-            <li>Editar</li>
-            <li>Excluir</li>
+            {/* EDITAR */}
+            <li>
+              <GroupCreditForm
+                groupId={groupId}
+                initialValues={row}
+                className="flex items-center gap-2"
+              >
+                <span className="flex items-center gap-2">
+                  <PencilIcon size={16} className="stroke-1" />
+                  Editar
+                </span>
+              </GroupCreditForm>
+            </li>
+
+            {/* EXCLUIR */}
+            <li>
+              <AlertDialog>
+                <AlertDialogTrigger className="flex items-center gap-2">
+                  <Trash2Icon size={16} className="stroke-1" />
+                  Excluir
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Deseja mesmo excluir este cartão?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Essa ação é irreversível e só será permitida caso não
+                      existam transações vinculadas a este cartão.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={async () => {
+                        toastSonner.promise(
+                          deleteCredit({
+                            variables: { id: row._id },
+                          }),
+                          {
+                            position: "top-center",
+                            loading: "Deletando Cartao...",
+                            success: "Cartao deletado com sucesso!",
+                            error:
+                              "Erro ao deletar o cartao,cartao esta vinculado a uma transação.",
+                          }
+                        );
+                        refresh();
+                      }}
+                    >
+                      Confirmar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </li>
           </ul>
         </PopoverContent>
       </Popover>
@@ -106,12 +166,15 @@ function DeleteActionsRender(
 ) {
   const { refresh } = useRouter();
   const { deleteCredit } = useCreditActions();
+
   return (
     <div className="flex items-center justify-end space-x-2">
+      {/* EXCLUIR */}
       <AlertDialog>
         <AlertDialogTrigger className="text-muted-foreground hover:text-foreground">
           <Trash2Icon size={20} className="stroke-1" />
         </AlertDialogTrigger>
+
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
@@ -122,15 +185,23 @@ function DeleteActionsRender(
               transações vinculadas a esta cartão.
             </AlertDialogDescription>
           </AlertDialogHeader>
+
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
-                await deleteCredit({
-                  variables: {
-                    id: cell.row.original._id,
-                  },
-                });
+                toastSonner.promise(
+                  deleteCredit({
+                    variables: { id: cell.row.original._id },
+                  }),
+                  {
+                    position: "top-center",
+                    loading: "Deletando Cartao...",
+                    success: "Cartao deletado com sucesso!",
+                    error:
+                      "Erro ao deletar o cartao,cartao esta vinculado a uma transação.",
+                  }
+                );
                 refresh();
               }}
             >
@@ -140,6 +211,7 @@ function DeleteActionsRender(
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* EDITAR */}
       <GroupCreditForm
         groupId={groupId}
         className="text-muted-foreground hover:text-foreground"
@@ -150,6 +222,7 @@ function DeleteActionsRender(
     </div>
   );
 }
+
 function MobileSkeleton() {
   return (
     <div className="flex flex-col space-y-1">
