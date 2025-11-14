@@ -26,44 +26,42 @@ export default function ChartFilter() {
   const currentYear = getYear(filterByStartMonth);
   return (
     <div>
-      <div className="">
-        <div className="mb-2 flex flex-grow items-center space-x-3 xl:w-60 xl:flex-grow-0">
-          <CalendarRangePiker
-            onSelectStart={(value) => {
-              setFilterByStarMonth(parseISO(value));
-            }}
-            onSelectEnd={(value) => {
-              setFilterByEndMonth(parseISO(value));
-            }}
-            defaultValues={{ month: currentMonth, year: currentYear }}
-            className={cn(
-              "flex w-full items-center gap-3 whitespace-nowrap rounded-lg bg-background p-3 text-sm opacity-70",
-              "xl:p-3 xl:opacity-100"
-            )}
-          >
-            <div>
-              <CalendarDays size={18} />
-            </div>
-            <div className="flex w-full rounded-lg">
-              {`${getMonthName(currentMonth)} / ${currentYear}`}
-            </div>
-            <div>
-              <ChevronDown className="h-4 w-4 opacity-50" />
-            </div>
-          </CalendarRangePiker>
+      <div className="mb-2 flex flex-col items-center space-x-3 xl:w-60 xl:flex-row space-y-5 xl:space-y-0">
+        <CalendarRangePiker
+          onSelectStart={(value) => {
+            setFilterByStarMonth(parseISO(value));
+          }}
+          onSelectEnd={(value) => {
+            setFilterByEndMonth(parseISO(value));
+          }}
+          defaultValues={{ month: currentMonth, year: currentYear }}
+          className={cn(
+            "flex w-full items-center gap-3 whitespace-nowrap rounded-lg bg-background p-3 text-sm opacity-70",
+            "xl:p-3 xl:opacity-100"
+          )}
+        >
           <div>
-            <Button
-              variant="secondary"
-              className="bg-yellow-500 p-3 hover:hover:bg-yellow-700 text-primary-foreground"
-              type="button"
-              onClick={() => {
-                setFilterByEndMonth(null);
-                setFilterByStarMonth(null);
-              }}
-            >
-              Limpar filtro
-            </Button>
+            <CalendarDays size={18} />
           </div>
+          <div className="flex w-full rounded-lg">
+            {`${getMonthName(currentMonth)} / ${currentYear}`}
+          </div>
+          <div>
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          </div>
+        </CalendarRangePiker>
+        <div className="w-full">
+          <Button
+            variant="secondary"
+            className="bg-yellow-500  hover:hover:bg-yellow-700 text-primary-foreground "
+            type="button"
+            onClick={() => {
+              setFilterByEndMonth(null);
+              setFilterByStarMonth(null);
+            }}
+          >
+            Limpar filtro
+          </Button>
         </div>
       </div>
     </div>

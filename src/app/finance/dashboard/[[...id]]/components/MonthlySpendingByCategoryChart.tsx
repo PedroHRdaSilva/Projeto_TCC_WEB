@@ -5,22 +5,33 @@ import { format } from "date-fns/format";
 import { ptBR } from "date-fns/locale";
 import { parseISO } from "date-fns/parseISO";
 import { groupBy } from "lodash";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ReferenceLine,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import { useMonthlySpendingByCategoryQuery } from "@/graphql/hooks/graphqlHooks";
-import { Card, CardContent, CardHeader, CardTitle } from "@/lib/ui/card";
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/lib/ui/Chart";
-import type { ChartConfig, CustomTooltipProps } from "@/lib/ui/Chart";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/lib/ui/card";
+import { ChartContainer, ChartTooltip } from "@/lib/ui/Chart";
+import type { ChartConfig } from "@/lib/ui/Chart";
 
 import type { TooltipContentProps } from "recharts";
 import type {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { compactFormatter, formatCurrency } from "@/lib/utils/formatters";
+import { Skeleton } from "@/lib/ui/skeleton";
 
 export const description = "A stacked bar chart with a legend";
 
@@ -49,36 +60,6 @@ export function MonthlySpendingByCategoryChart({
 
   const rows = data?.monthlySpendingByCategory ?? [];
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Gastos por Categoria</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-muted-foreground py-6">
-            Carregando dados...
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (!rows.length) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Gastos por Categoria</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-muted-foreground py-6">
-            Nenhum dado disponível para o período selecionado.
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   const grouped = groupBy(rows, "reportDate");
 
   const chartData = Object.entries(grouped).map(([date, items]) => {
@@ -97,6 +78,16 @@ export function MonthlySpendingByCategoryChart({
   const categories = rows.map((c) => c.category.description) ?? [];
   const uniqueCategories = Array.from(new Set(categories));
 
+  const stackedTotals = chartData.map((entry) =>
+    uniqueCategories.reduce(
+      (sum, cat) => sum + ((entry[cat] as number) || 0),
+      0
+    )
+  );
+
+  const maxValue = Math.round(Math.max(...stackedTotals) / 1000) * 1000;
+  const midValue = Math.round(maxValue / 2);
+
   const chartConfig: ChartConfig = uniqueCategories.reduce((acc, cat, idx) => {
     acc[cat] = {
       label: cat,
@@ -105,15 +96,42 @@ export function MonthlySpendingByCategoryChart({
     return acc;
   }, {} as ChartConfig);
 
+  if (loading) {
+    return (
+      <div>
+        <div className="flex space-x-4">
+          <Skeleton className="flex h-[316px] w-full bg-background"></Skeleton>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <Card className="flex h-[316px] items-center justify-center">
+        <CardHeader>
+          <CardTitle className="font-sans text-lg">Receitas x Gastos</CardTitle>
+          <CardDescription className="font-sans text-sm text-zinc-400">
+            Crie um cartão para começar a usar o gráfico
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
   return (
-    <Card>
+    <Card className="xl:h-[316px]">
       <CardHeader>
-        <CardTitle className="text-xl">Gastos por Categoria</CardTitle>
+        <CardTitle className="font-sans text-lg">
+          Gastos por categoria
+        </CardTitle>
+        <CardDescription className="font-sans text-sm text-zinc-400">
+          Distribuição dos gastos ao longo do período
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart data={chartData} barSize={200} stackOffset="sign">
-            <CartesianGrid vertical={false} horizontal={false} />
+      <CardContent className="xl:p-0 xl:pl-1 xl:pr-4">
+        <ChartContainer config={chartConfig} className="h-[200px] w-full">
+          <BarChart data={chartData} stackOffset="sign">
+            <CartesianGrid horizontal={false} />
             <XAxis
               dataKey="time"
               tickLine={false}
@@ -123,18 +141,53 @@ export function MonthlySpendingByCategoryChart({
                 format(new Date(time), "MMM/yyyy", { locale: ptBR })
               }
             />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              domain={[0, maxValue]}
+              ticks={[0, midValue, maxValue]}
+              tickFormatter={(value) => compactFormatter.format(value)}
+            />
 
-            <ChartTooltip content={CustomTooltip} />
+            <ReferenceLine
+              y={maxValue}
+              stroke="gray"
+              strokeDasharray="3 3"
+              label={{
+                value: maxValue.toLocaleString("pt-BR"),
+                position: "right",
+                fill: "gray",
+                fontSize: 12,
+              }}
+            />
 
-            {uniqueCategories.map((cat, idx) => {
-              const isLast = idx === uniqueCategories.length - 1;
+            <ReferenceLine
+              y={midValue}
+              stroke="gray"
+              strokeDasharray="3 3"
+              label={{
+                value: midValue.toLocaleString("pt-BR"),
+                position: "right",
+                fill: "gray",
+                fontSize: 12,
+              }}
+            />
+
+            <ReferenceLine y={0} strokeDasharray="3 3" stroke="gray" />
+
+            <ChartTooltip
+              cursor={false}
+              content={renderCustomTooltip(chartConfig)}
+            />
+
+            {uniqueCategories.map((cat) => {
               return (
                 <Bar
                   key={cat}
                   dataKey={cat}
                   stackId="a"
                   fill={chartConfig[cat]?.color}
-                  radius={isLast ? [8, 8, 0, 0] : [0, 0, 0, 0]}
+                  radius={[0, 0, 0, 0]}
                 />
               );
             })}
@@ -144,9 +197,53 @@ export function MonthlySpendingByCategoryChart({
     </Card>
   );
 }
+const renderCustomTooltip = (chartConfig: ChartConfig) => {
+  function TooltipComponent(props: TooltipContentProps<ValueType, NameType>) {
+    return <CustomTooltip {...props} chartConfig={chartConfig} />;
+  }
 
-function CustomTooltip(props: TooltipContentProps<ValueType, NameType>) {
+  TooltipComponent.displayName = "CustomTooltip";
+
+  return TooltipComponent;
+};
+interface CustomTooltipProps extends TooltipContentProps<ValueType, NameType> {
+  chartConfig: ChartConfig;
+}
+function CustomTooltip({
+  active,
+  payload,
+  label,
+  chartConfig,
+}: CustomTooltipProps) {
+  if (!active || !payload || payload.length === 0) return null;
+
+  const formattedLabel =
+    typeof label === "number"
+      ? format(new Date(label), "MMM/yyyy", { locale: ptBR }).replace(
+          /^./,
+          (c) => c.toUpperCase()
+        )
+      : label;
+
   return (
-    <ChartTooltipContent {...(props as CustomTooltipProps)} hideLabel={true} />
+    <div className="flex flex-col rounded bg-secondary p-2 text-sm shadow-md">
+      <p className="font-dm-sans text-[10px]">{formattedLabel}</p>
+      {payload.map((item, idx) => (
+        <div key={idx} className="flex items-center gap-2 pt-2 text-xs">
+          <span
+            className="h-2 w-2 rounded-sm"
+            style={{ backgroundColor: item.color }}
+          ></span>
+          <div className="flex w-full justify-between space-x-3">
+            <span className="font-dm-sans text-[8px] text-muted-foreground">
+              {chartConfig[item.dataKey as keyof typeof chartConfig]?.label}:
+            </span>
+            <span className="font-dm-sans text-[8px] text-muted-foreground">
+              {formatCurrency(item.value as number)}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

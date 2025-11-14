@@ -137,12 +137,16 @@ export type ICreditCard = {
   __typename: "CreditCard";
   _id: Scalars["ObjectID"]["output"];
   description: Scalars["String"]["output"];
+  limit: Scalars["Float"]["output"];
   transactionGroupId: Scalars["ObjectID"]["output"];
+  validity: Scalars["String"]["output"];
 };
 
 export type ICreditCardInput = {
   description: Scalars["String"]["input"];
+  limit: Scalars["Float"]["input"];
   transactionGroupId: Scalars["ObjectID"]["input"];
+  validity: Scalars["String"]["input"];
 };
 
 export type IIconProperties = {
@@ -216,7 +220,7 @@ export type IMutationDeleteCreditCardArgs = {
 };
 
 export type IMutationDeleteTransactionArgs = {
-  _id: Scalars["ObjectID"]["input"];
+  _id: Array<Scalars["ObjectID"]["input"]>;
 };
 
 export type IMutationDeleteTransactionGroupArgs = {
@@ -536,6 +540,8 @@ export type ICreateCreditCardMutation = {
     _id: any;
     transactionGroupId: any;
     description: string;
+    limit: number;
+    validity: string;
   };
 };
 
@@ -628,7 +634,7 @@ export type IDeleteTransactionGroupMutation = {
 };
 
 export type IDeleteTransactionMutationVariables = Exact<{
-  id: Scalars["ObjectID"]["input"];
+  _id: Array<Scalars["ObjectID"]["input"]> | Scalars["ObjectID"]["input"];
 }>;
 
 export type IDeleteTransactionMutation = {
@@ -679,6 +685,8 @@ export type IUpdateCreditCardMutation = {
     _id: any;
     transactionGroupId: any;
     description: string;
+    limit: number;
+    validity: string;
   };
 };
 
@@ -877,6 +885,8 @@ export type ICreditCardByGroupIdQuery = {
     _id: any;
     transactionGroupId: any;
     description: string;
+    limit: number;
+    validity: string;
   }>;
 };
 

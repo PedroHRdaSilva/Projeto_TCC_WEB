@@ -27,9 +27,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/lib/ui/form";
-import { Input } from "@/lib/ui/input";
+import { defaultCurrencyFormat, Input } from "@/lib/ui/input";
 import useCreditActions from "@/app/finance/transaction/[[...id]]/components/hooks/useCreditActions";
 import CreditCardByGroupIdQuery from "@/graphql/queries/transactions/CreditCardByGroupIdQuery";
+import parseCurrencyToNumber from "@/utils/currency";
+import { cn } from "@/lib/utils";
 
 interface GroupCreditFormProps {
   children: ReactNode;
@@ -55,6 +57,10 @@ export default function GroupCreditForm({
     resolver: zodResolver(groupCreditFormSchema),
     defaultValues: {
       description: initialValues?.description || "",
+      limit: initialValues
+        ? defaultCurrencyFormat.format(initialValues.limit)
+        : defaultCurrencyFormat.format(0),
+      validity: initialValues?.validity || "",
     },
   });
 
@@ -67,6 +73,8 @@ export default function GroupCreditForm({
             input: {
               description: data.description,
               transactionGroupId: groupId,
+              limit: parseCurrencyToNumber(data.limit),
+              validity: data.validity,
             },
           },
           refetchQueries: [
@@ -93,6 +101,8 @@ export default function GroupCreditForm({
             input: {
               description: data.description,
               transactionGroupId: groupId,
+              limit: parseCurrencyToNumber(data.limit),
+              validity: data.validity,
             },
           },
           refetchQueries: [
@@ -127,7 +137,7 @@ export default function GroupCreditForm({
 
       <DialogContent>
         <DialogHeader className="flex h-fit w-full flex-row items-center space-x-1.5 space-y-0 border-b border-border pb-3.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md border bg-secondary">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md border bg-background">
             <TagIcon
               className="text-foreground"
               size={20}
@@ -142,7 +152,7 @@ export default function GroupCreditForm({
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               {initialValues
-                ? "Altere os dados do cartão"
+                ? "Altere os dados do cartao"
                 : "Crie um cartão personalizado"}
             </DialogDescription>
           </div>
@@ -153,36 +163,84 @@ export default function GroupCreditForm({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="flex w-full flex-col gap-4"
           >
-            <div className="flex select-none gap-4">
-              <div className="flex flex-1 flex-col">
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm text-muted-foreground">
-                        Descrição
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Digite a descrição do cartão"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="flex flex-col space-y-1">
+                  <FormLabel className="text-sm text-muted-foreground">
+                    Descrição
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Digite a descrição do cartão"
+                      {...field}
+                    />
+                  </FormControl>
+                  <span className="h-4">
+                    <FormMessage />
+                  </span>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="limit"
+              render={({ field }) => (
+                <FormItem className="flex flex-col space-y-1 w-[196px]">
+                  <FormLabel className="text-sm text-muted-foreground">
+                    Limite
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="currency"
+                      className={cn("h-10 border border-border xl:w-[200px]")}
+                      placeholder="Informe o valor"
+                      {...field}
+                    />
+                  </FormControl>
+                  <span className="h-4">
+                    <FormMessage />
+                  </span>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="validity"
+              render={({ field }) => (
+                <FormItem className="flex flex-col space-y-1 w-[196px]">
+                  <FormLabel className="text-sm text-muted-foreground">
+                    Validade
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      maxLength={5}
+                      placeholder="MM/AA"
+                      className={cn("h-10 border border-border xl:w-[200px]")}
+                      value={field.value || ""}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, "");
+                        if (value.length >= 3) {
+                          value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                        }
+                        field.onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <span className="h-4">
+                    <FormMessage />
+                  </span>
+                </FormItem>
+              )}
+            />
 
             <div className="flex w-full justify-end">
-              <Button
-                type="submit"
-                className="w-36 gap-3 bg-green-500 text-primary-foreground hover:bg-green-700"
-                variant="outline"
-              >
+              <Button type="submit" className="w-36 gap-3" variant="outline">
                 {isLoading ? "Aguarde..." : "Salvar"}
               </Button>
             </div>
@@ -197,6 +255,13 @@ export const groupCreditFormSchema = z.object({
   description: z
     .string("Nome do cartão é obrigatório")
     .min(4, "O nome do cartão deve conter no mínimo 4 caracteres"),
+  limit: z.string("Valor obrigatório").refine((value) => {
+    const amountNormalized = parseCurrencyToNumber(value);
+    return amountNormalized > 0;
+  }, "O valor deve ser maior que 0"),
+  validity: z
+    .string()
+    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Formato inválido (MM/AA)"),
 });
 
 export type GroupCreditFormSchema = z.infer<typeof groupCreditFormSchema>;

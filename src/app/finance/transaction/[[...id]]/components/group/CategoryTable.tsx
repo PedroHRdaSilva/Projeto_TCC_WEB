@@ -89,24 +89,46 @@ export default function CategoryTable({ groupId }: GroupCategoryTableProps) {
             )
           : []
       }
-      onMobileRender={(row) => GroupCategoryTableMobileRender(row)}
+      onMobileRender={(row) => GroupCategoryTableMobileRender(row, groupId)}
     />
   );
 }
 
-function GroupCategoryTableMobileRender(row: CategoryTable) {
+function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
+  const { refresh } = useRouter();
+  const { deleteCategory } = useCategoryActions();
+
   const IconComponent =
     arrayOfPossibleIcons.find(
       (node) => node.displayName === row.iconProperties.icon
     ) || TrophyIcon;
 
+  const handleDelete = async () => {
+    toast.promise(
+      deleteCategory({
+        variables: {
+          id: row._id,
+          groupId,
+        },
+      }),
+      {
+        position: "top-center",
+        loading: "Deletando categoria...",
+        success: "Categoria deletada com sucesso!",
+        error: "Erro ao apagar a categoria",
+      }
+    );
+
+    refresh();
+  };
+
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex w-full items-center justify-between ">
       <div className="flex items-center gap-2">
         <div
           className="flex size-10 items-center justify-center rounded-lg"
           style={{
-            backgroundColor: hexToRgba(row.iconProperties.background, 1),
+            backgroundColor: hexToRgba(row.iconProperties.background, 0.5),
           }}
         >
           <IconComponent
@@ -132,10 +154,47 @@ function GroupCategoryTableMobileRender(row: CategoryTable) {
 
         <PopoverContent align="end" sideOffset={10} className="w-fit">
           <ul className="space-y-2 text-sm text-foreground">
-            <>
-              <li>Editar</li>
-              <li>Excluir</li>
-            </>
+            {/* EDITAR */}
+            <li>
+              <GroupCategoryForm
+                groupId={groupId}
+                initialValues={row}
+                className="flex items-center gap-2"
+              >
+                <span className="flex items-center gap-2">
+                  <PencilIcon size={16} className="stroke-1" />
+                  Editar
+                </span>
+              </GroupCategoryForm>
+            </li>
+
+            {/* EXCLUIR */}
+            <li>
+              <AlertDialog>
+                <AlertDialogTrigger className="flex items-center gap-2">
+                  <Trash2Icon size={16} className="stroke-1" />
+                  Excluir
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Deseja mesmo excluir esta categoria?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Essa ação é irreversível e só será permitida caso não
+                      existam transações vinculadas a esta categoria.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete}>
+                      Confirmar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </li>
           </ul>
         </PopoverContent>
       </Popover>
@@ -155,7 +214,7 @@ function CategoryDescriptionRender(cell: CellContext<CategoryTable, unknown>) {
       <div
         className="flex size-6 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: hexToRgba(row.iconProperties.background, 1),
+          backgroundColor: hexToRgba(row.iconProperties.background, 0.5),
         }}
       >
         <IconComponent size={14} style={{ color: row.iconProperties.color }} />
@@ -178,7 +237,7 @@ function CategoryActionsRender(
       deleteCategory({
         variables: {
           id: cell.row.original._id,
-          groupId: groupId,
+          groupId,
         },
       }),
       {
@@ -191,12 +250,14 @@ function CategoryActionsRender(
 
     refresh();
   };
+
   return (
     <div className="flex items-center space-x-2">
       <AlertDialog>
         <AlertDialogTrigger className="text-muted-foreground hover:text-foreground">
           <Trash2Icon size={20} className="stroke-1" />
         </AlertDialogTrigger>
+
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
@@ -226,6 +287,7 @@ function CategoryActionsRender(
     </div>
   );
 }
+
 function MobileSkeleton() {
   return (
     <div className="flex flex-col space-y-1">

@@ -18,13 +18,15 @@ import type { InternalRefetchQueriesInclude } from "@apollo/client";
 import useTransactionActions from "@/app/finance/transaction/[[...id]]/components/hooks/useTransactionActions";
 
 interface DeleteGroupAlertProps {
-  transactionId: string;
+  transactionId: string[];
   refetchQueries: InternalRefetchQueriesInclude;
+  onSuccess?: () => void;
 }
 
 export default function TransactionDeleteAlert({
   transactionId,
   refetchQueries,
+  onSuccess,
 }: DeleteGroupAlertProps) {
   const { deleteTransaction } = useTransactionActions();
 
@@ -32,7 +34,7 @@ export default function TransactionDeleteAlert({
     toast.promise(
       deleteTransaction({
         variables: {
-          id: transactionId,
+          _id: transactionId,
         },
         refetchQueries,
       }),
@@ -42,6 +44,7 @@ export default function TransactionDeleteAlert({
         error: "Erro ao deletar a Transação.",
       }
     );
+    onSuccess?.();
   };
   return (
     <div>
