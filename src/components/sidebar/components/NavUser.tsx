@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Bell, ChevronsUpDown, Settings } from "lucide-react";
 
 import { useViewer } from "@/lib/auth/AuthContext";
@@ -19,19 +20,28 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/lib/ui/sidebar";
+
 import LogoutButton from "@/components/sidebar/components/LogoutButton";
+import EditUserDialog from "@/app/finance/transaction/[[...id]]/components/group/ChangePasswordDialog";
 
 export default function NavUser() {
   const viewer = useViewer();
+  const { isMobile } = useSidebar();
+
+  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   const user = {
     name: viewer?.name || "",
     email: viewer?.email || "",
   };
-  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu>
+      <EditUserDialog
+        isOpen={openChangePassword}
+        setIsOpen={setOpenChangePassword}
+      />
+
       <SidebarMenuItem className="flex justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild={true}>
@@ -45,13 +55,16 @@ export default function NavUser() {
                   {user.name?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
+
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
@@ -66,24 +79,33 @@ export default function NavUser() {
                     {user.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
+
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
               <DropdownMenuItem className="flex space-x-2">
                 <Bell size={20} />
                 <span className="text-lg">Notificações</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex space-x-2">
+
+              <DropdownMenuItem
+                className="flex space-x-2"
+                onSelect={() => setOpenChangePassword(true)}
+              >
                 <Settings size={20} />
                 <span className="text-lg">Configuração</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem>
               <LogoutButton />
             </DropdownMenuItem>

@@ -7,14 +7,12 @@ import { parseAsDate } from "@/app/finance/transaction/[[...id]]/components/filt
 import ChartFilter from "@/app/finance/dashboard/[[...id]]/components/ChartFilter";
 import { MonthlyRevenueVsExpensesChart } from "@/app/finance/dashboard/[[...id]]/components/MonthlyRevenueVsExpensesChart";
 import { MonthlySpendingByCategoryChart } from "@/app/finance/dashboard/[[...id]]/components/MonthlySpendingByCategoryChart";
-import { CardCategorySpending } from "@/app/finance/dashboard/[[...id]]/components/CardCategorySpending";
 
 import { arrayOfPossibleIcons, cn, hexToRgba } from "@/lib/utils/utils";
 import { SettingsIcon, TrophyIcon } from "lucide-react";
 import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/components/group/TransactionsGroupConfig";
 import TransactionGroupSelection from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupSelection";
 import TreemapCategorysChart from "@/app/finance/dashboard/[[...id]]/components/TreemapCategorysChart";
-import { Carousel } from "@/lib/ui/carousel";
 import CarouselCreditCard from "@/app/finance/dashboard/[[...id]]/components/CarouselCreditCard";
 
 interface DashboardContentProps {
