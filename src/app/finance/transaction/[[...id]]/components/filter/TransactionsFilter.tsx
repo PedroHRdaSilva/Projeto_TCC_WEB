@@ -38,7 +38,7 @@ export default function TransactionsFilter({
   const currentYear = getYear(filterByPeriod);
   return (
     <div className="flex w-full align-center space-x-5">
-      <h1 className="text-3xl">Filtros</h1>
+      <h1 className="text-2xl 2xl:text-3xl">Filtros</h1>
       <div className="flex space-x-5">
         <Calendar
           onSelect={(value) => {
@@ -47,7 +47,7 @@ export default function TransactionsFilter({
           defaultValues={{ month: currentMonth, year: currentYear }}
           className={cn(
             "flex w-full items-center gap-3 rounded-lg whitespace-nowrap bg-white px-4 text-sm h-10",
-            "xl:bg-white xl:h-10 xl:w-60"
+            "xl:bg-white xl:h-10 xl:w-[228px]"
           )}
         >
           <div>
@@ -70,7 +70,7 @@ export default function TransactionsFilter({
           }}
           className="flex h-10 w-60 items-center justify-between rounded-lg bg-white pl-4"
         >
-          <span className="text-sm text-black">Filtre por categoria</span>
+          <span className="text-sm text-zinc-500">Filtre por categoria</span>
         </ComboboxCategories>
 
         <div className="relative flex-1">
@@ -82,8 +82,9 @@ export default function TransactionsFilter({
             type="text"
             placeholder="Busque aqui..."
             className={cn(
-              "pl-10 h-9 w-auto bg-background opacity-70 placeholder:text-black",
-              "xl:bg-white xl:opacity-100 xl:h-10 "
+              "pl-10 h-9 w-auto bg-background opacity-70 placeholder:text-zinc-500",
+              "xl:bg-white xl:opacity-100 xl:h-10 xl:w-48 ",
+              " 2xl:w-72 "
             )}
             onChange={debounce(400, (e) => {
               setFilterBySearch(e.target.value);

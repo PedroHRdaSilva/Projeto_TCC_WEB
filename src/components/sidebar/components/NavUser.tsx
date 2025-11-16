@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, ChevronsUpDown, Settings } from "lucide-react";
+import { Bell, ChevronsUpDown, Moon, Settings } from "lucide-react";
 
 import { useViewer } from "@/lib/auth/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/lib/ui/avatar";
@@ -12,6 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/lib/ui/dropdownMenu";
 import {
@@ -90,11 +93,6 @@ export default function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem className="flex space-x-2">
-                <Bell size={20} />
-                <span className="text-lg">Notificações</span>
-              </DropdownMenuItem>
-
               <DropdownMenuItem
                 className="flex space-x-2"
                 onSelect={() => setOpenChangePassword(true)}

@@ -53,7 +53,10 @@ export default function ComboboxCategories({
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command value={initialValue}>
-          <CommandInput placeholder="Procurar Categorias..." />
+          <CommandInput
+            placeholder="Procurar Categorias..."
+            className="focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none "
+          />
           <CommandList className="max-h-none overflow-hidden">
             <CommandEmpty>Categoria nao encontrada</CommandEmpty>
             <CommandGroup className="border-b">

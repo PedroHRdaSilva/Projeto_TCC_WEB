@@ -61,7 +61,10 @@ export default function ComboboxCredit({
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command value={initialValue}>
-          <CommandInput placeholder="Procurar Cartões..." />
+          <CommandInput
+            placeholder="Procurar Cartões..."
+            className="focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none"
+          />
           <CommandList className="max-h-none overflow-hidden">
             <CommandEmpty>Cartão não encontrado</CommandEmpty>
 
