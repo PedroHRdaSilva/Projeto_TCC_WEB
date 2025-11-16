@@ -53,7 +53,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
     <>
       <div className="hidden w-full flex-col gap-5 xl:flex xl:flex-row justify-end">
         <div className="flex gap-4">
-          <div className="flex h-24 w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
+          <div className="flex h-24 w-48 2xl:w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
             <span className="text-secondary-foreground">Receitas</span>
             <div className="flex">
               <span className="font-dm-sans text-lg font-bold text-primary">
@@ -67,7 +67,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
             </div>
           </div>
 
-          <div className="flex h-24 w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
+          <div className="flex h-24 w-48 2xl:w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
             <span className="text-secondary-foreground">Despesas</span>
             <div className="flex">
               <span className="font-dm-sans text-lg font-bold text-destructive">
@@ -86,7 +86,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
             </div>
           </div>
 
-          <div className="flex h-24 w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
+          <div className="flex h-24 w-48 2xl:w-60 flex-col gap-4 rounded-lg bg-background p-4 font-dm-sans text-sm">
             <span className="text-secondary-foreground">Saldo</span>
             <div className="flex">
               <span

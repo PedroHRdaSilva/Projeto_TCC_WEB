@@ -118,8 +118,22 @@ export function MonthlySpendingByCategoryChart({
       </Card>
     );
   }
+  if (chartData.length === 0) {
+    return (
+      <Card className="flex h-[316px] items-center justify-center text-center">
+        <CardHeader>
+          <CardTitle className="font-sans text-lg">
+            Gastos por categoria
+          </CardTitle>
+          <CardDescription className="font-sans text-sm text-zinc-400">
+            Não há gastos no período.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
   return (
-    <Card className="xl:h-[316px]">
+    <Card className="xl:h-[360px]">
       <CardHeader>
         <CardTitle className="font-sans text-lg">
           Gastos por categoria

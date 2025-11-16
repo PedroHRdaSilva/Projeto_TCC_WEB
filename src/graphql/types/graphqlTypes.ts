@@ -188,6 +188,8 @@ export type IMutation = {
   updateCreditCard: ICreditCard;
   updateTransaction: Maybe<ITransaction>;
   updateTransactionGroup: ITransactionGroup;
+  updateUserName: Scalars["Boolean"]["output"];
+  updateUserPassword: Scalars["Boolean"]["output"];
 };
 
 export type IMutationCreateCategoryArgs = {
@@ -264,6 +266,14 @@ export type IMutationUpdateTransactionArgs = {
 export type IMutationUpdateTransactionGroupArgs = {
   _id: Scalars["ObjectID"]["input"];
   input: IUpdateTransactionGroupInput;
+};
+
+export type IMutationUpdateUserNameArgs = {
+  name: Scalars["String"]["input"];
+};
+
+export type IMutationUpdateUserPasswordArgs = {
+  password: Scalars["String"]["input"];
 };
 
 export type IObjectKeyValue = {
@@ -792,6 +802,24 @@ export type IResetPasswordMutationVariables = Exact<{
 export type IResetPasswordMutation = {
   __typename: "Mutation";
   resetPassword: boolean;
+};
+
+export type IUpdateUserNameMutationVariables = Exact<{
+  name: Scalars["String"]["input"];
+}>;
+
+export type IUpdateUserNameMutation = {
+  __typename: "Mutation";
+  updateUserName: boolean;
+};
+
+export type IUpdateUserPasswordMutationVariables = Exact<{
+  password: Scalars["String"]["input"];
+}>;
+
+export type IUpdateUserPasswordMutation = {
+  __typename: "Mutation";
+  updateUserPassword: boolean;
 };
 
 export type ICardCategorySpendingQueryVariables = Exact<{

@@ -64,7 +64,7 @@ export default async function TransactionsPage(props: TransactionsPageProps) {
     );
   }
   return (
-    <AppLayoutPage className="xl:space-y-6">
+    <AppLayoutPage className="xl:space-y-6 ">
       <div className="h-full">
         <TransactionGroupInformation group={data.transactionGroupById} />
       </div>

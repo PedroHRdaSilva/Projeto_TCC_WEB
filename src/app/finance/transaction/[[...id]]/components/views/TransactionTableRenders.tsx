@@ -199,7 +199,7 @@ export function StatusRender(
     : [cell._id];
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full">
       <span className="w-20 rounded bg-muted p-1 px-2 lg:px-2">
         {cell.status?.toUpperCase() === "PAID" ? "Pago" : "Pendente"}
       </span>

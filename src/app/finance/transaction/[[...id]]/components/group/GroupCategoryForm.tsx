@@ -209,7 +209,9 @@ export default function GroupCategoryForm({
                         </div>
                       </RadioGroup>
                     </FormControl>
-                    <FormMessage />
+                    <span className="h-4">
+                      <FormMessage />
+                    </span>
                   </FormItem>
                 )}
               />
@@ -246,7 +248,9 @@ export default function GroupCategoryForm({
                         </div>
                       </PopoverChangeIcon>
                     </FormControl>
-                    <FormMessage />
+                    <span className="h-2">
+                      <FormMessage />
+                    </span>
                   </FormItem>
                 )}
               />
@@ -267,7 +271,9 @@ export default function GroupCategoryForm({
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <span className="h-2">
+                        <FormMessage />
+                      </span>
                     </FormItem>
                   )}
                 />

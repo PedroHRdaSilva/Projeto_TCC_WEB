@@ -88,6 +88,18 @@ export function MonthlyRevenueVsExpensesChart({
       </div>
     );
   }
+  if (chartData.length === 0) {
+    return (
+      <Card className="flex h-[350px] items-center justify-center text-center">
+        <CardHeader>
+          <CardTitle className="font-sans text-lg">Receitas x Gastos</CardTitle>
+          <CardDescription className="font-sans text-sm text-zinc-400">
+            Não há movimentações no período .
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   if (!data) {
     return (
@@ -95,7 +107,7 @@ export function MonthlyRevenueVsExpensesChart({
         <CardHeader>
           <CardTitle className="font-sans text-lg">Receitas x Gastos</CardTitle>
           <CardDescription className="font-sans text-sm text-zinc-400">
-            Crie um cartão para começar a usar o gráfico
+            Não há movimentações no período .
           </CardDescription>
         </CardHeader>
       </Card>

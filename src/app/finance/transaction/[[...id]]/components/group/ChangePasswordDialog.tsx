@@ -1,50 +1,149 @@
 "use client";
 
-import { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "@/lib/ui/button";
 import { Input } from "@/lib/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/lib/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/lib/ui/form";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/lib/ui/tabs";
+import { toast } from "sonner";
+
+import {
+  useUpdateUserNameMutation,
+  useUpdateUserPasswordMutation,
+} from "@/graphql/hooks/graphqlHooks";
+import { useRouter } from "next/navigation";
 
 export default function EditUserDialog({
   isOpen,
   setIsOpen,
 }: {
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  setIsOpen: (v: boolean) => void;
 }) {
-  const [newName, setNewName] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [UpdateUserName] = useUpdateUserNameMutation();
+  const [UpdateUserPassword] = useUpdateUserPasswordMutation();
+  const { refresh } = useRouter();
+  const nameSchema = z.object({
+    newName: z
+      .string()
+      .min(2, { message: "O nome deve ter pelo menos 2 caracteres" }),
+  });
 
-  function handleSubmit() {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("Preencha todos os campos");
-      return;
-    }
+  const nameForm = useForm<z.infer<typeof nameSchema>>({
+    resolver: zodResolver(nameSchema),
+    defaultValues: { newName: "" },
+  });
 
-    if (newPassword !== confirmPassword) {
-      alert("As senhas não coincidem");
-      return;
-    }
+  function onSubmitName(values: z.infer<typeof nameSchema>) {
+    toast.promise(
+      (async () => {
+        const { data } = await UpdateUserName({
+          variables: {
+            name: values.newName,
+          },
+        });
 
-    // Chamada da API para alterar a senha
-    console.log({ currentPassword, newPassword });
-    alert("Senha alterada com sucesso!");
-    setIsOpen(false);
-  }
-  function disableSaveButton() {
-    return (
-      (!newName && (!newPassword || !confirmPassword || !currentPassword)) ||
-      (!newName && !newPassword && !confirmPassword && !currentPassword)
+        if (!data?.updateUserName) {
+          throw new Error("Erro ao criar usuário");
+        }
+
+        return true;
+      })(),
+      {
+        loading: "Alterando nome...",
+        success: "Nome Alterado com sucesso!",
+        error: "Erro ao alterar nome",
+      }
     );
+    setIsOpen(false);
+    refresh();
+  }
+
+  const passwordRequirements = [
+    {
+      key: "uppercase",
+      message: "Letra Maiúscula",
+      regex: /^(?=.*[A-Z])/,
+    },
+    {
+      key: "lowercase",
+      message: "Letra Minúscula",
+      regex: /^(?=.*[a-z])/,
+    },
+    {
+      key: "number",
+      message: "Número",
+      regex: /^(?=.*\d)/,
+    },
+    {
+      key: "special",
+      message: "Caractere Especial",
+      regex: /^(?=.*[@$!%*?&])/,
+    },
+    {
+      key: "length",
+      message: "Mínimo de 8 caracteres",
+      regex: /^.{8,}$/,
+    },
+  ];
+
+  const passwordSchema = z
+    .object({
+      newPassword: z.string().min(1, "Digite sua nova senha"),
+      confirmPassword: z.string().min(1, "Confirme sua nova senha"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "As senhas não coincidem",
+      path: ["confirmPassword"],
+    });
+
+  const passwordForm = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: { newPassword: "", confirmPassword: "" },
+  });
+
+  const watchPassword = passwordForm.watch("newPassword");
+
+  function onSubmitPassword(values: z.infer<typeof passwordSchema>) {
+    toast.promise(
+      (async () => {
+        const { data } = await UpdateUserPassword({
+          variables: {
+            password: values.confirmPassword,
+          },
+        });
+
+        if (!data?.updateUserPassword) {
+          throw new Error("Erro ao alterar senha");
+        }
+
+        return true;
+      })(),
+      {
+        loading: "Alterando senha...",
+        success: "Senha alterada com sucesso!",
+        error: "Erro ao alterar senha !",
+      }
+    );
+    setIsOpen(false);
+    refresh();
   }
 
   return (
@@ -52,68 +151,128 @@ export default function EditUserDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-foreground">
-            Editar perfil
+            Configurações
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            Atualize seu nome ou sua senha preenchendo os campos abaixo.
-          </DialogDescription>
+          <DialogDescription>Atualize seu nome ou senha.</DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4 mt-4">
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium">Alterar nome:</label>
-            <Input
-              type="text"
-              placeholder="Novo nome"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <label className="text-sm font-medium">Senha atual</label>
-            <Input
-              type="password"
-              placeholder="Digite sua senha atual"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-          </div>
+        <Tabs defaultValue="profile" className="mt-4">
+          <TabsList className="grid grid-cols-2 w-full">
+            <TabsTrigger value="profile">Alterar nome</TabsTrigger>
+            <TabsTrigger value="password">Alterar senha</TabsTrigger>
+          </TabsList>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium">Nova senha</label>
-            <Input
-              type="password"
-              placeholder="Digite sua nova senha"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
+          <TabsContent value="profile" className="mt-6">
+            <Form {...nameForm}>
+              <form
+                onSubmit={nameForm.handleSubmit(onSubmitName)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={nameForm.control}
+                  name="newName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Novo nome</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Digite seu novo nome" {...field} />
+                      </FormControl>
+                      <span className="h-2">
+                        <FormMessage />
+                      </span>
+                    </FormItem>
+                  )}
+                />
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium">Confirmar nova senha</label>
-            <Input
-              type="password"
-              placeholder="Confirme sua nova senha"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-        </div>
+                <Button type="submit" className="w-full mt-2">
+                  Salvar nome
+                </Button>
+              </form>
+            </Form>
+          </TabsContent>
 
-        <DialogFooter className="mt-4 flex gap-2">
-          <Button
-            variant="ghost"
-            onClick={() => setIsOpen(false)}
-            className="w-full"
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            className="w-full bg-primary text-white"
-            disabled={disableSaveButton()}
-          >
-            Salvar
-          </Button>
-        </DialogFooter>
+          <TabsContent value="password" className="mt-6">
+            <Form {...passwordForm}>
+              <form
+                onSubmit={passwordForm.handleSubmit(onSubmitPassword)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={passwordForm.control}
+                  name="newPassword"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Nova senha</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Nova senha"
+                          {...field}
+                        />
+                      </FormControl>
+
+                      {fieldState.isDirty && (
+                        <ul className="mt-2 flex flex-col space-y-1 text-sm text-neutral-400">
+                          {passwordRequirements.map((rule) => (
+                            <li
+                              key={rule.key}
+                              className="flex items-center space-x-2"
+                            >
+                              {rule.regex.test(watchPassword) ? (
+                                <div>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="#a3a3a3"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="stroke-background"
+                                  >
+                                    <circle cx="12" cy="12" r="12" />
+                                    <path d="m9 12 2 2 4-4" strokeWidth={2.5} />
+                                  </svg>
+                                </div>
+                              ) : (
+                                <div className="size-3.5 rounded-full border-[1.5px] border-neutral-400 bg-transparent" />
+                              )}
+                              <span>{rule.message}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={passwordForm.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirmar nova senha</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Confirme a nova senha"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full mt-2">
+                  Salvar senha
+                </Button>
+              </form>
+            </Form>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );

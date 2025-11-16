@@ -67,6 +67,8 @@ export type MutationKeySpecifier = (
   | "updateCreditCard"
   | "updateTransaction"
   | "updateTransactionGroup"
+  | "updateUserName"
+  | "updateUserPassword"
   | MutationKeySpecifier
 )[];
 export type MutationFieldPolicy = {
@@ -88,6 +90,8 @@ export type MutationFieldPolicy = {
   updateCreditCard?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTransaction?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTransactionGroup?: FieldPolicy<any> | FieldReadFunction<any>;
+  updateUserName?: FieldPolicy<any> | FieldReadFunction<any>;
+  updateUserPassword?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ObjectKeyValueKeySpecifier = (
   | "key"

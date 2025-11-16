@@ -939,6 +939,103 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   Types.IResetPasswordMutation,
   Types.IResetPasswordMutationVariables
 >;
+export const UpdateUserNameMutationDocument = gql`
+  mutation UpdateUserNameMutation($name: String!) {
+    updateUserName(name: $name)
+  }
+`;
+export type IUpdateUserNameMutationMutationFn = Apollo.MutationFunction<
+  Types.IUpdateUserNameMutation,
+  Types.IUpdateUserNameMutationVariables
+>;
+
+/**
+ * __useUpdateUserNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserNameMutation, { data, loading, error }] = useUpdateUserNameMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateUserNameMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IUpdateUserNameMutation,
+    Types.IUpdateUserNameMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IUpdateUserNameMutation,
+    Types.IUpdateUserNameMutationVariables
+  >(UpdateUserNameMutationDocument, options);
+}
+export type UpdateUserNameMutationHookResult = ReturnType<
+  typeof useUpdateUserNameMutation
+>;
+export type UpdateUserNameMutationMutationResult =
+  Apollo.MutationResult<Types.IUpdateUserNameMutation>;
+export type UpdateUserNameMutationMutationOptions = Apollo.BaseMutationOptions<
+  Types.IUpdateUserNameMutation,
+  Types.IUpdateUserNameMutationVariables
+>;
+export const UpdateUserPasswordMutationDocument = gql`
+  mutation UpdateUserPasswordMutation($password: String!) {
+    updateUserPassword(password: $password)
+  }
+`;
+export type IUpdateUserPasswordMutationMutationFn = Apollo.MutationFunction<
+  Types.IUpdateUserPasswordMutation,
+  Types.IUpdateUserPasswordMutationVariables
+>;
+
+/**
+ * __useUpdateUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserPasswordMutation, { data, loading, error }] = useUpdateUserPasswordMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useUpdateUserPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    Types.IUpdateUserPasswordMutation,
+    Types.IUpdateUserPasswordMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    Types.IUpdateUserPasswordMutation,
+    Types.IUpdateUserPasswordMutationVariables
+  >(UpdateUserPasswordMutationDocument, options);
+}
+export type UpdateUserPasswordMutationHookResult = ReturnType<
+  typeof useUpdateUserPasswordMutation
+>;
+export type UpdateUserPasswordMutationMutationResult =
+  Apollo.MutationResult<Types.IUpdateUserPasswordMutation>;
+export type UpdateUserPasswordMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    Types.IUpdateUserPasswordMutation,
+    Types.IUpdateUserPasswordMutationVariables
+  >;
 export const CardCategorySpendingDocument = gql`
   query CardCategorySpending(
     $groupId: ObjectID!
