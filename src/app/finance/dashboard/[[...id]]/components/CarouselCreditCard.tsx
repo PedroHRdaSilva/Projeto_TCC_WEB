@@ -32,10 +32,12 @@ type TransactionNode = NonNullable<
 
 interface CarouselCreditCardProps {
   groupId: string;
+  filterByStartMonth?: Date | null;
 }
 
 export default function CarouselCreditCard({
   groupId,
+  filterByStartMonth,
 }: CarouselCreditCardProps) {
   const { filterByCategoryId, filterBySearch } = useFilterQueryState();
 
@@ -49,13 +51,16 @@ export default function CarouselCreditCard({
     variables: {
       cursor: null,
       filterByCategoryId,
-      filterByPeriod: lightFormat(new Date(), "yyyy-MM-dd"),
+      filterByPeriod: lightFormat(
+        filterByStartMonth ? filterByStartMonth : new Date(),
+        "yyyy-MM-dd"
+      ),
       filterBySearch,
       groupId,
       limit: 30,
     },
   });
-
+  console.log("data", filterByStartMonth);
   if (creditCardLoading || loading) {
     return (
       <div>
@@ -70,9 +75,11 @@ export default function CarouselCreditCard({
     data?.creditCardByGroupId.length === 0
   ) {
     return (
-      <Card className="flex h-[316px] items-center justify-center">
+      <Card className="flex h-full items-center justify-center">
         <CardHeader>
-          <CardTitle className="font-sans text-lg">Receitas x Gastos</CardTitle>
+          <CardTitle className="font-sans text-lg">
+            Cartões de crédito
+          </CardTitle>
           <CardDescription className="font-sans text-sm text-zinc-400">
             Crie um cartão de crédito
           </CardDescription>

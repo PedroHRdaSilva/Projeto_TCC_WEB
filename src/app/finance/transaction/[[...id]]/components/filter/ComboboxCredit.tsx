@@ -91,9 +91,12 @@ export default function ComboboxCredit({
                   key={credit._id}
                   value={credit.description}
                   onSelect={() => {
-                    setValue(credit._id);
+                    const newValue = value === credit._id ? "" : credit._id;
+
+                    setValue(newValue);
                     setOpen(false);
-                    onSelect?.(credit._id);
+
+                    onSelect?.(newValue);
                   }}
                 >
                   {credit.description}

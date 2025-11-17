@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -82,6 +82,7 @@ export default function CreateTransactionForm({
         : false,
     },
   });
+
   const buttons = [
     {
       label: "Salvar",
@@ -110,8 +111,6 @@ export default function CreateTransactionForm({
     },
   });
 
-  const hasInstallments = form.watch("installmentCheck");
-
   const { onSubmit } = useCreatTransactionSubmit({
     transactionGroup,
     initialValues,
@@ -123,6 +122,14 @@ export default function CreateTransactionForm({
       setOpenAlert?.(value);
     },
   });
+  const selectedCredit = form.watch("credit");
+
+  useEffect(() => {
+    if (!selectedCredit) {
+      form.setValue("installmentCheck", false);
+      form.setValue("installment", 0);
+    }
+  }, [selectedCredit, form]);
   return (
     <>
       {openAlert && (
@@ -313,38 +320,57 @@ export default function CreateTransactionForm({
                 </FormItem>
               )}
             />
-            <div className="mt-5 flex h-full items-center gap-2">
-              <FormField
-                control={form.control}
-                name="installmentCheck"
-                render={({ field }) => (
-                  <FormItem className="mt-6">
-                    <FormLabel></FormLabel>
-                    <FormControl>
-                      <div className="flex w-full items-center space-x-2">
-                        <Checkbox
-                          id="terms"
-                          className="rounded-[4px] border border-secondary-foreground data-[state=checked]:bg-muted-foreground"
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                          }}
-                        />
-                        <label className="text-sm text-secondary-foreground xl:text-base">
-                          Parcelamento
-                        </label>
-                      </div>
-                    </FormControl>
-                    <div className="h-4">
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
+
+            {(() => {
+              const selectedCredit = form.watch("credit");
+
+              return (
+                <div className="mt-5 flex h-full items-center gap-2">
+                  <FormField
+                    control={form.control}
+                    name="installmentCheck"
+                    render={({ field }) => (
+                      <FormItem className="mt-6">
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <div className="flex w-full items-center space-x-2">
+                            <Checkbox
+                              id="terms"
+                              disabled={!selectedCredit}
+                              className="
+                                rounded-[4px] border border-secondary-foreground 
+                                data-[state=checked]:bg-muted-foreground
+                                disabled:opacity-50 disabled:cursor-not-allowed
+                              "
+                              checked={field.value}
+                              onCheckedChange={(checked) => {
+                                if (!selectedCredit) return;
+                                field.onChange(checked);
+                              }}
+                            />
+                            <label
+                              className={cn(
+                                "text-sm text-secondary-foreground xl:text-base",
+                                !selectedCredit &&
+                                  "opacity-50 cursor-not-allowed"
+                              )}
+                            >
+                              Parcelamento
+                            </label>
+                          </div>
+                        </FormControl>
+                        <div className="h-4">
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })()}
           </div>
 
-          {hasInstallments && (
+          {form.watch("installmentCheck") && form.watch("credit") && (
             <FormField
               control={form.control}
               name="installment"
