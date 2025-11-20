@@ -72,8 +72,9 @@ export default function ComboboxCredit({
               <CommandItem>
                 <GroupCreditForm
                   groupId={groupId}
-                  onCreated={(creditId) => {
-                    setValue(creditId);
+                  onCreated={(categoryId) => {
+                    setValue(categoryId);
+                    onSelect?.(categoryId);
                     setOpen(false);
                   }}
                   className="flex w-full items-center gap-3"
