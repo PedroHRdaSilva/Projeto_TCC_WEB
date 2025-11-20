@@ -241,18 +241,18 @@ function CustomTooltip({
 
   return (
     <div className="flex flex-col rounded bg-secondary p-2 text-sm shadow-md">
-      <p className="font-dm-sans text-[10px]">{formattedLabel}</p>
+      <p className="font-dm-sans text-lg">{formattedLabel}</p>
       {payload.map((item, idx) => (
-        <div key={idx} className="flex items-center gap-2 pt-2 text-xs">
+        <div key={idx} className="flex items-center gap-2 pt-2 ">
           <span
             className="h-2 w-2 rounded-sm"
             style={{ backgroundColor: item.color }}
           ></span>
           <div className="flex w-full justify-between space-x-3">
-            <span className="font-dm-sans text-[8px] text-muted-foreground">
+            <span className="font-dm-sans  text-muted-foreground">
               {chartConfig[item.dataKey as keyof typeof chartConfig]?.label}:
             </span>
-            <span className="font-dm-sans text-[8px] text-muted-foreground">
+            <span className="font-dm-sans  text-muted-foreground">
               {formatCurrency(item.value as number)}
             </span>
           </div>
