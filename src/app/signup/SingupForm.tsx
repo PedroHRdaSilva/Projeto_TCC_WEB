@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -24,6 +23,7 @@ export default function SignupForm() {
 
   const form = useForm<SignupFormSchema>({
     mode: "onChange",
+    reValidateMode: "onChange",
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       name: "",
@@ -59,7 +59,7 @@ export default function SignupForm() {
     );
   };
 
-  const password = form.watch("password");
+  const password = form.watch("password") ?? "";
 
   return (
     <div className="flex flex-col space-y-4">
@@ -113,23 +113,23 @@ export default function SignupForm() {
                     {[
                       {
                         key: "uppercase",
-                        message: "Letra Maiúscula",
-                        regex: /^(?=.*[A-Z])/,
+                        message: "Letra maiúscula",
+                        regex: /[A-Z]/,
                       },
                       {
                         key: "lowercase",
-                        message: "Letra Minúscula",
-                        regex: /^(?=.*[a-z])/,
+                        message: "Letra minúscula",
+                        regex: /[a-z]/,
                       },
                       {
                         key: "number",
                         message: "Número",
-                        regex: /^(?=.*\d)/,
+                        regex: /\d/,
                       },
                       {
                         key: "special",
-                        message: "Caractere Especial",
-                        regex: /^(?=.*[@$!%*?&])/,
+                        message: "Caractere especial",
+                        regex: /[^A-Za-z0-9]/,
                       },
                       {
                         key: "length",
@@ -158,7 +158,7 @@ export default function SignupForm() {
                             </svg>
                           </div>
                         ) : (
-                          <div className="size-3.5 rounded-full border-[1.5px] border-neutral-400 bg-transparent" />
+                          <div className="h-3.5 w-3.5 rounded-full border-[1.5px] border-neutral-400 bg-transparent" />
                         )}
                         <span>{node.message}</span>
                       </li>
@@ -172,7 +172,7 @@ export default function SignupForm() {
           <Button
             type="submit"
             className="mt-4 w-full"
-            disabled={!form.formState.isDirty}
+            disabled={!form.formState.isValid || loading}
           >
             {loading ? "Aguarde..." : "Cadastrar-se"}
           </Button>
@@ -189,7 +189,7 @@ const signupFormSchema = z.object({
     .string()
     .min(8, "A senha deve ter no mínimo 8 caracteres")
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
       "A senha deve conter letras maiúsculas, minúsculas, número e caractere especial"
     ),
 });
