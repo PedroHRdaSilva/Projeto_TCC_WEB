@@ -83,17 +83,28 @@ export default function CreateTransactionForm({
     },
   });
 
+  // ========= NOVO: REMOVER SUBMIT AUTOMÁTICO ==========
+  const handleSubmitWithFlag = (shouldClose: boolean) => {
+    form.handleSubmit(async (values) => {
+      await onSubmit(values);
+
+      if (shouldClose) {
+        setOpen?.(false);
+      }
+    })();
+  };
+
   const buttons = [
     {
       label: "Salvar",
-      type: "submit" as const,
-      onClick: () => setCloseAfterSave(false),
+      type: "button" as const,
+      onClick: () => handleSubmitWithFlag(false),
       className: "bg-green-500 text-primary-foreground hover:bg-green-700",
     },
     {
       label: "Salvar e Fechar",
-      type: "submit" as const,
-      onClick: () => setCloseAfterSave(true),
+      type: "button" as const,
+      onClick: () => handleSubmitWithFlag(true),
       className: "bg-green-700 text-primary-foreground hover:bg-green-900",
     },
     {
@@ -116,12 +127,13 @@ export default function CreateTransactionForm({
     initialValues,
     refetchQueries,
     onFinished: () => {
-      setOpen?.(!closeAfterSave);
+      // removido closeAfterSave daqui — agora cada botão controla isso
     },
     setOpenAlert: (value) => {
       setOpenAlert?.(value);
     },
   });
+
   const selectedCredit = form.watch("credit");
 
   useEffect(() => {
@@ -130,22 +142,25 @@ export default function CreateTransactionForm({
       form.setValue("installment", 0);
     }
   }, [selectedCredit, form]);
+
   return (
     <>
       {openAlert && (
         <DuplicateDescriptionDialog
           onOpenChange={setOpenAlert}
           open={openAlert}
-          onSkip={async (value) => {
-            onSubmit(form.getValues(), value);
+          onSkip={async () => {
+            await onSubmit(form.getValues());
           }}
         />
       )}
+
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((values) => onSubmit(values))}
+          onSubmit={(e) => e.preventDefault()}
           className="flex h-dvh flex-col space-y-5 overflow-y-auto p-6 lg:p-0.5 xl:mt-8"
         >
+          {/* CAMPOS DO FORM */}
           <div className="flex flex-col gap-4 xl:flex-row">
             <FormField
               control={form.control}
@@ -172,6 +187,7 @@ export default function CreateTransactionForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="description"
@@ -198,6 +214,7 @@ export default function CreateTransactionForm({
               )}
             />
           </div>
+
           <div className="flex flex-col gap-4 xl:flex-row">
             <FormField
               control={form.control}
@@ -217,11 +234,10 @@ export default function CreateTransactionForm({
                           "focus-visible:ring-neutral-400"
                         )}
                       >
-                        {field.value ? (
-                          format(field.value, "dd/MM/yyyy")
-                        ) : (
-                          <span>Selecione uma data</span>
-                        )}
+                        {field.value
+                          ? format(field.value, "dd/MM/yyyy")
+                          : "Selecione uma data"}
+
                         <CalendarIcon size={20} className="ml-auto" />
                       </button>
                     </PopoverTrigger>
@@ -239,6 +255,7 @@ export default function CreateTransactionForm({
                 </FormItem>
               )}
             />
+
             <div className="flex gap-4">
               <FormField
                 control={form.control}
@@ -265,16 +282,15 @@ export default function CreateTransactionForm({
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="recurring"
                 render={({ field }) => (
                   <FormItem className="mt-6">
-                    <FormLabel></FormLabel>
                     <FormControl>
                       <div className="flex w-full items-center space-x-2">
                         <Checkbox
-                          id="terms"
                           className="rounded-[4px] border border-secondary-foreground data-[state=checked]:bg-muted-foreground"
                           checked={field.value}
                           onCheckedChange={field.onChange}
@@ -292,6 +308,8 @@ export default function CreateTransactionForm({
               />
             </div>
           </div>
+
+          {/* CRÉDITO + PARCELAMENTO */}
           <div className="flex w-full items-center gap-4">
             <FormField
               control={form.control}
@@ -321,53 +339,39 @@ export default function CreateTransactionForm({
               )}
             />
 
-            {(() => {
-              const selectedCredit = form.watch("credit");
-
-              return (
-                <div className="mt-5 flex h-full items-center gap-2">
-                  <FormField
-                    control={form.control}
-                    name="installmentCheck"
-                    render={({ field }) => (
-                      <FormItem className="mt-6">
-                        <FormLabel></FormLabel>
-                        <FormControl>
-                          <div className="flex w-full items-center space-x-2">
-                            <Checkbox
-                              id="terms"
-                              disabled={!selectedCredit}
-                              className="
-                                rounded-[4px] border border-secondary-foreground 
-                                data-[state=checked]:bg-muted-foreground
-                                disabled:opacity-50 disabled:cursor-not-allowed
-                              "
-                              checked={field.value}
-                              onCheckedChange={(checked) => {
-                                if (!selectedCredit) return;
-                                field.onChange(checked);
-                              }}
-                            />
-                            <label
-                              className={cn(
-                                "text-sm text-secondary-foreground xl:text-base",
-                                !selectedCredit &&
-                                  "opacity-50 cursor-not-allowed"
-                              )}
-                            >
-                              Parcelamento
-                            </label>
-                          </div>
-                        </FormControl>
-                        <div className="h-4">
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              );
-            })()}
+            {/* PARCELAMENTO */}
+            <FormField
+              control={form.control}
+              name="installmentCheck"
+              render={({ field }) => (
+                <FormItem className="mt-6">
+                  <FormControl>
+                    <div className="flex w-full items-center space-x-2">
+                      <Checkbox
+                        disabled={!selectedCredit}
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          if (!selectedCredit) return;
+                          field.onChange(checked);
+                        }}
+                        className="rounded-[4px] border border-secondary-foreground data-[state=checked]:bg-muted-foreground disabled:opacity-50"
+                      />
+                      <label
+                        className={cn(
+                          "text-sm text-secondary-foreground xl:text-base",
+                          !selectedCredit && "opacity-50 cursor-not-allowed"
+                        )}
+                      >
+                        Parcelamento
+                      </label>
+                    </div>
+                  </FormControl>
+                  <div className="h-4">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
           </div>
 
           {form.watch("installmentCheck") && form.watch("credit") && (
@@ -403,11 +407,13 @@ export default function CreateTransactionForm({
               )}
             />
           )}
+
+          {/* BOTÕES */}
           <div className="flex h-full items-end justify-end gap-2">
             {buttons.map((btn) => (
               <Button
                 key={btn.label}
-                type={btn.type}
+                type="button"
                 className={cn(
                   "ring-offset-background focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-1",
                   "focus-visible:ring-neutral-400",

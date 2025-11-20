@@ -63,8 +63,9 @@ export default function ComboboxCategories({
               <CommandItem>
                 <GroupCategoryForm
                   groupId={groupId}
-                  onCreated={(categoryId) => {
-                    setValue(categoryId);
+                  onCreated={(creditId) => {
+                    setValue(creditId);
+                    onSelect?.(creditId);
                     setOpen(false);
                   }}
                   className="flex w-full items-center gap-3"
