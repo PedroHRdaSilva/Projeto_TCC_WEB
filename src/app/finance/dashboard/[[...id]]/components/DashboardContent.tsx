@@ -82,10 +82,7 @@ export default function DashboardContent({ group }: DashboardContentProps) {
           </div>
 
           <div className="flex-[1]">
-            <CarouselCreditCard
-              groupId={group._id}
-              filterByStartMonth={filterByStartMonth}
-            />
+            <CarouselCreditCard groupId={group._id} />
           </div>
         </div>
 

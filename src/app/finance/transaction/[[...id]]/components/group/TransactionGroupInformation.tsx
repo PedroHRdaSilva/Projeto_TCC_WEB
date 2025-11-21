@@ -46,7 +46,7 @@ export default function TransactionGroupInformation({
       <div className="flex w-full flex-col xl:flex-row ">
         <div
           className={cn(
-            "-mx-4 -mt-4 flex h-32 bg-white p-5 border ",
+            "-mx-4 -mt-4 flex h-32 bg-white p-5 border items-center ",
             "xl:mx-0 xl:mt-0 xl:h-24 xl:w-full xl:max-w-[300px] xl:items-center xl:rounded-lg",
             "2xl:max-w-[340px]"
           )}

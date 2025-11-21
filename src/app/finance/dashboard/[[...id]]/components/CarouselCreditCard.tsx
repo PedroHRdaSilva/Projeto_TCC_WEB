@@ -1,7 +1,7 @@
-import { lightFormat } from "date-fns";
-import { Cpu, Wifi } from "lucide-react";
+import { getMonth, getYear, lightFormat, parseISO } from "date-fns";
+import { CalendarDays, ChevronDown, Cpu, Wifi } from "lucide-react";
 import * as React from "react";
-
+import { format } from "date-fns/format";
 import {
   useCreditCardByGroupIdQuery,
   useTransactionsByGroupIdQuery,
@@ -25,6 +25,9 @@ import {
   CarouselItem,
   useCarousel,
 } from "@/lib/ui/carousel";
+import Calendar from "@/lib/ui/calendar";
+import { cn } from "@/lib/utils";
+import { ptBR } from "date-fns/locale";
 
 type TransactionNode = NonNullable<
   ITransactionsByGroupIdQuery["transactions"]["nodes"]
@@ -32,14 +35,17 @@ type TransactionNode = NonNullable<
 
 interface CarouselCreditCardProps {
   groupId: string;
-  filterByStartMonth?: Date | null;
 }
 
 export default function CarouselCreditCard({
   groupId,
-  filterByStartMonth,
 }: CarouselCreditCardProps) {
-  const { filterByCategoryId, filterBySearch } = useFilterQueryState();
+  const {
+    filterByCategoryId,
+    filterBySearch,
+    filterByPeriod,
+    setFilterByPeriod,
+  } = useFilterQueryState();
 
   const { data, loading: creditCardLoading } = useCreditCardByGroupIdQuery({
     variables: {
@@ -52,7 +58,7 @@ export default function CarouselCreditCard({
       cursor: null,
       filterByCategoryId,
       filterByPeriod: lightFormat(
-        filterByStartMonth ? filterByStartMonth : new Date(),
+        filterByPeriod ? filterByPeriod : new Date(),
         "yyyy-MM-dd"
       ),
       filterBySearch,
@@ -60,12 +66,13 @@ export default function CarouselCreditCard({
       limit: 30,
     },
   });
-  console.log("data", filterByStartMonth);
+  const currentMonth = getMonth(filterByPeriod) + 1;
+  const currentYear = getYear(filterByPeriod);
   if (creditCardLoading || loading) {
     return (
       <div>
         <div className="flex space-x-4">
-          <Skeleton className="flex h-[316px] w-full bg-background"></Skeleton>
+          <Skeleton className="flex h-96 md:w-[455px] xl:w-[580px] bg-background"></Skeleton>
         </div>
       </div>
     );
@@ -75,22 +82,66 @@ export default function CarouselCreditCard({
     data?.creditCardByGroupId.length === 0
   ) {
     return (
-      <Card className="flex h-full items-center justify-center">
-        <CardHeader>
-          <CardTitle className="font-sans text-lg">
-            Cartões de crédito
+      <Card className="flex h-96 md:w-[455px] xl:w-[580px]">
+        <CardHeader className="h-full">
+          <CardTitle className="flex flex-col font-sans text-lg space-y-3 md:flex-row md:items-center justify-between">
+            <span className="p-1">Cartões de crédito</span>
+
+            <Calendar
+              onSelect={(value) => {
+                setFilterByPeriod(parseISO(value));
+              }}
+              defaultValues={{ month: currentMonth, year: currentYear }}
+              className={cn(
+                "flex  items-center gap-3 rounded-lg whitespace-nowrap bg-zinc-100 px-4 text-sm h-10 w-[240px]  md:w-[230px]",
+                " xl:h-10 xl:w-[228px]"
+              )}
+            >
+              <div>
+                <CalendarDays size={18} />
+              </div>
+              <div className="flex w-full rounded-lg">
+                {`${getMonthName(currentMonth)} / ${currentYear}`}
+              </div>
+              <div>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </div>
+            </Calendar>
           </CardTitle>
-          <CardDescription className="font-sans text-sm text-zinc-400">
-            Crie um cartão de crédito
+          <CardDescription className="font-sans text-sm text-zinc-400 items-center justify-center flex text-center ">
+            Crie um cartão de crédito ou cria uma transação nesse periodo com
+            algum cartao já criado.
           </CardDescription>
         </CardHeader>
       </Card>
     );
   }
+
   return (
-    <Card className="p-6">
-      <CardTitle className="mb-2 font-sans text-sm">
-        Cartões de crédito
+    <Card className="p-6 md:w-[455px] xl:w-full">
+      <CardTitle className="flex flex-col font-sans text-lg space-y-3 md:flex-row md:items-center justify-between">
+        <span className="p-1">Cartões de crédito</span>
+
+        <Calendar
+          onSelect={(value) => {
+            setFilterByPeriod(parseISO(value));
+          }}
+          defaultValues={{ month: currentMonth, year: currentYear }}
+          className={cn(
+            "flex  items-center gap-3 rounded-lg whitespace-nowrap bg-zinc-100 px-4 text-sm h-10 w-[240px]  md:w-[230px]",
+            " xl:h-10 xl:w-[228px]"
+          )}
+        >
+          <div>
+            <CalendarDays size={18} />
+          </div>
+          <div className="flex w-full rounded-lg">
+            {`${getMonthName(currentMonth)} / ${currentYear}`}
+          </div>
+          <div>
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          </div>
+        </Calendar>
       </CardTitle>
       <Carousel>
         <CarouselContent>
@@ -166,3 +217,9 @@ function CarouselDetails({
     </div>
   );
 }
+const getMonthName = (month: number) => {
+  const date = new Date(2025, month - 1, 1);
+  const monthName = format(date, "MMMM", { locale: ptBR });
+
+  return monthName.charAt(0).toLocaleUpperCase() + monthName.slice(1);
+};

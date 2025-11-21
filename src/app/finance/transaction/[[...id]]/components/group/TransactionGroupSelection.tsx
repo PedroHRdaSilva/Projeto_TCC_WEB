@@ -98,7 +98,7 @@ export default function TransactionGroupSelection({
             </DialogDescription>
           </div>
 
-          <div className="flex justify-between w-full sm:w-auto">
+          <div className="flex justify-between w-full flex-col md:flex-row space-y-3 md:items-center">
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
@@ -137,116 +137,113 @@ export default function TransactionGroupSelection({
                 ) || TrophyIcon;
 
               return (
-                <Link
+                <div
                   key={group._id}
-                  href={
-                    dashboard
-                      ? `/finance/dashboard/${group._id}`
-                      : `/finance/transaction/${group._id}`
-                  }
                   className="flex w-full items-center justify-between rounded-md hover:bg-muted/40 transition"
                 >
-                  {/* Ícone + Descrição */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex h-10 w-10 items-center justify-center rounded-lg"
-                      style={{
-                        backgroundColor: hexToRgba(
-                          group.iconProperties.background,
-                          0.5
-                        ),
-                      }}
-                    >
-                      <IconComponent
-                        size={22}
-                        style={{ color: group.iconProperties.color }}
-                      />
-                    </div>
-                    <p className="text-sm font-medium text-foreground">
-                      {group.description}
-                    </p>
-                  </div>
-
-                  {/* Ações desktop */}
-                  <div className="hidden lg:flex items-center rounded-lg border">
-                    <Tooltip>
-                      <TooltipTrigger
-                        className="px-3.5 py-2"
-                        onClick={(e) => e.preventDefault()}
+                  {/* ---- LINK PRINCIPAL ---- */}
+                  <Link
+                    href={
+                      dashboard
+                        ? `/finance/dashboard/${group._id}`
+                        : `/finance/transaction/${group._id}`
+                    }
+                    className="flex w-full items-center justify-between"
+                  >
+                    {/* Ícone + Descrição */}
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex h-10 w-10 items-center justify-center rounded-lg"
+                        style={{
+                          backgroundColor: hexToRgba(
+                            group.iconProperties.background,
+                            0.5
+                          ),
+                        }}
                       >
-                        <CircleCheckBig
-                          size={18}
-                          className="text-muted-foreground"
+                        <IconComponent
+                          size={22}
+                          style={{ color: group.iconProperties.color }}
                         />
-                      </TooltipTrigger>
-                      <TooltipContent>Marcar como principal</TooltipContent>
-                    </Tooltip>
+                      </div>
 
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                        >
-                          <DeleteGroupAlert
-                            onDelete={(valor) => {
-                              setIsOpen(valor);
-                              handleReplace(valor);
+                      <p className="text-sm font-medium text-foreground">
+                        {group.description}
+                      </p>
+                    </div>
+
+                    {/* Ações desktop */}
+                    <div className="hidden lg:flex items-center rounded-lg border">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
                             }}
-                            groupIdPage={groupIdPage}
-                            groupId={group._id}
-                            totalGroups={transactionsGroup.length}
-                          />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>Excluir grupo</TooltipContent>
-                    </Tooltip>
+                            className="w-10 items-center flex justify-center"
+                          >
+                            <DeleteGroupAlert
+                              onDelete={(valor) => {
+                                setIsOpen(valor);
+                                handleReplace(valor);
+                              }}
+                              groupIdPage={groupIdPage}
+                              groupId={group._id}
+                              totalGroups={transactionsGroup.length}
+                            />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>Excluir grupo</TooltipContent>
+                      </Tooltip>
 
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="px-3.5 py-2 hover:bg-transparent focus:outline-none"
-                    >
-                      <ChevronRightIcon size={20} />
-                    </Button>
-                  </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="px-3.5 py-2 hover:bg-transparent focus:outline-none"
+                      >
+                        <ChevronRightIcon size={20} />
+                      </Button>
+                    </div>
+                  </Link>
 
-                  {/* Ações mobile */}
+                  {/* ---- POPUP MOBILE (FORA DO LINK!) ---- */}
                   <Popover modal>
-                    <PopoverTrigger className="flex lg:hidden">
+                    <PopoverTrigger
+                      className="flex lg:hidden ml-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <EllipsisVerticalIcon className="stroke-muted-foreground" />
                     </PopoverTrigger>
+
                     <PopoverContent
                       align="end"
                       sideOffset={10}
                       className="w-fit"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <ul className="space-y-2 text-sm text-foreground">
-                        <li>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            // onClick={() =>
-                            //   setDefaultTransactionGroup(group._id)
-                            // }
-                            className="p-1"
-                          >
-                            Definir como principal
-                          </Button>
-                        </li>
-                        <li>
-                          <DeleteGroupAlert
-                            onDelete={(valor) => {
-                              setIsOpen(valor);
-                              handleReplace(valor);
+                        {/* ❌ deletar – NÃO navega */}
+                        <li className="w-10 items-center flex justify-center">
+                          <div
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
                             }}
-                            groupIdPage={groupIdPage}
-                            groupId={group._id}
-                            mobile={true}
-                          />
+                          >
+                            <DeleteGroupAlert
+                              onDelete={(valor) => {
+                                setIsOpen(valor);
+                                handleReplace(valor);
+                              }}
+                              groupIdPage={groupIdPage}
+                              groupId={group._id}
+                              mobile={true}
+                            />
+                          </div>
                         </li>
+
+                        {/* ✔️ ir para o grupo – navega normalmente */}
                         <li>
                           <Link
                             href={
@@ -254,7 +251,7 @@ export default function TransactionGroupSelection({
                                 ? `/finance/dashboard/${group._id}`
                                 : `/finance/transaction/${group._id}`
                             }
-                            className="p-1"
+                            className="p-1 block"
                           >
                             Ir para o grupo
                           </Link>
@@ -262,7 +259,7 @@ export default function TransactionGroupSelection({
                       </ul>
                     </PopoverContent>
                   </Popover>
-                </Link>
+                </div>
               );
             })}
           </TooltipProvider>
