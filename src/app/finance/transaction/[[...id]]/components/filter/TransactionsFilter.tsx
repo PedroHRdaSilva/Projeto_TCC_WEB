@@ -9,11 +9,8 @@ import { getYear } from "date-fns/getYear";
 import { format } from "date-fns/format";
 import { ptBR } from "date-fns/locale";
 import { parseISO } from "date-fns/parseISO";
-import { startOfMonth } from "date-fns/startOfMonth";
 import debounce from "lodash/fp/debounce";
 
-import { parseAsDate } from "@/app/finance/transaction/[[...id]]/components/filter/urlParsers";
-import { parseAsString, useQueryState } from "nuqs";
 import ComboboxCategories from "@/app/finance/transaction/[[...id]]/components/filter/ComboboxCategories";
 import { ICategoriesByGroupIdQuery } from "@/graphql/types/graphqlTypes";
 import useFilterQueryState from "@/app/finance/transaction/[[...id]]/components/filter/useFilterQueryState";

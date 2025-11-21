@@ -113,7 +113,7 @@ export default function TreemapCategorysChart({
     );
   }
   return (
-    <Card className="xl:h-[360px]">
+    <Card className="">
       <CardHeader>
         <CardTitle className="font-sans text-lg">
           Gastos por categoria
@@ -121,9 +121,15 @@ export default function TreemapCategorysChart({
         <CardDescription className="font-sans text-sm text-zinc-400">
           Distribuição dos gastos ao longo do período
         </CardDescription>
+
+        <p className=" text-muted-foreground md:text-end text-sm md:text-base ">
+          {isTransactionView
+            ? "Clique em qualquer área para voltar às categorias"
+            : "Clique em uma categoria para ver as transações detalhadas"}
+        </p>
       </CardHeader>
 
-      <CardContent className="mt-2 h-[200px]">
+      <CardContent className=" h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <Treemap
             data={isTransactionView ? treemapDataTransaction : treemapData}
@@ -136,12 +142,6 @@ export default function TreemapCategorysChart({
             <Tooltip content={<CustomTooltip />} />
           </Treemap>
         </ResponsiveContainer>
-        {/* ⭐ Legenda explicando o clique */}
-        <p className="mt-4  text-muted-foreground">
-          {isTransactionView
-            ? "Clique em qualquer área para voltar às categorias"
-            : "Clique em uma categoria para ver as transações detalhadas"}
-        </p>
       </CardContent>
     </Card>
   );
