@@ -72,7 +72,7 @@ export default function CarouselCreditCard({
     return (
       <div>
         <div className="flex space-x-4">
-          <Skeleton className="flex h-96 md:w-[455px] xl:w-[580px] bg-background"></Skeleton>
+          <Skeleton className="flex h-96 md:w-[455px] xl:w-[470px] bg-background w-full"></Skeleton>
         </div>
       </div>
     );
@@ -82,7 +82,7 @@ export default function CarouselCreditCard({
     data?.creditCardByGroupId.length === 0
   ) {
     return (
-      <Card className="flex h-96 md:w-[455px] xl:w-[580px]">
+      <Card className="flex h-[370px] md:w-[455px] xl:w-[472px] w-full">
         <CardHeader className="h-full">
           <CardTitle className="flex flex-col font-sans text-lg space-y-3 md:flex-row md:items-center justify-between">
             <span className="p-1">Cartões de crédito</span>
