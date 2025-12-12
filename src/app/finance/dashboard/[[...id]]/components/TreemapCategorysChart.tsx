@@ -75,6 +75,7 @@ export default function TreemapCategorysChart({
     name,
     size,
   }));
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleClick = (node: any) => {
     if (!isTransactionView) {
@@ -146,8 +147,21 @@ export default function TreemapCategorysChart({
     </Card>
   );
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CustomTreemapCell({ x, y, width, height, name, size, onClick }: any) {
+
+function CustomTreemapCell({
+  x,
+  y,
+  width,
+  height,
+  name,
+  size,
+  onClick,
+  index,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: any) {
+  // 1. Lógica de cores baseada nas suas variáveis de sistema
+  const fillColor = `var(--chart-${(index % 10) + 1})`;
+
   return (
     <g>
       <rect
@@ -155,7 +169,11 @@ function CustomTreemapCell({ x, y, width, height, name, size, onClick }: any) {
         y={y}
         width={width}
         height={height}
-        style={{ fill: "#7F1D1D", stroke: "#fff", cursor: "pointer" }}
+        style={{
+          fill: fillColor, // Aplicando a cor variável aqui
+          stroke: "#fff",
+          cursor: "pointer",
+        }}
         onClick={() => onClick({ name, size })}
       />
       {width > 60 && height > 20 && (
@@ -183,6 +201,7 @@ function CustomTreemapCell({ x, y, width, height, name, size, onClick }: any) {
     </g>
   );
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
