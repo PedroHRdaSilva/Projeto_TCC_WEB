@@ -14,6 +14,7 @@ import {
   ITransactionCategoryTypeEnum,
   type ICategoriesByGroupIdQuery,
 } from "@/graphql/types/graphqlTypes";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,11 +36,19 @@ import useCategoryActions from "@/app/finance/transaction/[[...id]]/components/h
 import GroupCategoryForm from "@/app/finance/transaction/[[...id]]/components/group/GroupCategoryForm";
 import { Skeleton } from "@/lib/ui/skeleton";
 
+// ==============================================
+// TYPES
+// ==============================================
+
 type CategoryTable = ICategoriesByGroupIdQuery["categoriesByGroupId"][0];
 
 interface GroupCategoryTableProps {
   groupId: string;
 }
+
+// ==============================================
+// MAIN COMPONENT
+// ==============================================
 
 export default function CategoryTable({ groupId }: GroupCategoryTableProps) {
   const { data, loading } = useCategoriesByGroupIdQuery({
@@ -62,10 +71,10 @@ export default function CategoryTable({ groupId }: GroupCategoryTableProps) {
     },
     {
       header: "Ações",
-      cell: (cell: CellContext<CategoryTable, unknown>) =>
-        CategoryActionsRender(cell, groupId),
+      cell: ({ row }) => (
+        <CategoryActionsRender row={row.original} groupId={groupId} />
+      ),
       size: 100,
-      maxSize: 100,
     },
   ];
 
@@ -89,12 +98,24 @@ export default function CategoryTable({ groupId }: GroupCategoryTableProps) {
             )
           : []
       }
-      onMobileRender={(row) => GroupCategoryTableMobileRender(row, groupId)}
+      onMobileRender={(row) => (
+        <GroupCategoryTableMobileRender row={row} groupId={groupId} />
+      )}
     />
   );
 }
 
-function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
+// ==============================================
+// MOBILE ROW COMPONENT (AGORA CORRETO)
+// ==============================================
+
+function GroupCategoryTableMobileRender({
+  row,
+  groupId,
+}: {
+  row: CategoryTable;
+  groupId: string;
+}) {
   const { refresh } = useRouter();
   const { deleteCategory } = useCategoryActions();
 
@@ -106,13 +127,9 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
   const handleDelete = async () => {
     toast.promise(
       deleteCategory({
-        variables: {
-          id: row._id,
-          groupId,
-        },
+        variables: { id: row._id, groupId },
       }),
       {
-        position: "top-center",
         loading: "Deletando categoria...",
         success: "Categoria deletada com sucesso!",
         error: "Erro ao apagar a categoria",
@@ -123,7 +140,7 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
   };
 
   return (
-    <div className="flex w-full items-center justify-between ">
+    <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-2">
         <div
           className="flex size-10 items-center justify-center rounded-lg"
@@ -147,13 +164,13 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
         </div>
       </div>
 
-      <Popover modal={true}>
+      <Popover modal>
         <PopoverTrigger className="flex lg:hidden">
           <EllipsisVerticalIcon className="stroke-muted-foreground" />
         </PopoverTrigger>
 
         <PopoverContent align="end" sideOffset={10} className="w-fit">
-          <ul className="space-y-2 text-sm text-foreground">
+          <ul className="space-y-2 text-sm">
             {/* EDITAR */}
             <li>
               <GroupCategoryForm
@@ -162,7 +179,7 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
                 className="flex items-center gap-2"
               >
                 <span className="flex items-center gap-2">
-                  <PencilIcon size={16} className="stroke-1" />
+                  <PencilIcon size={16} />
                   Editar
                 </span>
               </GroupCategoryForm>
@@ -172,7 +189,7 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
             <li>
               <AlertDialog>
                 <AlertDialogTrigger className="flex items-center gap-2">
-                  <Trash2Icon size={16} className="stroke-1" />
+                  <Trash2Icon size={16} />
                   Excluir
                 </AlertDialogTrigger>
 
@@ -202,8 +219,79 @@ function GroupCategoryTableMobileRender(row: CategoryTable, groupId: string) {
   );
 }
 
+// ==============================================
+// DESKTOP ACTIONS COMPONENT (CORRIGIDO)
+// ==============================================
+
+function CategoryActionsRender({
+  row,
+  groupId,
+}: {
+  row: CategoryTable;
+  groupId: string;
+}) {
+  const { refresh } = useRouter();
+  const { deleteCategory } = useCategoryActions();
+
+  const handleDelete = async () => {
+    toast.promise(
+      deleteCategory({
+        variables: { id: row._id, groupId },
+      }),
+      {
+        loading: "Deletando categoria...",
+        success: "Categoria deletada com sucesso!",
+        error: "Erro ao apagar a categoria",
+      }
+    );
+
+    refresh();
+  };
+
+  return (
+    <div className="flex items-center space-x-2">
+      <AlertDialog>
+        <AlertDialogTrigger className="text-muted-foreground hover:text-foreground">
+          <Trash2Icon size={20} />
+        </AlertDialogTrigger>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Deseja mesmo excluir esta categoria?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Essa ação é irreversível e só será permitida caso não existam
+              transações vinculadas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <GroupCategoryForm
+        groupId={groupId}
+        initialValues={row}
+        className="text-muted-foreground hover:text-foreground"
+      >
+        <PencilIcon size={20} />
+      </GroupCategoryForm>
+    </div>
+  );
+}
+
+// ==============================================
+// DESCRIÇÃO DO ÍCONE
+// ==============================================
+
 function CategoryDescriptionRender(cell: CellContext<CategoryTable, unknown>) {
   const row = cell.row.original;
+
   const IconComponent =
     arrayOfPossibleIcons.find(
       (node) => node.displayName === row.iconProperties.icon
@@ -225,68 +313,9 @@ function CategoryDescriptionRender(cell: CellContext<CategoryTable, unknown>) {
   );
 }
 
-function CategoryActionsRender(
-  cell: CellContext<CategoryTable, unknown>,
-  groupId: string
-) {
-  const { refresh } = useRouter();
-  const { deleteCategory } = useCategoryActions();
-
-  const handleDelete = async () => {
-    toast.promise(
-      deleteCategory({
-        variables: {
-          id: cell.row.original._id,
-          groupId,
-        },
-      }),
-      {
-        position: "top-center",
-        loading: "Deletando categoria...",
-        success: "Categoria deletada com sucesso!",
-        error: "Erro ao apagar a categoria",
-      }
-    );
-
-    refresh();
-  };
-
-  return (
-    <div className="flex items-center space-x-2">
-      <AlertDialog>
-        <AlertDialogTrigger className="text-muted-foreground hover:text-foreground">
-          <Trash2Icon size={20} className="stroke-1" />
-        </AlertDialogTrigger>
-
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Deseja mesmo excluir esta categoria?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Essa ação é irreversível e só será permitida caso não existam
-              transações vinculadas a esta categoria.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
-              Confirmar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <GroupCategoryForm
-        groupId={groupId}
-        className="text-muted-foreground hover:text-foreground"
-        initialValues={cell.row.original}
-      >
-        <PencilIcon size={20} className="stroke-1" />
-      </GroupCategoryForm>
-    </div>
-  );
-}
+// ==============================================
+// MOBILE SKELETON
+// ==============================================
 
 function MobileSkeleton() {
   return (

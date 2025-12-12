@@ -2,8 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TagIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -48,7 +47,6 @@ export default function GroupCreditForm({
   initialValues,
   onCreated,
 }: GroupCreditFormProps) {
-  const { refresh } = useRouter();
   const { createCredit, updateCredit, isLoading } = useCreditActions();
   const [open, setOpen] = useState(false);
 
@@ -131,6 +129,17 @@ export default function GroupCreditForm({
       setOpen(false);
     }
   }
+  useEffect(() => {
+    if (!open) return;
+
+    if (!initialValues) {
+      form.reset({
+        description: "",
+        limit: defaultCurrencyFormat.format(0),
+        validity: "",
+      });
+    }
+  }, [open]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className={className}>{children}</DialogTrigger>
@@ -240,7 +249,10 @@ export default function GroupCreditForm({
             />
 
             <div className="flex w-full justify-end">
-              <Button type="submit" className="w-36 gap-3" variant="outline">
+              <Button
+                type="submit"
+                className="w-36 gap-3 bg-green-700 hover:bg-green-700"
+              >
                 {isLoading ? "Aguarde..." : "Salvar"}
               </Button>
             </div>

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TagIcon, TrophyIcon } from "lucide-react";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -134,7 +134,21 @@ export default function GroupCategoryForm({
     arrayOfPossibleIcons.find(
       (node) => node.displayName === iconProperties.icon
     ) || TrophyIcon;
+  useEffect(() => {
+    if (!open) return;
 
+    if (!initialValues) {
+      form.reset({
+        iconProperties: {
+          background: "#fb923c",
+          color: "#ffffff",
+          icon: "Trophy",
+        },
+        description: "",
+        type: undefined,
+      });
+    }
+  }, [open]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className={className}>{children}</DialogTrigger>
@@ -283,7 +297,7 @@ export default function GroupCategoryForm({
             <div className="flex w-full justify-end">
               <Button
                 type="submit"
-                className="w-36 gap-3 bg-green-500 text-primary-foreground hover:bg-green-700"
+                className="w-36 gap-3 bg-green-700 hover:bg-green-700 text-primary-foreground "
                 variant="outline"
               >
                 {isLoading ? "Aguarde..." : "Salvar"}
@@ -302,15 +316,20 @@ export const groupCategoryFormSchema = z.object({
     color: z.string(),
     icon: z.string(),
   }),
+
   description: z
     .string()
     .min(4, "O nome do grupo deve conter no mínimo 4 caracteres"),
+
   type: z
-    .enum([
-      ITransactionCategoryTypeEnum.EARNINGS,
-      ITransactionCategoryTypeEnum.EXPENSES,
+    .union([
+      z.nativeEnum(ITransactionCategoryTypeEnum),
+      z.null(),
+      z.undefined(),
     ])
-    .optional(),
+    .refine((val) => val !== null && val !== undefined, {
+      message: "Selecione se é Receita ou Despesa",
+    }),
 });
 
 export type GroupCategoryFormSchema = z.infer<typeof groupCategoryFormSchema>;

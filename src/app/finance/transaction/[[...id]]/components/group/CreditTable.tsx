@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast as toastSonner } from "sonner";
 import { useCreditCardByGroupIdQuery } from "@/graphql/hooks/graphqlHooks";
 import type { ICreditCardByGroupIdQuery } from "@/graphql/types/graphqlTypes";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/lib/ui/alertDialog";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/lib/ui/popover";
 
 import { DataTable, DataTableSkeleton } from "@/lib/ui/table/DataTable";
@@ -33,21 +35,21 @@ interface GroupCreditTableTableProps {
 
 export default function CreditTable({ groupId }: GroupCreditTableTableProps) {
   const { data, loading } = useCreditCardByGroupIdQuery({
-    variables: {
-      transactionGroupId: groupId,
-    },
+    variables: { transactionGroupId: groupId },
   });
 
   const columns: ColumnDef<CreditTable>[] = [
     {
       accessorKey: "description",
       header: "Cartão",
-      cell: DeleteDescriptionRender,
+      cell: (info) => <DeleteDescriptionRender cell={info} />,
     },
     {
       id: "actions",
       header: () => <span className="flex w-full justify-end">Ações</span>,
-      cell: (cell) => DeleteActionsRender(cell, groupId),
+      cell: (cell) => (
+        <DeleteActionsRenderComponent cell={cell} groupId={groupId} />
+      ),
       size: 100,
       maxSize: 100,
     },
@@ -67,12 +69,22 @@ export default function CreditTable({ groupId }: GroupCreditTableTableProps) {
     <DataTable
       columns={columns}
       data={data ? [...data.creditCardByGroupId] : []}
-      onMobileRender={(row) => GroupCategoryTableMobileRender(row, groupId)}
+      onMobileRender={(row) => (
+        <GroupCategoryTableMobileRenderComponent row={row} groupId={groupId} />
+      )}
     />
   );
 }
 
-function GroupCategoryTableMobileRender(row: CreditTable, groupId: string) {
+/* ----------------------------- MOBILE RENDER ----------------------------- */
+
+function GroupCategoryTableMobileRenderComponent({
+  row,
+  groupId,
+}: {
+  row: CreditTable;
+  groupId: string;
+}) {
   const { refresh } = useRouter();
   const { deleteCredit } = useCreditActions();
 
@@ -151,18 +163,15 @@ function GroupCategoryTableMobileRender(row: CreditTable, groupId: string) {
   );
 }
 
-function DeleteDescriptionRender(cell: CellContext<CreditTable, unknown>) {
-  return (
-    <div className="flex items-center gap-2">
-      <p className="text-sm text-foreground">{cell.getValue() as string}</p>
-    </div>
-  );
-}
+/* ----------------------------- DESKTOP RENDER ----------------------------- */
 
-function DeleteActionsRender(
-  cell: CellContext<CreditTable, unknown>,
-  groupId: string
-) {
+function DeleteActionsRenderComponent({
+  cell,
+  groupId,
+}: {
+  cell: CellContext<CreditTable, unknown>;
+  groupId: string;
+}) {
   const { refresh } = useRouter();
   const { deleteCredit } = useCreditActions();
 
@@ -221,6 +230,22 @@ function DeleteActionsRender(
     </div>
   );
 }
+
+/* ----------------------------- DESCRIPTION ----------------------------- */
+
+function DeleteDescriptionRender({
+  cell,
+}: {
+  cell: CellContext<CreditTable, unknown>;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <p className="text-sm text-foreground">{cell.getValue() as string}</p>
+    </div>
+  );
+}
+
+/* ----------------------------- SKELETON ----------------------------- */
 
 function MobileSkeleton() {
   return (
