@@ -159,7 +159,9 @@ export function MonthlySpendingByCategoryChart({
               axisLine={false}
               tickLine={false}
               domain={[0, maxValue]}
-              ticks={[0, midValue, maxValue]}
+              ticks={[0, midValue, maxValue].filter(
+                (v, i, arr) => arr.indexOf(v) === i
+              )}
               tickFormatter={(value) => compactFormatter.format(value)}
             />
 
