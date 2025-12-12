@@ -59,11 +59,11 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
               <span className="font-dm-sans text-lg font-bold text-primary">
                 {moneyFormatter.format(revenue.total)}
               </span>
-              {revenue.percentageVariation !== 0 && (
+              {/* {revenue.percentageVariation !== 0 && (
                 <span className="ml-auto flex items-center font-dm-sans text-sm font-bold text-primary">
-                  {revenue.percentageVariation} % <ArrowUp />
+                  {revenue.percentageVariation.toFixed(2)} % <ArrowUp />
                 </span>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -73,7 +73,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
               <span className="font-dm-sans text-lg font-bold text-destructive">
                 {moneyFormatter.format(expense.total)}
               </span>
-              {expense.percentageVariation !== 0 && (
+              {/* {expense.percentageVariation !== 0 && (
                 <span className="ml-auto flex items-center font-dm-sans text-sm font-bold text-destructive">
                   {expense.percentageVariation.toFixed(2)} %
                   {expense.percentageVariation > 0 ? (
@@ -82,7 +82,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
                     <ArrowDown />
                   )}
                 </span>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
               >
                 {moneyFormatter.format(balance.total)}
               </span>
-              {balance.percentageVariation !== 0 && (
+              {/* {balance.percentageVariation !== 0 && (
                 <span
                   className={`ml-auto flex items-center font-dm-sans text-sm font-bold ${
                     balance.percentageVariation < 0
@@ -111,7 +111,7 @@ export default function IncomeExpenses({ group }: TransactionSummaryProps) {
                     <ArrowDown className="text-destructive" />
                   )}
                 </span>
-              )}
+              )} */}
             </div>
           </div>
         </div>

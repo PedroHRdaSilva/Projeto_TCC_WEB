@@ -76,7 +76,6 @@ export default function TransactionGroupForm({
   });
 
   const handleSubmit = async (data: TransactionGroupFormSchema) => {
-    console.log(data);
     await onSubmit(data);
     if (isCreating) setOpen(false);
   };

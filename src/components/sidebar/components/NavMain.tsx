@@ -1,9 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ArrowRightLeftIcon, LayoutDashboardIcon } from "lucide-react";
-
 import { Collapsible, CollapsibleTrigger } from "@/lib/ui/collapsible";
-
 import {
   SidebarGroup,
   SidebarMenu,
@@ -13,18 +12,30 @@ import {
 import routes from "@/utils/routes";
 
 export default function NavMain() {
+  const [lastGroupId, setLastGroupId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedId = localStorage.getItem("lastTransactionGroupId");
+    if (savedId) setLastGroupId(savedId);
+  }, []);
+
   const items = [
     {
       name: "Dashboard",
-      url: routes.finance.dashboard,
+      url: lastGroupId
+        ? `${routes.finance.dashboard}/${lastGroupId}`
+        : routes.finance.dashboard,
       icon: LayoutDashboardIcon,
     },
     {
       name: "Transações",
-      url: routes.finance.transactions,
+      url: lastGroupId
+        ? `${routes.finance.transactions}/${lastGroupId}`
+        : routes.finance.transactions,
       icon: ArrowRightLeftIcon,
     },
   ];
+
   return (
     <SidebarGroup>
       <SidebarMenu className="flex space-y-2">

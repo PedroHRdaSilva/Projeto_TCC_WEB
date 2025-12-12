@@ -17,6 +17,7 @@ import TransactionTableView from "@/app/finance/transaction/[[...id]]/components
 import useFilterQueryState from "@/app/finance/transaction/[[...id]]/components/filter/useFilterQueryState";
 import FooterMobile from "@/app/FooterMobile";
 import TransationsFilterMobile from "@/app/finance/transaction/[[...id]]/components/filter/TransationsFilterMobile";
+import { useEffect } from "react";
 
 interface TransactionsPageProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
@@ -26,6 +27,11 @@ interface TransactionsPageProps {
 export default function TransactionGroupInformation({
   group,
 }: TransactionsPageProps) {
+  useEffect(() => {
+    if (group?._id) {
+      localStorage.setItem("lastTransactionGroupId", group._id);
+    }
+  }, [group?._id]);
   const { iconProperties, description } = group;
   const { filterByPeriod, filterByCategoryId, filterBySearch } =
     useFilterQueryState();
@@ -40,7 +46,7 @@ export default function TransactionGroupInformation({
     arrayOfPossibleIcons.find(
       (node) => node.displayName === iconProperties.icon
     ) || TrophyIcon;
-  console.log("1!!", group._id);
+
   return (
     <div className="flex flex-col w-full bg-gray-200 p-5 gap-5 h-full  ">
       <div className="flex w-full flex-col xl:flex-row ">
@@ -48,7 +54,7 @@ export default function TransactionGroupInformation({
           className={cn(
             "-mx-4 -mt-4 flex h-32 bg-white p-5 border items-center ",
             "xl:mx-0 xl:mt-0 xl:h-24 xl:w-full xl:max-w-[300px] xl:items-center xl:rounded-lg",
-            "2xl:max-w-[340px]"
+            "2xl:max-w-[370px]"
           )}
         >
           <div

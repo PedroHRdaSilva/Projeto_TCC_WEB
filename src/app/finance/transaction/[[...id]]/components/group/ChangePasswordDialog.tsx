@@ -184,8 +184,11 @@ export default function EditUserDialog({
                   )}
                 />
 
-                <Button type="submit" className="w-full mt-2">
-                  Salvar nome
+                <Button
+                  type="submit"
+                  className="w-full mt-2 bg-green-700 hover:bg-green-700"
+                >
+                  Salvar
                 </Button>
               </form>
             </Form>
@@ -266,8 +269,11 @@ export default function EditUserDialog({
                   )}
                 />
 
-                <Button type="submit" className="w-full mt-2">
-                  Salvar senha
+                <Button
+                  type="submit"
+                  className="w-full mt-2 bg-green-700 hover:bg-green-700"
+                >
+                  Salvar
                 </Button>
               </form>
             </Form>

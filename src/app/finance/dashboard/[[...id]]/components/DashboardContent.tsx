@@ -14,11 +14,17 @@ import TransactionsGroupConfig from "@/app/finance/transaction/[[...id]]/compone
 import TransactionGroupSelection from "@/app/finance/transaction/[[...id]]/components/group/TransactionGroupSelection";
 import TreemapCategorysChart from "@/app/finance/dashboard/[[...id]]/components/TreemapCategorysChart";
 import CarouselCreditCard from "@/app/finance/dashboard/[[...id]]/components/CarouselCreditCard";
+import { useEffect } from "react";
 
 interface DashboardContentProps {
   group: NonNullable<ITransactionGroupByIdQuery["transactionGroupById"]>;
 }
 export default function DashboardContent({ group }: DashboardContentProps) {
+  useEffect(() => {
+    if (group?._id) {
+      localStorage.setItem("lastTransactionGroupId", group._id);
+    }
+  }, [group?._id]);
   const { iconProperties, description } = group;
   const [filterByStartMonth] = useQueryState("start", parseAsDate);
   const [filterByEndMonth] = useQueryState("end", parseAsDate);
@@ -28,7 +34,7 @@ export default function DashboardContent({ group }: DashboardContentProps) {
     ) || TrophyIcon;
   const dashboard = true;
   return (
-    <div>
+    <div className=" flex flex-col w-full bg-gray-200 p-5 gap-5 ">
       <div
         className={cn(
           "-mx-4 -mt-4 flex h-32 bg-white p-5 border  ",

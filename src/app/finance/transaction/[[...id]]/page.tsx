@@ -7,12 +7,10 @@ import {
   ITransactionGroupByIdQueryVariables,
 } from "@/graphql/types/graphqlTypes";
 import { Button } from "@/lib/ui/button";
-import { Separator } from "@/lib/ui/separator";
 
 import { getAuthenticatedClient } from "@/lib/utils/server-utils";
 import { getParamStringValue } from "@/lib/utils/utils";
 import { PlusIcon } from "lucide-react";
-import Link from "next/link";
 
 interface TransactionsPageProps {
   params: Promise<{
