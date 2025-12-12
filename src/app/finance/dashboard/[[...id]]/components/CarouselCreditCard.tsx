@@ -72,7 +72,7 @@ export default function CarouselCreditCard({
     return (
       <div>
         <div className="flex space-x-4">
-          <Skeleton className="flex h-96 md:w-[455px] xl:w-[470px] bg-background w-full"></Skeleton>
+          <Skeleton className="flex h-96 md:w-[455px] xl:w-[385px] bg-background w-full"></Skeleton>
         </div>
       </div>
     );

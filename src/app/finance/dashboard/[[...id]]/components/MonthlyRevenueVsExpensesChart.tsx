@@ -70,7 +70,7 @@ export function MonthlyRevenueVsExpensesChart({
     return (
       <div>
         <div className="flex space-x-4">
-          <Skeleton className="flex h-[316px] w-full bg-background"></Skeleton>
+          <Skeleton className="flex h-[385px] w-full bg-background"></Skeleton>
         </div>
       </div>
     );
